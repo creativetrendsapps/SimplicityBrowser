@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.MainActivity">
+
+    <item
+        android:id="@+id/stopLoading"
+        android:title="@string/stop_loading"
+        android:orderInCategory="00"
+        android:icon="@drawable/ic_stop_loading"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+
+    <item
+        android:id="@+id/startLoading"
+        android:title="@string/refresh_page"
+        android:orderInCategory="01"
+        android:icon="@drawable/ic_refresh_page"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+
+
+    <item
+        android:id="@+id/privateM"
+        android:title="@string/privateMode"
+        android:orderInCategory="1"
+        android:checkable="true"
+        app:showAsAction="never" />
+
+
+
+    <!--<item
+        android:id="@+id/historyMenu"
+        android:title="@string/history"
+        android:orderInCategory="5"
+        app:showAsAction="never" /> -->
+
+    <item
+        android:id="@+id/simplicityHome"
+        android:title="@string/home"
+        android:icon="@drawable/home"
+        android:orderInCategory="6"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/findM"
+        android:title="@string/findinpage"
+        android:orderInCategory="7"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/share"
+        android:title="@string/share"
+        android:orderInCategory="8"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/addToHomescreen"
+        android:title="@string/add_to_home_screen"
+        android:orderInCategory="9"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/request_desktop"
+        android:title="Request desktop site"
+        android:orderInCategory="10"
+        android:checkable="true"
+        app:showAsAction="never"
+        tools:ignore="HardcodedText" />
+
+
+    <item
+        android:id="@+id/settingsAction"
+        android:title="@string/settings"
+        android:orderInCategory="19"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/actionClose"
+        android:title="@string/exit"
+        android:orderInCategory="19"
+        app:showAsAction="never" />
+</menu>

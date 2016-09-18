@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <com.creativetrends.simplicity.app.preferences.PreferenceCategory
+        android:title="About Simplicity" >
+
+
+        <Preference
+            android:title="Simplicity"
+            android:icon="@drawable/globe"
+            android:selectable="false" />
+
+        <Preference
+            android:key="version_number"
+            android:title="Version"
+            android:icon="@drawable/ic_about_about" />
+
+        <Preference
+            android:key="rate_simplicity"
+            android:title="Rate Simplicity"
+            android:icon="@drawable/star"
+            android:summary="If you like this app, please consider rating it."/>
+
+        <Preference
+            android:key="libraries"
+            android:title="Libraries &amp; Software Used"
+            android:summary="Open source software used in Simplicity."
+            android:icon="@drawable/dictionary"/>
+
+
+
+        <Preference
+            android:title="divider"
+            android:selectable="false"
+            android:layout="@layout/divider_preference"/>
+
+
+
+    </com.creativetrends.simplicity.app.preferences.PreferenceCategory>
+
+
+    <com.creativetrends.simplicity.app.preferences.PreferenceCategory
+        android:title="Developer" >
+
+
+        <Preference
+            android:title="Creative Trends Apps"
+            android:icon="@drawable/account"
+            android:selectable="false" />
+
+        <Preference
+            android:key="google_plus"
+            android:title="Google+ Community"
+            android:summary="Get help and support."
+            android:icon="@drawable/google_plus"/>
+
+
+        <Preference
+            android:key="on_twitter"
+            android:title="Creative Trends on Twitter"
+            android:summary="Follow on Twitter."
+            android:icon="@drawable/twitter"/>
+
+        <Preference
+            android:key="more_apps"
+            android:title="More Apps"
+            android:summary="More app on Google Play."
+            android:icon="@drawable/google_play"/>
+
+
+        <Preference
+            android:title="divider"
+            android:selectable="false"
+            android:layout="@layout/divider_preference"/>
+
+
+
+    </com.creativetrends.simplicity.app.preferences.PreferenceCategory>
+
+
+</PreferenceScreen>

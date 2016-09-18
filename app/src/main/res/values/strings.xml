@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<resources>
+
+    <string name="app_name">Simplicity</string>
+    <string name="home">Home</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
+    <string name="share">Share</string>
+    <string name="add_to_home_screen">Add to home screen</string>
+    <string name="shortcut_name">Shortcut name</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="create">Create</string>
+    <string name="privacy_settings">Privacy Settings</string>
+    <string name="general_settings">General Settings</string>
+    <string name="privateMode">Private mode</string>
+    <string name="findinpage">Find in page</string>
+    <string name="no_connection">No connection</string>
+    <string name="refresh">Refresh</string>
+    <string name="help">Help</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="addPage"/>
+    <string name="removePage">Remove Bookmark</string>
+    <string name="error">Error</string>
+    <string name="app_restart">Restart to apply changes.</string>
+    <string name="stop_loading">Stop loading</string>
+    <string name="refresh_page">Refresh page</string>
+
+    <string name="default_font_size">Default Font Size</string>
+
+    <string name="exit">Exit</string>
+    <string name="close_window">Close window</string>
+    <string name="small_donation">Small Donation</string>
+    <string name="medium_donation">Medium Donation</string>
+    <string name="large_donation">Large Donation</string>
+    <string name="donate">Donate</string>
+    <string name="omnibox_hint">Search or browse</string>
+    <string name="search_engine_choice">Search Engine Choice</string>
+    <string name="about_donations">About Donations</string>
+    <string name="donations">Thank you for considering to donate. Donations are optional and help support future development. In the future your donations will unlock new added features.</string>
+
+    <string-array name="search_engine">
+        <item>DuckDuckGo</item>
+        <item>Google</item>
+        <item>Bing</item>
+        <item>Yahoo</item>
+        <item>StartPage</item>
+    </string-array>
+    <string-array name="search_engine_values" translatable="false">
+        <item>https://duckduckgo.com/?q=</item>
+        <item>https://www.google.com/search?q=</item>
+        <item>https://www.bing.com/search?q=</item>
+        <item>https://search.yahoo.com/mobile/s?p=</item>
+        <item>https://www.startpage.com/do/search?q=</item>
+    </string-array>
+
+
+
+    <string name="about_text"><![CDATA[
+
+   	<b>Material Preferences</b><br><br>
+
+   	The MIT License (MIT)<br><br>
+
+	Copyright &#169; 2015 Jens Driller<br><br>
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:<br><br>
+
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.<br><br>
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.<br><br><br>
+
+	<b>Material Preference Compat</b><br><br>
+
+	The MIT License (MIT)<br><br>
+
+	Copyright &#169; 2015 Fung Jichun<br><br>
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:<br><br>
+
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.<br><br>
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.<br><br>
+
+
+
+	<b>Clans Floating Action Button</b><br><br>
+	Copyright &#169; 2015 Dmytro Tarianyk
+	<br><br>
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+	<br><br>
+   	http://www.apache.org/licenses/LICENSE-2.0
+	<br><br>
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+	<br><br>
+
+
+	<b>AdvancedWebView</b><br><br>
+	Copyright &#169; 2015 delight.im <info@delight.im>
+	<br><br>
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+	<br><br>
+   	http://www.apache.org/licenses/LICENSE-2.0
+	<br><br>
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+	<br><br>
+
+
+	<b>Minor</b><br><br>
+	Copyright &#169; 2016 Batterii
+	<br><br>
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+	<br><br>
+   	http://www.apache.org/licenses/LICENSE-2.0
+	<br><br>
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+	<br><br>
+    ]]></string>
+</resources>

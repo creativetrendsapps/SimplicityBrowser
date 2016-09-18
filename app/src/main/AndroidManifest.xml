@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.creativetrends.simplicity.app"
+    android:installLocation="auto"
+    tools:ignore="GradleOverrides">
+
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="com.android.vending.BILLING" />
+
+
+
+
+    <application
+        android:name=".activities.SimplicityApplication"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme"
+        tools:replace="android:allowBackup,android:theme"
+        android:launchMode="singleTask">
+
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="@string/app_name"
+            android:configChanges="keyboard|keyboardHidden|screenSize|orientation|locale"
+            android:windowSoftInputMode="adjustResize"
+            android:launchMode="singleTask">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+            </intent-filter>
+        </activity>
+
+
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:theme="@style/SettingsTheme"
+            android:label="@string/settings"
+            android:parentActivityName=".activities.MainActivity"
+            tools:ignore="UnusedAttribute">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".activities.NewWindow"
+            android:theme="@style/AppTheme"
+            android:label="@string/app_name"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize"
+            android:taskAffinity="">
+        </activity>
+
+
+
+        <activity
+            android:name=".activities.DonationActivity"
+            android:theme="@style/SettingsTheme"
+            android:label="@string/donate"
+            android:parentActivityName=".activities.SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.SettingsActivity" />
+        </activity>
+
+
+    </application>
+
+</manifest>

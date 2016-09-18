@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:background="@drawable/minor_notification_circle"
+        android:focusable="true"
+        android:layout_gravity="start|center_horizontal">
+
+    <TextView
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:textSize="8sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:id="@+id/minor_notification_text"
+        android:textColor="@android:color/white"/>
+
+</FrameLayout>

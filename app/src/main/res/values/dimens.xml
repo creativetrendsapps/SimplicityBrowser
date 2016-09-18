@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <dimen name="pref_title_space">8dp</dimen>
+    <dimen name="dialog_frame_margin">24dp</dimen>
+    <dimen name="dialog_content_padding_top">8dp</dimen>
+    <dimen name="dialog_content_padding_bottom">8dp</dimen>
+    <dimen name="dialog_content_textsize">14sp</dimen>
+</resources>

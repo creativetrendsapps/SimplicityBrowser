@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bookmarks_header"
+    android:background="?attr/colorPrimary"
+    android:fitsSystemWindows="true">
+
+    <TextView
+        android:id="@+id/bookmark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:layout_gravity="center"
+        android:text="@string/bookmarks"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        tools:ignore="RelativeOverlap" />
+
+
+    <ImageView
+        android:id="@+id/add_bookmark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:layout_marginEnd="22dp"
+        android:layout_gravity="end|center"
+        android:focusable="true"
+        android:clickable="true"
+        android:src="@drawable/ic_add_mark"
+        tools:ignore="ContentDescription"
+        android:layout_alignTop="@+id/bookmark"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>
