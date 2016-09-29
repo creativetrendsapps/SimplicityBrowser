@@ -1,4 +1,3 @@
-
 package com.creativetrends.simplicity.app.activities;
 
 import android.app.Activity;
