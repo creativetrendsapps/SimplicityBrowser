@@ -16,10 +16,10 @@ import com.creativetrends.simplicity.app.R;
 public class DonationActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler{
 
     private BillingProcessor bp;
-    private static final String PRODUCT_ID_1 = "com.creativetrends.simplicity.app.smalldonation";
-    private static final String PRODUCT_ID_2 = " com.creativetrends.simplicity.app.mediumdonation ";
-    private static final String PRODUCT_ID_3 = " com.creativetrends.simplicity.app.largedonation ";
-    private static final String LICENSE_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjSFHzrCW9carUOooKilg7YpmDd8hvNk8Z2VFYVDVzhZtPsDXeeqckeW9AicEtTHu4s1uBPK6w2Z7LE8pb1kTrHR8YuIFltWmi3w9WKmt5RPgbSXDObzhXj2q6dz/QRyqMOl9JWL4C2gkNJLhvtqF3iJ+gp4PvYNCO5dN+EpGfWW6q4cJENYBwsobZQ/6rUGMNiKwJfPbDoaepkc3OEowIl4S49sIjMqvNKNvzTqyGJUMTerbljqdu9Jpk4Z8opAf0w7CasJ2vNKS3/ZERlT3fWZbR8TZvyo813rO7brRmMv0XtdrLeMS/TggWr9YAKbhyqOvZORaBdziu98jO0W5FwIDAQAB";
+    private static final String PRODUCT_ID_1 = "product1";
+    private static final String PRODUCT_ID_2 = "product2";
+    private static final String PRODUCT_ID_3 = "product3";
+    private static final String LICENSE_KEY = "YOUR_KEY";
 
     private RelativeLayout small, medium, large;
 
