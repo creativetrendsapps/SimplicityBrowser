@@ -139,8 +139,6 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
 
             case "donate_app":
                 startActivity(new Intent(getActivity(), DonationActivity.class));
-                Intent donateIntent = new Intent(getActivity(), DonationActivity.class);
-                startActivity(donateIntent);
                 break;
         }
         return false;
