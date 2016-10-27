@@ -1,22 +1,3 @@
-/**
- * Copyright 2016 Soren Stoutner <soren@stoutner.com>.
- *
- * This file is part of Privacy Browser <https://www.stoutner.com/privacy-browser>.
- *
- * Privacy Browser is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Privacy Browser is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package com.creativetrends.simplicity.app.fragments;
 
 import android.Manifest;
@@ -49,7 +30,6 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
     Context context;
     private static final int REQUEST_LOCATION = 1;
     private static final String TAG = Settings.class.getSimpleName();
-    public boolean mListStyled;
     public static final String RESTART_CODE = "changed_setting";
     public static final String RESTART_RESULTS = "needs_restart";
 
@@ -159,14 +139,7 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
     public void onStart() {
         super.onStart();
         getActivity().setTitle(R.string.settings);
-        View rootView = getView();
-        if (rootView != null) {
-            ListView list = (ListView) rootView.findViewById(android.R.id.list);
-            list.setPadding(0, 0, 0, 0);
-            list.setDivider(null);
-            mListStyled = true;
-            savedPreferences.registerOnSharedPreferenceChangeListener(preferencesListener);
-        }
+       
     }
 
     @Override
