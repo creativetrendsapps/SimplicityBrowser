@@ -21,7 +21,6 @@
         <item name="colorPrimaryDark">@color/settingsPrimaryDark</item>
         <item name="colorAccent">@color/md_blue_600</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-        <item name="android:listDivider">@null</item>
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
