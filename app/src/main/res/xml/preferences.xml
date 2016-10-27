@@ -48,12 +48,6 @@
             android:defaultValue="true" />
 
 
-        <Preference
-            android:title="divider"
-            android:selectable="false"
-            android:layout="@layout/divider_preference"/>
-
-
 
     </com.creativetrends.simplicity.app.preferences.PreferenceCategory>
 
@@ -99,13 +93,7 @@
             android:defaultValue="true"/>
 
 
-        <Preference
-            android:title="divider"
-            android:selectable="false"
-            android:layout="@layout/divider_preference"/>
-
-
-
+      
     </com.creativetrends.simplicity.app.preferences.PreferenceCategory>
 
 
@@ -137,11 +125,7 @@
             android:entryValues="@array/default_font_size_entry_values"
             android:defaultValue="100" />
 
-        <Preference
-            android:title="divider"
-            android:selectable="false"
-            android:layout="@layout/divider_preference"/>
-
+      
     </com.creativetrends.simplicity.app.preferences.PreferenceCategory>
 
 
@@ -174,10 +158,6 @@
             android:icon="@drawable/heart"/>
 
 
-        <Preference
-            android:title="divider"
-            android:selectable="false"
-            android:layout="@layout/divider_preference"/>
     </com.creativetrends.simplicity.app.preferences.PreferenceCategory>
 
 
