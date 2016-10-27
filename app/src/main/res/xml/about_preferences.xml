@@ -30,12 +30,6 @@
 
 
 
-        <Preference
-            android:title="divider"
-            android:selectable="false"
-            android:layout="@layout/divider_preference"/>
-
-
 
     </com.creativetrends.simplicity.app.preferences.PreferenceCategory>
 
@@ -65,14 +59,8 @@
         <Preference
             android:key="more_apps"
             android:title="More Apps"
-            android:summary="More app on Google Play."
+            android:summary="More on Google Play."
             android:icon="@drawable/google_play"/>
-
-
-        <Preference
-            android:title="divider"
-            android:selectable="false"
-            android:layout="@layout/divider_preference"/>
 
 
 
