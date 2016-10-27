@@ -5,7 +5,7 @@ This is the source for Simplicity.
 This repo will be updated as much as possbile.
 
 # Update:
-9/17/16 This update converts most all of the drawables used in Simplicity to vector drawables. This reduces the apps size and also helps with scaling images for different screen resolutions better.
+10/26/16 <b>PLEASE READ THE LICENSE BEFORE FORKING OR USING THIS PROJECT TO CREATE A BROWSER. PLEASE DO NOT VIOLATE THE LICENSE.</b> This update converts most all of the drawables used in Simplicity to vector drawables. This reduces the apps size and also helps with scaling images for different screen resolutions better.
 
 # Please Read:
 DO NOT USE THE NAME SIMPLICITY. DO NOT INCLUDE SIMPLICITY IN YOUR APPS NAME. DO NOT USE ANY OF SIMPLICITY'S LAUNCHER ICONS. YOU MUST NOT USE THE CREATIVE TRENDS NAME EXCEPT TO GIVE CREDIT. PLEASE GIVE CREDIT IF YOU USE THIS SOURCE. 
