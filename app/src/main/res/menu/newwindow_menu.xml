@@ -32,12 +32,6 @@
 
 
 
-    <!--<item
-        android:id="@+id/historyMenu"
-        android:title="@string/history"
-        android:orderInCategory="5"
-        app:showAsAction="never" /> -->
-
     <item
         android:id="@+id/simplicityHome"
         android:title="@string/home"

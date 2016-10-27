@@ -2,10 +2,12 @@ package com.creativetrends.simplicity.app.activities;
 
 import android.Manifest;
 import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
@@ -15,6 +17,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -25,6 +28,7 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -36,6 +40,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Patterns;
@@ -68,23 +74,21 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.akiniyalocts.minor.MinorLayout;
-import com.akiniyalocts.minor.MinorView;
-import com.akiniyalocts.minor.behavior.MinorBehavior;
+import com.creativetrends.simplicity.app.behavior.BottomBehavior;
 import com.creativetrends.simplicity.app.R;
-import com.creativetrends.simplicity.app.ui.SnackBar;
+import com.creativetrends.simplicity.app.ui.BottomNavigationViewHelper;
+import com.creativetrends.simplicity.app.ui.SimplicityOmniBox;
 import com.creativetrends.simplicity.app.ui.WebViewScroll;
 import com.creativetrends.simplicity.app.utils.AdBlock;
+import com.creativetrends.simplicity.app.utils.AppTheme;
+import com.creativetrends.simplicity.app.utils.Bookmark;
 import com.creativetrends.simplicity.app.utils.Connectivity;
-import com.creativetrends.simplicity.app.utils.Listener;
+import com.creativetrends.simplicity.app.utils.Downloader;
+import com.creativetrends.simplicity.app.utils.SimplicityAdapter;
 import com.creativetrends.simplicity.app.utils.OnlineStatus;
-import com.creativetrends.simplicity.app.utils.Sharer;
+import com.creativetrends.simplicity.app.utils.PreferencesUtility;
 import com.creativetrends.simplicity.app.utils.StaticUtils;
 import com.creativetrends.simplicity.app.webview.SimplicityChromeClient;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -94,19 +98,19 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import static android.os.Build.VERSION_CODES.M;
 
-public class MainActivity extends AppCompatActivity implements ShortcutActivity.CreateHomeScreenSchortcutListener {
+public class MainActivity extends AppCompatActivity implements ShortcutActivity.CreateHomeScreenSchortcutListener, SimplicityAdapter.onBookmarkSelected {
+    AppBarLayout appbar;
     private boolean refreshed;
+    public int scrollPosition = 0;
     public static final String PREFS_NAME = "SimplicityPrefs";
     public static final String PREFS_SEARCH_HISTORY = "SimplicityHistory";
     private Set<String> history;
     NavigationView bookmarkFavs;
-    MinorLayout tabs;
     public static Bitmap favoriteIcon;
     public static WebViewScroll webView;
     private RelativeLayout header;
@@ -129,43 +133,31 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
     public static boolean firstPartyCookiesEnabled;
     public static boolean thirdPartyCookiesEnabled;
     public static String defaultSearch;
-    private DrawerLayout bookmarksDrawer;
+    @SuppressLint("StaticFieldLeak")
+    public static DrawerLayout bookmarksDrawer;
     private ImageView secure;
     private MenuItem stopPage;
     private MenuItem refreshPage;
     public static String homepage;
-    public static SwipeRefreshLayout swipeToRefresh;
+    SwipeRefreshLayout swipeToRefresh;
     private Toolbar toolbar;
     private String UrlCleaner;
-    private AutoCompleteTextView omniBox;
+    private SimplicityOmniBox omniBox;
     private boolean isPrivate;
     private boolean computerMode;
     private FrameLayout addressBarFrameLayout;
     private static long back_pressed;
-    //private boolean refreshed;
+    BottomNavigationView bottomNavigationView;
+    RecyclerView recyclerBookmarks;
+    private ArrayList<Bookmark> listBookmarks = new ArrayList<>();
+    private SimplicityAdapter adapterBookmarks;
 
-    List<String> bookmarkUrls;
-    List<String> bookmarkTitles;
-
-    public static List<JSONObject> asList(final JSONArray ja) {
-        final int len = ja.length();
-        final ArrayList<JSONObject> result = new ArrayList<>(len);
-        for (int i = 0; i < len; i++) {
-            final JSONObject obj = ja.optJSONObject(i);
-            if (obj != null) {
-                result.add(obj);
-            }
-        }
-        return result;
-    }
 
     @Override
-
     @SuppressLint("SetJavaScriptEnabled")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        bottomTabs();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         history = settings.getStringSet(PREFS_SEARCH_HISTORY, new HashSet<String>());
@@ -179,7 +171,13 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
         bookmarksDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         bookmarkFavs = (NavigationView) findViewById(R.id.simplicity_bookmarks);
         addressBarFrameLayout = (FrameLayout) findViewById(R.id.addressBarFrameLayout);
-        tabs = (MinorLayout) findViewById(R.id.tabs);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        listBookmarks = PreferencesUtility.getBookmarks();
+        recyclerBookmarks = (RecyclerView) findViewById(R.id.recycler_bookmarks);
+        recyclerBookmarks.setLayoutManager(new LinearLayoutManager(this));
+        adapterBookmarks = new SimplicityAdapter(this, listBookmarks, this);
+        recyclerBookmarks.setAdapter(adapterBookmarks);
+        appbar = (AppBarLayout) findViewById(R.id.appbar);
         setSupportActionBar(toolbar);
 
         assert swipeToRefresh != null;
@@ -192,6 +190,10 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
                 webView.reload();
             }
         });
+
+        if (preferences.getBoolean("no_ads", false)) {
+            AdBlock.init(this);
+        }
 
         webView = (WebViewScroll) findViewById(R.id.mainWebView);
         assert webView != null;
@@ -222,16 +224,27 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
         webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
         webView.setFocusable(true);
         webView.setFocusableInTouchMode(true);
-        webView.setListener(this, new Listener(this, webView));
+        webView.setOnScrollChangedCallback(new WebViewScroll.OnScrollChangedCallback() {
+            public void onScroll(int l, int t) {
+                scrollPosition = t;
+            }
+        });
+        try {
+            AppTheme.fontSize(webView, this);
+        } catch (Exception ignored) {
+
+        }
 
 
-        omniBox = (AutoCompleteTextView) findViewById(R.id.omniBox);
+        omniBox = (SimplicityOmniBox) findViewById(R.id.omniBox);
         omniBox.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     try {
                         loadUrlFromTextBox();
                         omniBox.setCursorVisible(false);
+                        webView.hasFocus();
+                        history.add(webView.getUrl());
                         addSearchInput(omniBox.getText().toString());
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
@@ -251,9 +264,6 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
             }
         });
 
-        if (preferences.getBoolean("no_ads", false)) {
-            AdBlock.init(this);
-        }
 
         if (preferences.getBoolean("show_home", false)) {
             toolbar.setLogo(R.drawable.home);
@@ -272,171 +282,65 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
             });
 
         }
-
-        if (preferences.getBoolean("scroll_toolbar", false)) {
-            AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
-            MinorBehavior.behaviorTranslationEnabled = true;
-        } else {
-            AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
-            params.setScrollFlags(0);
-            MinorBehavior.behaviorTranslationEnabled = false;
-        }
-
-
-        //noinspection deprecation
-        webView.setWebViewClient(new WebViewClient() {
-            private Map<String, Boolean> loadedUrls = new HashMap<>();
-
-            @SuppressWarnings("deprecation")
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+        bottomNavigationView.setOnNavigationItemSelectedListener( new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-                if (preferences.getBoolean("no_ads", false)) {
-                        boolean ad;
-                        if (!loadedUrls.containsKey(url)) {
-                            ad = AdBlock.isAd(url);
-                            loadedUrls.put(url, ad);
-                        } else {
-                            ad = loadedUrls.get(url);
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+                switch (item.getItemId()) {
+                    case R.id.action_back:
+                        if(webView.canGoBack()){
+                            webView.goBack();
                         }
-                        return ad ? AdBlock.createEmptyResource() :
-                                super.shouldInterceptRequest(view, url);
+                        break;
+                    case R.id.action_forward:
+                        if(webView.canGoForward()){
+                            webView.goForward();
+                        }
+                        break;
+                    case R.id.action_bookmarks:
+                        bookmarksDrawer.openDrawer(GravityCompat.END);
+                        webView.isFocused();
+                        break;
 
-
-                }
-                return super.shouldInterceptRequest(view, url);
-
-            }
-
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                try {
-                    if(preferences.getBoolean("no_track", false)){
-                        HashMap<String, String> extraHeaders = new HashMap<>();
-                        extraHeaders.put("DNT", "1");
-                        view.loadUrl(url, extraHeaders);
-                        return true;
-                    }
-                    if ((url.contains("market://")
-                            || url.contains("mailto:")
-                            || url.contains("play.google")
-                            || url.contains("tel:"))) {
-                        view.getContext().startActivity( new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-                        return true;
-                    }
-                    if ((url.contains("http://") || url.contains("https://"))) {
-                        return false;
-                    }
-
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    try {
-                        view.getContext().startActivity(intent);
-                    } catch (ActivityNotFoundException e) {
-                        Log.e("shouldOverrideUrlLoad", "" + e.getMessage());
-                        e.printStackTrace();
-                    }
-
-                    return true;
-                } catch (NullPointerException npe) {
-                    npe.printStackTrace();
-                    return true;
-                }
-            }
-
-
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-                try {
-                    swipeToRefresh.setRefreshing(true);
-                    omniBox.setText(url);
-                    stopPage.setVisible(true);
-                    if (refreshPage.isVisible()) {
-                        refreshPage.setVisible(false);
-                    }
-                    if ((url.contains("https://"))) {
-                        secure.setVisibility(View.VISIBLE);
-                    } else {
-                        secure.setVisibility(View.GONE);
-                    }
-
-                } catch (NullPointerException ignored) {
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-
-            @SuppressWarnings("deprecation")
-            @Override
-            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                if (Connectivity.isConnected(getApplicationContext()) && !refreshed) {
-                    webView.loadUrl(failingUrl);
-                    refreshed = true;
-                } else {
-                    webView.loadUrl("file:///android_asset/error.html");
-                    omniBox.setText(R.string.app_name);
-                    setColor(ContextCompat.getColor(MainActivity.this, R.color.black));
-                    Snackbar snackbar = Snackbar.make(webView, R.string.no_connection, Snackbar.LENGTH_INDEFINITE);
-                    snackbar.setAction(R.string.refresh, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (webView.canGoBack()) {
-                                webView.stopLoading();
-                                webView.goBack();
+                    case R.id.action_new:
+                        if(preferences.getBoolean("merge_windows", false)) {
+                            Intent windowIntent = new Intent(MainActivity.this, NewWindow.class);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                windowIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                             }
+                            startActivity(windowIntent);
+                        }else{
+                            Intent windowIntent = new Intent(MainActivity.this, NewWindow.class);
+                            startActivity(windowIntent);
                         }
-                    });
-                    snackbar.show();
+                        break;
 
+                    case R.id.action_jump:
+                        scrollToTop();
+                        break;
                 }
-            }
-
-
-            @TargetApi(Build.VERSION_CODES.M)
-            @Override
-            public void onReceivedError(WebView view, WebResourceRequest req, WebResourceError err) {
-                onReceivedError(view, err.getErrorCode(), err.getDescription().toString(), req.getUrl().toString());
-            }
-
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                try {
-                    swipeToRefresh.setRefreshing(false);
-                    initalizeBookmarks(bookmarkFavs);
-                    stopPage.setVisible(false);
-                    refreshPage.setVisible(true);
-                    omniBox.setText(webView.getUrl());
-                        omniBox.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.white));
-                        addressBarFrameLayout.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.url_bar_border));
-
-                    if (url.contains("file:///")) {
-                        omniBox.setText(R.string.app_name);
-                    }
-
-
-                } catch (NullPointerException ignored) {
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                return false;
             }
         });
 
-        ImageView add_button = (ImageView) bookmarkFavs.getHeaderView(0).findViewById(R.id.add_bookmark);
+
+        ImageView add_button = (ImageView) findViewById(R.id.add_bookmark);
         add_button.setClickable(true);
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addBookmark(webView.getTitle().replace("", ""), webView.getUrl());
+                Bookmark bookmark = new Bookmark();
+                bookmark.setTitle(webView.getTitle());
+                bookmark.setUrl(webView.getUrl());
+                adapterBookmarks.addItem(bookmark);
                 bookmarksDrawer.closeDrawers();
-                Toast.makeText(getBaseContext(), "The site: " + webView.getTitle().replace("", "") + " has been bookmarked.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Added: " + webView.getTitle().replace("", "") + " to bookmarks.", Toast.LENGTH_LONG).show();
             }
         });
 
+
+        webView.setWebViewClient(new WebClient());
         webView.setDownloadListener(new DownloadListener() {
             @Override
             public void onDownloadStart(final String url, String userAgent, final String contentDisposition, final String mimeType, long contentLength) {
@@ -500,7 +404,7 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
             }
         });
 
-            webView.setWebChromeClient(new SimplicityChromeClient(this) {
+        SimplicityChromeClient webChromeClient = new SimplicityChromeClient(this) {
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             public boolean onShowFileChooser(WebView mWebView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
 
@@ -547,15 +451,19 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
                 super.onReceivedIcon(view, icon);
                 try {
                     favoriteIcon = icon;
-                        Palette.from(icon).generate(new Palette.PaletteAsyncListener() {
-                            @Override
-                            public void onGenerated(Palette palette) {
-                                setColor(palette.getVibrantColor(ContextCompat.getColor(MainActivity.this, R.color.md_blue_600)));
-                                refreshPage.setIcon(R.drawable.ic_refresh_page_white);
-                                stopPage.setIcon(R.drawable.ic_stop_loading_white);
+                    Palette.from(icon).generate(new Palette.PaletteAsyncListener() {
+                        @Override
+                        public void onGenerated(Palette palette) {
+                            setColor(palette.getVibrantColor(ContextCompat.getColor(MainActivity.this, R.color.md_blue_600)));
+                            refreshPage.setIcon(R.drawable.ic_refresh_page_white);
+                            stopPage.setIcon(R.drawable.ic_stop_loading_white);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                setTaskDescription(new ActivityManager.TaskDescription("Simplicity", BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher), palette.getVibrantColor(ContextCompat.getColor(MainActivity.this, R.color.md_blue_600))));
 
                             }
-                        });
+
+                        }
+                    });
 
 
                 } catch (NullPointerException ignored) {
@@ -564,6 +472,21 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
                 }
             }
 
+        };
+
+        webView.setWebChromeClient(webChromeClient);
+
+        appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (preferences.getBoolean("scroll_toolbar", false)) {
+                    webView.setCanScrollVertically((appBarLayout.getHeight() - appBarLayout.getBottom()) != 0);
+                    BottomBehavior.behaviorTranslationEnabled = true;
+                } else {
+                    BottomBehavior.behaviorTranslationEnabled = false;
+
+                }
+            }
         });
 
 
@@ -595,8 +518,6 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
         defaultSearch = savedPreferences.getString("search_engine", "https://www.google.com/search?q=");
         homepage = savedPreferences.getString("homepage", "");
 
-        String defaultFontSizeString = savedPreferences.getString("default_font_size", "100");
-        webView.getSettings().setTextZoom(Integer.valueOf(defaultFontSizeString));
 
         final Intent intent = getIntent();
 
@@ -660,9 +581,9 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
         }
 
 
-    super.onCreateOptionsMenu(menu);
-    return true;
-}
+        super.onCreateOptionsMenu(menu);
+        return true;
+    }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -677,6 +598,7 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
 
+
             case R.id.stopLoading:
                 webView.stopLoading();
                 break;
@@ -686,7 +608,7 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
                 break;
 
             case R.id.actionClose:
-                if(preferences.getBoolean("clear_data", false)) {
+                if (preferences.getBoolean("clear_data", false)) {
                     if (Build.VERSION.SDK_INT >= 21) {
                         cookieManager.removeAllCookies(null);
                     } else {
@@ -699,9 +621,6 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
                     formData.clearFormData();
                     webView.clearCache(true);
                     webView.clearHistory();
-
-                    omniBox = null;
-                    history = null;
                     webView.destroy();
                 }
                 if (Build.VERSION.SDK_INT >= 21) {
@@ -710,7 +629,6 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
                     finish();
                 }
                 break;
-
 
 
             case R.id.request_desktop:
@@ -774,7 +692,6 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
                 break;
 
 
-
             case R.id.share:
                 String shareBody = webView.getUrl();
                 Intent sharingIntent = new Intent(Intent.ACTION_SEND);
@@ -794,7 +711,6 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
 
         return super.onOptionsItemSelected(menuItem);
     }
-
 
 
     @Override
@@ -821,8 +737,6 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
 
     @Override
     public void onBackPressed() {
-        final WebView webView = (WebView) findViewById(R.id.mainWebView);
-        assert webView != null;
         if (webView.canGoBack()) {
             webView.goBack();
         } else {
@@ -830,12 +744,12 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
                 if (back_pressed + 2000 > System.currentTimeMillis())
                     super.onBackPressed();
                 else
-                    Toast.makeText(getBaseContext(), "Press back again to exit " +getResources().getString(R.string.app_name) +"!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "Press back again to exit " + getResources().getString(R.string.app_name) + "!", Toast.LENGTH_SHORT).show();
                 back_pressed = System.currentTimeMillis();
             } else {
                 super.onBackPressed();
             }
-            if(preferences.getBoolean("clear_data", false)) {
+            if (preferences.getBoolean("clear_data", false)) {
                 if (Build.VERSION.SDK_INT >= 21) {
                     cookieManager.removeAllCookies(null);
                 } else {
@@ -848,9 +762,6 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
                 formData.clearFormData();
                 webView.clearCache(true);
                 webView.clearHistory();
-
-                omniBox = null;
-                history = null;
                 webView.destroy();
             }
         }
@@ -858,25 +769,27 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
 
     @Override
     protected void onPause() {
+        super.onPause();
         if (webView != null) {
             unregisterForContextMenu(webView);
             webView.onPause();
-            super.onPause();
         }
+        PreferencesUtility.saveBookmarks(adapterBookmarks.getListBookmarks());
     }
 
     @Override
     public void onResume() {
+        super.onResume();
         registerForContextMenu(webView);
         webView.onResume();
         webView.requestFocus();
-        super.onResume();
+        listBookmarks = PreferencesUtility.getBookmarks();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(preferences.getBoolean("clear_data", false)){
+        if (preferences.getBoolean("clear_data", false)) {
             if (Build.VERSION.SDK_INT >= 21) {
                 cookieManager.removeAllCookies(null);
             } else {
@@ -889,17 +802,14 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
             formData.clearFormData();
             webView.clearCache(true);
             webView.clearHistory();
-
-            omniBox = null;
-            history = null;
             webView.destroy();
-        }else{
-          webView.destroy();
+        } else {
+            webView.destroy();
         }
     }
 
     @Override
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         savePrefs();
     }
@@ -967,7 +877,7 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
                 ClipboardManager clipboard = (ClipboardManager) MainActivity.this.getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newUri(this.getContentResolver(), "URI", Uri.parse(urlToGrab));
                 clipboard.setPrimaryClip(clip);
-                Snackbar.make(webView,"Copied to clipboard", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(webView, "Copied to clipboard", Snackbar.LENGTH_SHORT).show();
         }
         return super.onContextItemSelected(item);
     }
@@ -983,7 +893,7 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
 
     @SuppressWarnings("Range")
     private void saveImageToDisk(String imageUrl) {
-        if (!Sharer.resolve(this)) {
+        if (!Downloader.resolve(this)) {
             urlToGrab = null;
             return;
         }
@@ -1016,11 +926,11 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
                     .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
             dm.enqueue(request);
 
-            new SnackBar(this, "Downloading", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(webView, "Downloading", Snackbar.LENGTH_LONG).show();
         } catch (IllegalStateException ex) {
-            new SnackBar(this, "Permission denied", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(webView, "Permission denied", Snackbar.LENGTH_SHORT).show();
         } catch (Exception ex) {
-            new SnackBar(this, "Something went wrong", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(webView, "Something went wrong", Snackbar.LENGTH_SHORT).show();
         } finally {
             urlToGrab = null;
         }
@@ -1071,7 +981,7 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), getWindow().getStatusBarColor(), StaticUtils.darkColor(color));
-            colorAnimation.setDuration(100);
+            colorAnimation.setDuration(50);
             colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animator) {
@@ -1089,7 +999,7 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
             colorFrom = ((ColorDrawable) backgroundFrom).getColor();
 
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, color);
-        colorAnimation.setDuration(250);
+        colorAnimation.setDuration(50);
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animator) {
@@ -1097,9 +1007,8 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
                 swipeToRefresh.setProgressBackgroundColorSchemeColor((int) animator.getAnimatedValue());
                 header = (RelativeLayout) findViewById(R.id.bookmarks_header);
                 header.setBackgroundColor((int) animator.getAnimatedValue());
-                assert tabs != null;
-                tabs.setVisibility(View.VISIBLE);
-                tabs.setBackgroundColor((int) animator.getAnimatedValue());
+                bottomNavigationView.setVisibility(View.VISIBLE);
+                bottomNavigationView.setBackgroundColor((int) animator.getAnimatedValue());
                 if (preferences.getBoolean("show_home", false)) {
                     toolbar.setLogo(R.drawable.home_white);
                 }
@@ -1110,22 +1019,15 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
         colorAnimation.start();
 
 
-        initalizeBookmarks(bookmarkFavs);
         //noinspection deprecation
         bookmarksDrawer.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-                initalizeBookmarks(bookmarkFavs);
-                webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED, WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
 
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                initalizeBookmarks(bookmarkFavs);
-                webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED, WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
             }
 
             @Override
@@ -1138,178 +1040,203 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
 
             }
         });
-        bookmarkFavs.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @SuppressWarnings("SuspiciousMethodCalls")
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                if (menuItem.getTitle() == getString(R.string.addPage)) {
-                    if (!webView.getTitle().equals("")) {
-                        addBookmark(webView.getTitle().replace("", ""), webView.getUrl());
-                    }
-                } else if (menuItem.getTitle() == getString(R.string.removePage)) {
-                    removeBookmark(webView.getTitle().replace("", ""));
-                    bookmarksDrawer.closeDrawers();
-                    Toast.makeText(getBaseContext(), "The site: " + webView.getTitle().replace("", "") + " has been removed from bookmarks.", Toast.LENGTH_SHORT).show();
-                } else {
-                    webView.loadUrl(bookmarkUrls.get(bookmarkTitles.indexOf(menuItem.getTitle())));
-                    bookmarksDrawer.closeDrawers();
-                }
-                return true;
-            }
-        });
-
     }
 
-    public void initalizeBookmarks(NavigationView bookmarkFavs) {
-        bookmarkUrls = new ArrayList<>();
-        bookmarkTitles = new ArrayList<>();
-        final Menu menu = bookmarkFavs.getMenu();
-        menu.clear();
-        String result = preferences.getString("simplicity_bookmarks", "[]");
-        try {
-            JSONArray bookmarksArray = new JSONArray(result);
-            for (int i = 0; i < bookmarksArray.length(); i++) {
-                JSONObject bookmark = bookmarksArray.getJSONObject(i);
-                menu.add(bookmark.getString("title")).setIcon(R.drawable.ic_bookmark);
-                bookmarkTitles.add(bookmark.getString("title"));
-                bookmarkUrls.add(bookmark.getString("url"));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        //noinspection StatementWithEmptyBody
-        if (!bookmarkUrls.contains(webView.getUrl())) {
-            menu.add(getString(R.string.addPage)).setIcon(null);
-        } else {
-            menu.add(getString(R.string.removePage)).setIcon(R.drawable.ic_trash);
+
+    private void setAutoCompleteSource() {
+        AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.omniBox);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, history.toArray(new String[history.size()]));
+
+        if (textView != null) {
+            textView.setAdapter(adapter);
+
         }
     }
 
-    public void addBookmark(String title, String url) {
-        String result = preferences.getString("simplicity_bookmarks", "[]");
-        try {
-            JSONArray bookmarksArray = new JSONArray(result);
-            bookmarksArray.put(new JSONObject("{'title':'" + title + "','url':'" + url + "'}"));
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("simplicity_bookmarks", bookmarksArray.toString());
-            editor.apply();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        initalizeBookmarks(bookmarkFavs);
-    }
-
-    public void removeBookmark(String title) {
-        String result = preferences.getString("simplicity_bookmarks", "[]");
-        try {
-            JSONArray bookmarksArray = new JSONArray(result);
-            if (Build.VERSION.SDK_INT >= 19) {
-                bookmarksArray.remove(bookmarkTitles.indexOf(title));
-            } else {
-                final List<JSONObject> objs = asList(bookmarksArray);
-                objs.remove(bookmarkTitles.indexOf(title));
-                final JSONArray out = new JSONArray();
-                for (final JSONObject obj : objs) {
-                    out.put(obj);
-                }
-                bookmarksArray = out;
-            }
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("simplicity_bookmarks", bookmarksArray.toString());
-            editor.apply();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        initalizeBookmarks(bookmarkFavs);
-    }
-
- private void setAutoCompleteSource(){
-     AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.omniBox);
-     ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, history.toArray(new String[history.size()]));
-
-     if (textView != null) {
-         textView.setAdapter(adapter);
-
-     }
- }
-
-    private void addSearchInput(String input){
-        if(!history.contains(input))
-        {
+    private void addSearchInput(String input) {
+        if (!history.contains(input)) {
             history.add(input);
             setAutoCompleteSource();
         }
     }
 
-    private void savePrefs(){
+    private void savePrefs() {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putStringSet(PREFS_SEARCH_HISTORY, history);
         editor.apply();
+
+
     }
 
 
-    private void bottomTabs() {
-        final MinorView backward = (MinorView) findViewById(R.id.bottom_back);
-        assert backward != null;
-        backward.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               if(webView.canGoBack()){
-                   webView.goBack();
-               }
+
+
+
+    public class WebClient extends WebViewClient {
+        private Map<String, Boolean> loadedUrls = new HashMap<>();
+
+        @SuppressWarnings("deprecation")
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+        @Override
+        public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+            if (preferences.getBoolean("no_ads", false)) {
+                boolean ad;
+                if (!loadedUrls.containsKey(url)) {
+                    ad = AdBlock.isAd(url);
+                    loadedUrls.put(url, ad);
+                } else {
+                    ad = loadedUrls.get(url);
+                }
+                return ad ? AdBlock.createEmptyResource() :
+                        super.shouldInterceptRequest(view, url);
+
 
             }
-        });
+            return super.shouldInterceptRequest(view, url);
 
-        final MinorView forward = (MinorView) findViewById(R.id.bottom_forward);
-        assert forward != null;
-        forward.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(webView.canGoForward()){
-                    webView.goForward();
+        }
+
+
+        @SuppressWarnings("deprecation")
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            try {
+                if(preferences.getBoolean("no_track", false)){
+                    HashMap<String, String> extraHeaders = new HashMap<>();
+                    extraHeaders.put("DNT", "1");
+                    view.loadUrl(url, extraHeaders);
+                    return true;
+                }
+                if ((url.contains("market://")
+                        || url.contains("mailto:")
+                        || url.contains("play.google")
+                        || url.contains("tel:"))) {
+                    view.getContext().startActivity( new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                    return true;
+                }
+                if ((url.contains("http://") || url.contains("https://"))) {
+                    return false;
                 }
 
-            }
-
-        });
-
-        final MinorView bookmarks = (MinorView) findViewById(R.id.bottom_bookmarks);
-        assert bookmarks != null;
-        bookmarks.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bookmarksDrawer.openDrawer(GravityCompat.END);
-
-            }
-        });
-
-        final MinorView new_window = (MinorView) findViewById(R.id.bottom_window);
-        assert new_window != null;
-        new_window.setOnClickListener(new View.OnClickListener() {
-            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onClick(View v) {
-                if(preferences.getBoolean("merge_windows", false)) {
-                    Intent windowIntent = new Intent(MainActivity.this, NewWindow.class);
-                    windowIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                    startActivity(windowIntent);
-                }else{
-                    Intent windowIntent = new Intent(MainActivity.this, NewWindow.class);
-                    startActivity(windowIntent);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                try {
+                    view.getContext().startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    Log.e("shouldOverrideUrlLoad", "" + e.getMessage());
+                    e.printStackTrace();
                 }
-            }
-        });
 
-        final MinorView jump_to_top = (MinorView) findViewById(R.id.bottom_jump);
-        assert jump_to_top != null;
-        jump_to_top.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                webView.loadUrl("javascript:scroll(0,0)");
+                return true;
+            } catch (NullPointerException npe) {
+                npe.printStackTrace();
+                return true;
             }
-        });
+        }
+
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+            try {
+                swipeToRefresh.setRefreshing(true);
+                omniBox.setText(url);
+                stopPage.setVisible(true);
+                if (refreshPage.isVisible()) {
+                    refreshPage.setVisible(false);
+                }
+                if ((url.contains("https://"))) {
+                    secure.setVisibility(View.VISIBLE);
+                } else {
+                    secure.setVisibility(View.GONE);
+                }
+
+            } catch (NullPointerException ignored) {
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        @SuppressWarnings("deprecation")
+        @Override
+        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+            if (Connectivity.isConnected(getApplicationContext()) && !refreshed) {
+                webView.loadUrl(failingUrl);
+                refreshed = true;
+            } else {
+                webView.loadUrl("file:///android_asset/error.html");
+                omniBox.setText(R.string.app_name);
+                setColor(ContextCompat.getColor(MainActivity.this, R.color.black));
+                Snackbar snackbar = Snackbar.make(webView, description, Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction(R.string.refresh, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (webView.canGoBack()) {
+                            webView.stopLoading();
+                            webView.goBack();
+                        }
+                    }
+                });
+                snackbar.show();
+
+            }
+        }
+
+
+        @TargetApi(Build.VERSION_CODES.M)
+        @Override
+        public void onReceivedError(WebView view, WebResourceRequest req, WebResourceError err) {
+            onReceivedError(view, err.getErrorCode(), err.getDescription().toString(), req.getUrl().toString());
+        }
+
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            try {
+                swipeToRefresh.setRefreshing(false);
+                listBookmarks = PreferencesUtility.getBookmarks();
+                stopPage.setVisible(false);
+                refreshPage.setVisible(true);
+                omniBox.setText(webView.getUrl());
+                omniBox.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.white));
+                addressBarFrameLayout.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.url_bar_border));
+
+                if (url.contains("file:///")) {
+                    omniBox.setText(R.string.app_name);
+                }
+
+
+            } catch (NullPointerException ignored) {
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void scrollToTop() {
+        if (scrollPosition > 10) {
+            scrollToTop(webView);
+        }
+    }
+
+
+    public static void scrollToTop(WebView webView) {
+        ObjectAnimator anim = ObjectAnimator.ofInt(webView, "scrollY", webView.getScrollY(), 0);
+        anim.setDuration(500);
+        anim.start();
+    }
+
+    @Override
+    public void loadBookmark(String title, String url) {
+        loadPage(url);
+    }
+
+    public void loadPage(String htmlLink) {
+        webView.loadUrl(htmlLink);
+
     }
 
 

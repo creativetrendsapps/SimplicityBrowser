@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="donation_check">
 
 
     <com.creativetrends.simplicity.app.preferences.PreferenceCategory
@@ -26,6 +28,7 @@
             android:key="search_engine"
             android:icon="@drawable/ic_search_engine"
             android:title="@string/search_engine_choice"
+            android:summary="@string/current_setting"
             android:entries="@array/search_engine"
             android:entryValues="@array/search_engine_values"
             android:defaultValue="https://www.google.com/search?q=" />
@@ -93,7 +96,7 @@
             android:title="Do Not Track"
             android:summary="Enable to ask sites not to track your browsing data."
             android:icon="@drawable/ic_no_track"
-            android:defaultValue="false"/>
+            android:defaultValue="true"/>
 
 
         <Preference
@@ -113,7 +116,7 @@
 
         <com.creativetrends.simplicity.app.preferences.SwitchPreference
             android:key="no_ads"
-            android:title="Ad Block (beta)"
+            android:title="Ad Block"
             android:summary="Block ads on websites."
             android:icon="@drawable/ic_ad_block"
             android:defaultValue="true" />
@@ -126,8 +129,9 @@
             android:defaultValue="true" />
 
         <com.creativetrends.simplicity.app.preferences.MaterialList
-            android:key="default_font_size"
+            android:key="font_pref"
             android:title="@string/default_font_size"
+            android:summary="@string/current_setting"
             android:icon="@drawable/ic_font_size"
             android:entries="@array/default_font_size_entries"
             android:entryValues="@array/default_font_size_entry_values"
@@ -139,6 +143,9 @@
             android:layout="@layout/divider_preference"/>
 
     </com.creativetrends.simplicity.app.preferences.PreferenceCategory>
+
+
+
 
 
     <com.creativetrends.simplicity.app.preferences.PreferenceCategory
@@ -153,8 +160,8 @@
         <Preference
             android:icon="@drawable/github_circle"
             android:key="get_source"
-            android:summary="Simplicity Source Code"
-            android:title="Build Simplicity from source">
+            android:summary="Build Simplicity from source"
+            android:title="Simplicity Source Code">
             <intent android:action="android.intent.action.VIEW"
                 android:data="https://github.com/creativetrendsapps/simplicitybrowser" />
         </Preference>

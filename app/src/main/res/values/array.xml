@@ -1,26 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string-array name="default_font_size_entries">
-        <item>50%</item>
-        <item>75%</item>
-        <item>85%</item>
-        <item>95%</item>
-        <item>100%</item>
-        <item>125%</item>
-        <item>150%</item>
-        <item>175%</item>
-        <item>200%</item>
+        <item>XXSmall (50%)</item>
+        <item>XSmall (75%)</item>
+        <item>Smaller (85%)</item>
+        <item>Small (90%)</item>
+        <item>Default (100%)</item>
+        <item>Medium (105%)</item>
+        <item>Large (115%)</item>
+        <item>XLarge (125%)</item>
+        <item>XXLarge (175%)</item>
     </string-array>
 
     <string-array name="default_font_size_entry_values">
         <item>50</item>
         <item>75</item>
         <item>85</item>
-        <item>95</item>
+        <item>90</item>
         <item>100</item>
+        <item>105</item>
+        <item>115</item>
         <item>125</item>
-        <item>150</item>
         <item>175</item>
-        <item>200</item>
+    </string-array>
+
+
+    <string-array name="intervalPrefTitles">
+        <item>5 minutes</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+    </string-array>
+
+    <string-array name="colorsNames">
+        <item>white</item>
+        <item>red</item>
+        <item>green</item>
+        <item>blue</item>
+        <item>cyan</item>
+        <item>magenta</item>
+    </string-array>
+
+    <string-array name="intervalPrefValues">
+        <item>300000</item>
+        <item>900000</item>
+        <item>1800000</item>
+        <item>3600000</item>
+        <item>10800000</item>
+        <item>21600000</item>
+    </string-array>
+
+    <string-array name="colors">
+        <item>white</item>
+        <item>red</item>
+        <item>green</item>
+        <item>blue</item>
+        <item>cyan</item>
+        <item>magenta</item>
     </string-array>
 </resources>

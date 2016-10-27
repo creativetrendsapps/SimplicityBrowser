@@ -2,10 +2,12 @@ package com.creativetrends.simplicity.app.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
@@ -15,10 +17,11 @@ import com.creativetrends.simplicity.app.R;
 
 public class DonationActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler{
 
+
     private BillingProcessor bp;
     private static final String PRODUCT_ID_1 = "com.creativetrends.simplicity.app.smalldonation";
-    private static final String PRODUCT_ID_2 = " com.creativetrends.simplicity.app.mediumdonation ";
-    private static final String PRODUCT_ID_3 = " com.creativetrends.simplicity.app.largedonation ";
+    private static final String PRODUCT_ID_2 = "com.creativetrends.simplicity.app.mediumdonation";
+    private static final String PRODUCT_ID_3 = "com.creativetrends.simplicity.app.largedonation";
     private static final String LICENSE_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjSFHzrCW9carUOooKilg7YpmDd8hvNk8Z2VFYVDVzhZtPsDXeeqckeW9AicEtTHu4s1uBPK6w2Z7LE8pb1kTrHR8YuIFltWmi3w9WKmt5RPgbSXDObzhXj2q6dz/QRyqMOl9JWL4C2gkNJLhvtqF3iJ+gp4PvYNCO5dN+EpGfWW6q4cJENYBwsobZQ/6rUGMNiKwJfPbDoaepkc3OEowIl4S49sIjMqvNKNvzTqyGJUMTerbljqdu9Jpk4Z8opAf0w7CasJ2vNKS3/ZERlT3fWZbR8TZvyo813rO7brRmMv0XtdrLeMS/TggWr9YAKbhyqOvZORaBdziu98jO0W5FwIDAQAB";
 
     private RelativeLayout small, medium, large;
@@ -48,21 +51,32 @@ public class DonationActivity extends AppCompatActivity implements BillingProces
 
     @Override
     public void onProductPurchased(String productId, TransactionDetails details) {
-
+        Toast.makeText(getBaseContext(), "Thank you for your purchase.", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onPurchaseHistoryRestored() {
+        Toast.makeText(getBaseContext(), "Welcome back! Your previous purchases have been restored.", Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void onBillingError(int errorCode, Throwable error) {
+        Snackbar snackbar = Snackbar.make(large, "Something went wrong", Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction("Retry", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recreate();
+
+            }
+        });
+        snackbar.show();
 
     }
 
     @Override
     public void onBillingInitialized() {
+
 
     }
 

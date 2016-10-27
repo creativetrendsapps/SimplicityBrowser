@@ -39,7 +39,7 @@
     <string name="omnibox_hint">Search or browse</string>
     <string name="search_engine_choice">Search Engine Choice</string>
     <string name="about_donations">About Donations</string>
-    <string name="donations">Thank you for considering to donate. Donations are optional and help support future development. In the future your donations will unlock new added features.</string>
+    <string name="donations">Donations are optional and help support future development.</string>
 
     <string-array name="search_engine">
         <item>DuckDuckGo</item>
@@ -60,104 +60,46 @@
 
     <string name="about_text"><![CDATA[
 
-   	<b>Material Preferences</b><br><br>
-
-   	The MIT License (MIT)<br><br>
-
-	Copyright &#169; 2015 Jens Driller<br><br>
-
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:<br><br>
-
-	The above copyright notice and this permission notice shall be included in all
-	copies or substantial portions of the Software.<br><br>
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-	SOFTWARE.<br><br><br>
-
-	<b>Material Preference Compat</b><br><br>
-
-	The MIT License (MIT)<br><br>
-
-	Copyright &#169; 2015 Fung Jichun<br><br>
-
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:<br><br>
-
-	The above copyright notice and this permission notice shall be included in all
-	copies or substantial portions of the Software.<br><br>
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-	SOFTWARE.<br><br>
-
-
-
-	<b>Clans Floating Action Button</b><br><br>
-	Copyright &#169; 2015 Dmytro Tarianyk
-	<br><br>
-	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at
-	<br><br>
-   	http://www.apache.org/licenses/LICENSE-2.0
-	<br><br>
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
-	<br><br>
-
-
-	<b>AdvancedWebView</b><br><br>
-	Copyright &#169; 2015 delight.im <info@delight.im>
-	<br><br>
-	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at
-	<br><br>
-   	http://www.apache.org/licenses/LICENSE-2.0
-	<br><br>
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
-	<br><br>
-
-
-	<b>Minor</b><br><br>
-	Copyright &#169; 2016 Batterii
-	<br><br>
-	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at
-	<br><br>
-   	http://www.apache.org/licenses/LICENSE-2.0
-	<br><br>
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
-	<br><br>
+   	<i><b>#SOONBACKANSWER</b></i>
     ]]></string>
+
+    <string name="choose_email_client">Choose e-mail client</string>
+    <string name="google_play" translatable="false">Google Play</string>
+
+    <string name="loading">Loading&#8230;</string>
+    <string name="loading_error">Feed cannot be loaded</string>
+    <string name="please_configure">Please specify feed URL</string>
+    <string name="zero_items">No items to display</string>
+    <string name="preference_category1">General</string>
+    <string name="preference_category2">Predefined feeds</string>
+    <string name="preference_category3">Notifications</string>
+    <string name="preference_category4">Author</string>
+    <string name="notifications_feed_url">Notifications feed</string>
+    <string name="interval_pref">Time interval for checking</string>
+    <string name="interval_pref_description">Feed will be checked every %s.</string>
+    <string name="activate_notifications">Activate notifications</string>
+    <string name="all_notifications">All notifications</string>
+    <string name="notification_sound">Notification sound</string>
+    <string name="notification_sound_description">Choose a ringtone or silence: \u0020</string>
+    <string name="silent">No sound</string>
+    <string name="vibrate">Vibrations</string>
+    <string name="led_light">LED light</string>
+    <string name="led_color">LED light color</string>
+    <string name="led_color_description">Current blinking color is %s.</string>
+    <string name="new_item">New feed item</string>
+    <string name="new_items">new feed items</string>
+    <string name="date_null">No date</string>
+    <string name="rss">Rss reader</string>
+    <string name="current_setting">Current: %s.</string>
+    <string name="rate">Rate</string>
+    <string name="bugs">Report bug</string>
+    <string name="helpfeed">Feedback</string>
+    <string name="go_back">Back</string>
+    <string name="go_forward">Forward</string>
+    <string name="new_window_new">Window</string>
+    <string name="jump_to_top">Top</string>
+    <string name="removed">Removed:</string>
+    <string name="from_bookmarks">from bookmarks.</string>
+
+
 </resources>

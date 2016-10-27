@@ -1,27 +1,10 @@
-/**
- * Copyright 2016 Soren Stoutner <soren@stoutner.com>.
- *
- * This file is part of Privacy Browser <https://www.stoutner.com/privacy-browser>.
- *
- * Privacy Browser is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Privacy Browser is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package com.creativetrends.simplicity.app.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -30,9 +13,13 @@ import android.view.MenuItem;
 
 import com.creativetrends.simplicity.app.R;
 import com.creativetrends.simplicity.app.fragments.Settings;
+import com.creativetrends.simplicity.app.utils.Miscellany;
 import com.creativetrends.simplicity.app.utils.PreferencesUtility;
 
 public class SettingsActivity extends AppCompatActivity {
+    public static final String RESTART_CODE = "changed_setting";
+    public static final String RESTART_RESULTS = "needs_restart";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,12 +38,23 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        PreferencesUtility.putString("changed_setting", "needs_restart_false");
+    }
+
+
 
     @Override
     public void onBackPressed() {
         int count = getFragmentManager().getBackStackEntryCount();
         if (count == 0) {
+        if(PreferencesUtility.getString(RESTART_CODE, "").equals(RESTART_RESULTS)) {
+            changes();
+        }else {
             super.onBackPressed();
+        }
         } else
             getFragmentManager().popBackStack();
     }
@@ -79,30 +77,50 @@ public class SettingsActivity extends AppCompatActivity {
                 return true;
 
 
-            case R.id.simplicity_help:
-                Intent feedbackIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                "mailto", "contact@creativetrendsapps.com", null));
-                feedbackIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + " Feedback");
-                feedbackIntent.putExtra(Intent.EXTRA_TEXT, "Here is some awesome feedback for " + getString(R.string.app_name) + "\n\n");
-                startActivity(Intent.createChooser(feedbackIntent, "Send Feedback"));
+            case R.id.rate_folio:
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id="+getApplicationContext().getPackageName())));
                 return true;
 
 
+            case R.id.settings_feedback:
+                AlertDialog.Builder terms =  new AlertDialog.Builder(SettingsActivity.this);
+                terms.setTitle(getResources().getString(R.string.help));
+                terms.setMessage("Get help and support by choosing one of the options below.");
+                terms.setPositiveButton(R.string.helpfeed, new AlertDialog.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        Intent feedbackIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                                "mailto", "contact@creativetrendsapps.com", null));
+                        feedbackIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + " Feedback");
+                        feedbackIntent.putExtra(Intent.EXTRA_TEXT, "Here is some awesome feedback for " + getString(R.string.app_name) + "\n\n" + Miscellany.getDeviceInfo(SettingsActivity.this)+ "\n\n");
+                        startActivity(Intent.createChooser(feedbackIntent, getString(R.string.choose_email_client)));
 
+                    }
+                });
+                terms.setNegativeButton(R.string.bugs, new AlertDialog.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        Intent bugIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                                "mailto", "bugs@creativetrendsapps.com", null));
+                        bugIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + " Bug");
+                        bugIntent.putExtra(Intent.EXTRA_TEXT, "I found a bug in" + " " + getString(R.string.app_name) + "\n\n" + Miscellany.getDeviceInfo(SettingsActivity.this) + "\n\n");
+                        startActivity(Intent.createChooser(bugIntent, getString(R.string.choose_email_client)));
+                    }
 
+                });
+                terms.setNeutralButton(R.string.cancel, null);
+                terms.show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
 
 
         }
     }
-    private void changes(String key) {
-        if (key.equals(PreferencesUtility.getString("apply_changes", ""))) {
+
+
+    private void changes() {
             Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-        } else {
-            finish();
         }
     }
-}

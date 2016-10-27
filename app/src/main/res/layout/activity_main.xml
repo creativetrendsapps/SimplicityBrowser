@@ -30,6 +30,7 @@
                 android:layout_height="match_parent" >
 
                 <android.support.design.widget.AppBarLayout
+                    android:id="@+id/appbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:elevation="1dp"
@@ -66,8 +67,8 @@
 
                                 <ImageView
                                     android:id="@+id/favoriteIcon"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
+                                    android:layout_width="22dp"
+                                    android:layout_height="22dp"
                                     android:padding="3dp"
                                     android:layout_marginStart="5dp"
                                     android:src="@drawable/ic_secure_white"
@@ -80,7 +81,7 @@
 
 
 
-                                <AutoCompleteTextView
+                                <com.creativetrends.simplicity.app.ui.SimplicityOmniBox
                                     android:id="@+id/omniBox"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -91,7 +92,7 @@
                                     android:paddingLeft="5dp"
                                     android:paddingRight="5dp"
                                     android:paddingTop="1dp"
-                                    android:singleLine="true"
+                                    android:maxLines="1"
                                     android:textColor="@color/black"
                                     android:textSize="15sp"
                                     android:selectAllOnFocus="true"
@@ -125,6 +126,7 @@
                     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
+
                     <com.creativetrends.simplicity.app.ui.WebViewScroll
                         android:id="@+id/mainWebView"
                         android:layout_width="match_parent"
@@ -136,60 +138,18 @@
                 </android.support.v4.widget.SwipeRefreshLayout>
 
 
-
-
-                <com.akiniyalocts.minor.MinorLayout
-                    android:id="@+id/tabs"
+                <android.support.design.widget.BottomNavigationView
+                    android:id="@+id/bottom_navigation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:background="#ffffff"
-                    app:layout_behavior="com.akiniyalocts.minor.behavior.MinorBehavior"
-                    app:minor_center_items="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:visibility="gone">
+                    android:background="@color/white"
+                    app:itemIconTint="@color/white"
+                    app:itemTextColor="@color/white"
+                    app:menu="@menu/bottom_navigation_main"
+                    app:layout_behavior="com.creativetrends.simplicity.app.behavior.BottomBehavior"
+                    android:visibility="gone"/>
 
-                    <com.akiniyalocts.minor.MinorView
-                        android:id="@+id/bottom_back"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:foreground="?attr/selectableItemBackground"
-                        app:minor_icon_view="@layout/bottom_back"
-                        app:minor_title_text_color="#FFF" />
-
-                    <com.akiniyalocts.minor.MinorView
-                        android:id="@+id/bottom_forward"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:foreground="?attr/selectableItemBackground"
-                        app:minor_icon_view="@layout/bottom_forward"
-                        app:minor_title_text_color="#FFF" />
-
-                    <com.akiniyalocts.minor.MinorView
-                        android:id="@+id/bottom_bookmarks"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:foreground="?attr/selectableItemBackground"
-                        app:minor_icon_view="@layout/bottom_bookmarks"
-                        app:minor_title_text_color="#FFF"/>
-
-                    <com.akiniyalocts.minor.MinorView
-                        android:id="@+id/bottom_window"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:foreground="?attr/selectableItemBackground"
-                        app:minor_icon_view="@layout/bottom_window"
-                        app:minor_title_text_color="#FFF" />
-
-                    <com.akiniyalocts.minor.MinorView
-                        android:id="@+id/bottom_jump"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:foreground="?attr/selectableItemBackground"
-                        app:minor_icon_view="@layout/bottom_jump"
-                        app:minor_title_text_color="#FFF" />
-
-                </com.akiniyalocts.minor.MinorLayout>
             </android.support.design.widget.CoordinatorLayout>
 
         </FrameLayout>
@@ -201,10 +161,58 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end"
-            android:fitsSystemWindows="true"
-            app:headerLayout="@layout/simplicity_marks"
-            app:menu="@menu/bookmarks"/>
+            android:fitsSystemWindows="true">
 
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/bookmarks_header"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/favorites_height"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:background="?attr/colorPrimary"
+            android:fitsSystemWindows="true">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/favorites_text"
+            android:layout_gravity="center"
+            android:text="@string/bookmarks"
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:textColor="@color/white"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            tools:ignore="RelativeOverlap" />
+
+        <ImageView
+            android:id="@+id/add_bookmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/favorites_text"
+            android:layout_marginEnd="@dimen/favorites_add"
+            android:layout_gravity="end|center"
+            android:focusable="true"
+            android:clickable="true"
+            android:src="@drawable/ic_add_mark"
+            tools:ignore="ContentDescription"
+            android:layout_alignTop="@+id/textView"
+            android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_bookmarks"
+            android:paddingTop="16dp"
+            android:clipToPadding="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        </LinearLayout>
+
+        </android.support.design.widget.NavigationView>
     </android.support.v4.widget.DrawerLayout>
 
 

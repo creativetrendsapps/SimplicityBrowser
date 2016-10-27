@@ -1,38 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="58dp"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/bookmarks_header"
-    android:background="?attr/colorPrimary"
-    android:fitsSystemWindows="true">
-
-    <TextView
-        android:id="@+id/bookmark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="6dp"
-        android:layout_gravity="center"
-        android:text="@string/bookmarks"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/white"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        tools:ignore="RelativeOverlap" />
-
+    android:id="@+id/bookmark_holder"
+    android:background="?attr/selectableItemBackground"
+    android:padding="6.5dp"
+    android:focusable="true"
+    android:clickable="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/add_bookmark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="6dp"
-        android:layout_marginEnd="22dp"
-        android:layout_gravity="end|center"
+        android:padding="6.5dp"
         android:focusable="true"
         android:clickable="true"
-        android:src="@drawable/ic_add_mark"
-        tools:ignore="ContentDescription"
-        android:layout_alignTop="@+id/bookmark"
-        android:layout_alignParentEnd="true" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/ic_bookmark"
+        android:tint="?android:attr/textColorPrimary"
+        android:alpha="0.7"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:padding="6.5dp"
+        android:id="@+id/bookmark_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:text="@string/bookmarks"
+        android:tint="?android:attr/textColorPrimary"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:layout_toStartOf="@+id/bookmark_delete"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true" />
+
+    <ImageView
+        android:id="@+id/bookmark_delete"
+        android:padding="6.5dp"
+        android:focusable="true"
+        android:clickable="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_trash"
+        android:tint="?android:attr/textColorPrimary"
+        android:alpha="0.7"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        tools:ignore="ContentDescription" />
 
 </RelativeLayout>

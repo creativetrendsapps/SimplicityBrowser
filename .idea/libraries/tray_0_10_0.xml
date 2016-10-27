@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="tray-0.10.0">
+    <ANNOTATIONS>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/net.grandcentrix.tray/tray/0.10.0/annotations.zip!/" />
+    </ANNOTATIONS>
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/net.grandcentrix.tray/tray/0.10.0/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/net.grandcentrix.tray/tray/0.10.0/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.grandcentrix.tray/tray/0.10.0/1be60a9f60092e3503c87cf4f4fa782b9b96ef22/tray-0.10.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

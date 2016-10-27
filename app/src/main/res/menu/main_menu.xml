@@ -20,6 +20,7 @@
         android:orderInCategory="01"
         android:icon="@drawable/ic_refresh_page"
         app:showAsAction="always"
+        android:visible="false"
         tools:ignore="AlwaysShowAction" />
 
 
@@ -31,12 +32,6 @@
         app:showAsAction="never" />
 
 
-
-    <!--<item
-        android:id="@+id/historyMenu"
-        android:title="@string/history"
-        android:orderInCategory="5"
-        app:showAsAction="never" /> -->
 
     <item
         android:id="@+id/simplicityHome"
@@ -71,16 +66,22 @@
         app:showAsAction="never"
         tools:ignore="HardcodedText" />
 
+    <!--<item
+        android:id="@+id/rssAction"
+        android:title="@string/rss"
+        android:orderInCategory="11"
+        app:showAsAction="never" /> -->
+
 
     <item
         android:id="@+id/settingsAction"
         android:title="@string/settings"
-        android:orderInCategory="19"
+        android:orderInCategory="12"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/actionClose"
         android:title="@string/exit"
-        android:orderInCategory="19"
+        android:orderInCategory="13"
         app:showAsAction="never" />
 </menu>

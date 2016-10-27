@@ -3,12 +3,10 @@ package com.creativetrends.simplicity.app.webview;// Created by Creative Trends 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.graphics.Palette;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.JsPromptResult;
@@ -33,7 +31,7 @@ public class SimplicityChromeClient extends WebChromeClient implements MediaPlay
     private AlertDialog customViewDialog;
     private BottomSheetDialog alertDialog;
 
-    public SimplicityChromeClient(Activity activity) {
+    protected SimplicityChromeClient(Activity activity) {
         this.activity = activity;
 
         isVideoFullscreen = false;
@@ -49,9 +47,9 @@ public class SimplicityChromeClient extends WebChromeClient implements MediaPlay
             FrameLayout frameLayout = (FrameLayout) view;
             View focusedChild = frameLayout.getFocusedChild();
 
-            this.isVideoFullscreen = true;
-            this.videoViewContainer = frameLayout;
-            this.videoViewCallback = callback;
+            isVideoFullscreen = true;
+            videoViewContainer = frameLayout;
+            videoViewCallback = callback;
 
             if (customViewDialog != null && customViewDialog.isShowing())
                 customViewDialog.dismiss();
@@ -134,137 +132,117 @@ public class SimplicityChromeClient extends WebChromeClient implements MediaPlay
 
     @Override
     public boolean onJsAlert(WebView view, final String url, final String message, final JsResult result) {
-        Palette.from(view.getFavicon()).generate(new Palette.PaletteAsyncListener() {
+        if (alertDialog != null && alertDialog.isShowing()) alertDialog.dismiss();
+        alertDialog = new BottomSheetDialog(activity);
+        @SuppressLint("InflateParams") View v = activity.getLayoutInflater().inflate(R.layout.activity_bottomsheet, null, false);
+        ((TextView) v.findViewById(R.id.title)).setText(R.string.app_name);
+        ((TextView) v.findViewById(R.id.content)).setText(message);
+
+        v.findViewById(R.id.cancel).setVisibility(View.GONE);
+        v.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onGenerated(Palette palette) {
-                if (alertDialog != null && alertDialog.isShowing()) alertDialog.dismiss();
-
-                alertDialog = new BottomSheetDialog(activity);
-                @SuppressLint("InflateParams") View v = activity.getLayoutInflater().inflate(R.layout.activity_bottomsheet, null, false);
-
-                v.setBackgroundColor(palette.getVibrantColor(Color.parseColor("#80DEEA")));
-
-                ((TextView) v.findViewById(R.id.title)).setText(R.string.app_name);
-                ((TextView) v.findViewById(R.id.content)).setText(message);
-
-                v.findViewById(R.id.cancel).setVisibility(View.GONE);
-                v.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        result.confirm();
-                        alertDialog.dismiss();
-                    }
-                });
-
-                alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        result.cancel();
-                        dialog.dismiss();
-                    }
-                });
-
-                alertDialog.setContentView(v);
-                alertDialog.show();
+            public void onClick(View v) {
+                result.confirm();
+                alertDialog.dismiss();
             }
         });
+
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                result.cancel();
+                dialog.dismiss();
+            }
+        });
+
+        alertDialog.setContentView(v);
+        alertDialog.show();
         return true;
+
     }
+
+
+
 
     @Override
     public boolean onJsConfirm(WebView view, final String url, final String message, final JsResult result) {
-        Palette.from(view.getFavicon()).generate(new Palette.PaletteAsyncListener() {
+        if (alertDialog != null && alertDialog.isShowing()) alertDialog.dismiss();
+        alertDialog = new BottomSheetDialog(activity);
+        @SuppressLint("InflateParams") View v = activity.getLayoutInflater().inflate(R.layout.activity_bottomsheet, null, false);
+
+        ((TextView) v.findViewById(R.id.title)).setText(R.string.app_name);
+        ((TextView) v.findViewById(R.id.content)).setText(message);
+
+        v.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onGenerated(Palette palette) {
-                if (alertDialog != null && alertDialog.isShowing()) alertDialog.dismiss();
-
-                alertDialog = new BottomSheetDialog(activity);
-                @SuppressLint("InflateParams") View v = activity.getLayoutInflater().inflate(R.layout.activity_bottomsheet, null, false);
-
-                v.setBackgroundColor(palette.getVibrantColor(Color.parseColor("#80DEEA")));
-
-                ((TextView) v.findViewById(R.id.title)).setText(R.string.app_name);
-                ((TextView) v.findViewById(R.id.content)).setText(message);
-
-                v.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        result.cancel();
-                        alertDialog.dismiss();
-                    }
-                });
-
-                v.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        result.confirm();
-                        alertDialog.dismiss();
-                    }
-                });
-
-                alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        result.cancel();
-                        dialog.dismiss();
-                    }
-                });
-
-                alertDialog.setContentView(v);
-                alertDialog.show();
+            public void onClick(View v) {
+                result.cancel();
+                alertDialog.dismiss();
             }
         });
+
+        v.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                result.confirm();
+                alertDialog.dismiss();
+            }
+        });
+
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                result.cancel();
+                dialog.dismiss();
+            }
+        });
+
+        alertDialog.setContentView(v);
+        alertDialog.show();
         return true;
+
     }
 
     @Override
     public boolean onJsPrompt(WebView view, String url, final String message, final String defaultValue, final JsPromptResult result) {
-        Palette.from(view.getFavicon()).generate(new Palette.PaletteAsyncListener() {
+        if (alertDialog != null && alertDialog.isShowing()) alertDialog.dismiss();
+        alertDialog = new BottomSheetDialog(activity);
+        @SuppressLint("InflateParams") View v = activity.getLayoutInflater().inflate(R.layout.activity_bottomsheet, null, false);
+
+        ((TextView) v.findViewById(R.id.title)).setText(message);
+        v.findViewById(R.id.content).setVisibility(View.GONE);
+        v.findViewById(R.id.inputLayout).setVisibility(View.VISIBLE);
+
+        EditText input = (EditText) v.findViewById(R.id.input);
+        input.setHint(defaultValue);
+
+        v.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onGenerated(Palette palette) {
-                if (alertDialog != null && alertDialog.isShowing()) alertDialog.dismiss();
-
-                alertDialog = new BottomSheetDialog(activity);
-                @SuppressLint("InflateParams") View v = activity.getLayoutInflater().inflate(R.layout.activity_bottomsheet, null, false);
-
-                v.setBackgroundColor(palette.getVibrantColor(Color.parseColor("#80DEEA")));
-
-                ((TextView) v.findViewById(R.id.title)).setText(message);
-                v.findViewById(R.id.content).setVisibility(View.GONE);
-                v.findViewById(R.id.inputLayout).setVisibility(View.VISIBLE);
-
-                EditText input = (EditText) v.findViewById(R.id.input);
-                input.setHint(defaultValue);
-
-                v.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        result.cancel();
-                        alertDialog.dismiss();
-                    }
-                });
-
-                v.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        result.confirm();
-                        alertDialog.dismiss();
-                    }
-                });
-
-                alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        result.cancel();
-                        dialog.dismiss();
-                    }
-                });
-
-                alertDialog.setContentView(v);
-                alertDialog.show();
+            public void onClick(View v) {
+                result.cancel();
+                alertDialog.dismiss();
             }
         });
 
+        v.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                result.confirm();
+                alertDialog.dismiss();
+            }
+        });
+
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                result.cancel();
+                dialog.dismiss();
+            }
+        });
+
+        alertDialog.setContentView(v);
+        alertDialog.show();
         return true;
+
     }
 }

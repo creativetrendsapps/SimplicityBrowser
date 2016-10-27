@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="md_blue_600">#00bcd4</color>
+    <color name="md_blue_600">#1976d2</color>
     <color name="pcPD">#9E9E9E</color>
     <color name="background">#F5F5F5</color>
     <color name="md_grey_900">#212121</color>

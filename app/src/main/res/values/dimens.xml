@@ -6,4 +6,9 @@
     <dimen name="dialog_content_padding_top">8dp</dimen>
     <dimen name="dialog_content_padding_bottom">8dp</dimen>
     <dimen name="dialog_content_textsize">14sp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="favorites_height">55dp</dimen>
+    <dimen name="favorites_text">6dp</dimen>
+    <dimen name="favorites_add">15dp</dimen>
 </resources>
