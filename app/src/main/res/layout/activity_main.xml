@@ -72,7 +72,7 @@
                                     android:padding="3dp"
                                     android:layout_marginStart="5dp"
                                     android:src="@drawable/ic_secure_white"
-                                    android:background="@drawable/lock_border_material"
+                                    android:background="@android:color/transparent"
                                     android:layout_gravity="start|center_vertical"
                                     android:layout_centerVertical="true"
                                     android:layout_alignParentStart="true"
