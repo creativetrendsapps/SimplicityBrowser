@@ -6,7 +6,6 @@ android {
 
     defaultConfig {
         applicationId "com.creativetrends.simplicity.app"
-        resValue "string", "tray__authority", "${applicationId}.tray"
         minSdkVersion 21
         targetSdkVersion 25
         versionCode 20
