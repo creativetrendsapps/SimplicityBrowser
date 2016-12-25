@@ -38,6 +38,5 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     //noinspection GradleDynamicVersion
     compile 'com.anjlab.android.iab.v3:library:1.0.+'
-    compile project(':saxrssreader')
     compile 'net.grandcentrix.tray:tray:0.10.0'
 }
