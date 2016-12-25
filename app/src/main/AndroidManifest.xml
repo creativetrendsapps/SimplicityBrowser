@@ -32,30 +32,7 @@
         tools:replace="android:allowBackup,android:theme"
         android:launchMode="singleTask">
 
-        <receiver
-            android:name=".notifications.BootCompletedIntentReceiver"
-            android:enabled="true"
-            android:permission="android.permission.RECEIVE_BOOT_COMPLETED" >
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".notifications.PackageReplacedIntentReceiver"
-            android:enabled="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REPLACED" />
-                <data android:scheme="package" android:path="org.indywidualni.fnotifier" />
-            </intent-filter>
-        </receiver>
-        <service
-            android:name=".notifications.NotificationsService"
-            android:enabled="true"
-            android:exported="false"
-            android:process=":remote"
-            android:icon="@mipmap/ic_launcher" >
-        </service>
+        
 
         <activity
             android:name=".activities.MainActivity"
@@ -113,15 +90,7 @@
         </activity>
 
 
-        <activity
-            android:name=".activities.RssActivity"
-            android:theme="@style/SettingsTheme"
-            android:label="Simplicity Rss Reader"
-            android:parentActivityName=".activities.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MainActivity" />
-        </activity>
+        
 
 
     </application>
