@@ -5,7 +5,7 @@ This is the source for Simplicity.
 This repo will be updated as much as possbile.
 
 # Update:
-12/3/16 <b>PLEASE READ THE LICENSE BEFORE FORKING OR USING THIS PROJECT TO CREATE A BROWSER. PLEASE DO NOT VIOLATE THE LICENSE.</b> This update converts most all of the drawables used in Simplicity to vector drawables. This reduces the apps size and also helps with scaling images for different screen resolutions better. You must include this library in your project to build successfully: https://github.com/matshofman/Android-RSS-Reader-Library
+1/4/17 <b>PLEASE READ THE LICENSE BEFORE FORKING OR USING THIS PROJECT TO CREATE A BROWSER. PLEASE DO NOT VIOLATE THE LICENSE.</b> This update converts most all of the drawables used in Simplicity to vector drawables. This reduces the apps size and also helps with scaling images for different screen resolutions better. You must include this library in your project to build successfully: https://github.com/Batterii/Minor. Simplicity now uses Firebase crash reeporting, you must supply your own Google-json file to use this service. You can remove the need for this if you are using a different service for crash and bug reporting.
  
 
 # Please Read:
