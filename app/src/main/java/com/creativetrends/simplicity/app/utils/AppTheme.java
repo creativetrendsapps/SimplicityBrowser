@@ -1,17 +1,15 @@
-package com.creativetrends.simplicity.app.utils;// Created by Creative Trends Apps on 8/29/2016.
+package com.creativetrends.simplicity.app.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.util.TypedValue;
 import android.webkit.WebView;
 
-import java.util.Locale;
-
 public class AppTheme {
-    public WebView webview;
-    
+
+    /**Created by Creative Trends Apps on 8/29/2016.*/
+
     //this will get the themes color primary color
     public static int fetchColorPrimary(Context context) {
         int colorAttr;
@@ -25,7 +23,7 @@ public class AppTheme {
         context.getTheme().resolveAttribute(colorAttr, outValue, true);
         return outValue.data;
     }
-    
+
     //this will get the themes color primary dark color
     public static int fetchColorPrimaryDark(Context context) {
         int colorAttr;
@@ -39,7 +37,7 @@ public class AppTheme {
         context.getTheme().resolveAttribute(colorAttr, outValue, true);
         return outValue.data;
     }
-    
+
     //this will get the themes accent color
     public static int fetchColorAccent(Context context) {
         int colorAttr;
@@ -99,5 +97,7 @@ public class AppTheme {
             view.getSettings().setTextZoom(150);
         }
     }
+
+
 
 }

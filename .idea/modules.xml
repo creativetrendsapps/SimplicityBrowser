@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SimplicityBrowser-master.iml" filepath="$PROJECT_DIR$/SimplicityBrowser-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/saxrssreader/saxrssreader.iml" filepath="$PROJECT_DIR$/saxrssreader/saxrssreader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bottomnav/bottomnav.iml" filepath="$PROJECT_DIR$/bottomnav/bottomnav.iml" />
     </modules>
   </component>
 </project>

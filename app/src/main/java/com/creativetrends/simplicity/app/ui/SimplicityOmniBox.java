@@ -23,12 +23,7 @@ public class SimplicityOmniBox extends AutoCompleteTextView {
         super(context, attrs);
     }
 
-    public void setThreshold(int threshold) {
-        if (threshold < 0) {
-            threshold = 0;
-        }
-        myThreshold = threshold;
-    }
+
 
     public boolean enoughToFilter() {
         return true;
@@ -36,11 +31,14 @@ public class SimplicityOmniBox extends AutoCompleteTextView {
 
     protected void onFocusChanged(boolean focused, int direction,
                                   Rect previouslyFocusedRect) {
+        try {
+            super.performFiltering("", 67);
+            // TODO Auto-generated method stub
+            super.onFocusChanged(focused, direction, previouslyFocusedRect);
 
-        super.performFiltering("", 67);
-        // TODO Auto-generated method stub
-        super.onFocusChanged(focused, direction, previouslyFocusedRect);
+        } catch (Exception ignored) {
 
+        }
     }
 
     protected void performFiltering(CharSequence text, int keyCode) {

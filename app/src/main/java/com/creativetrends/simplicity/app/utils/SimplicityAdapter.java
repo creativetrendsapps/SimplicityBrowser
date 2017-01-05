@@ -58,9 +58,13 @@ public class SimplicityAdapter extends Adapter<SimplicityAdapter.ViewHolderBookm
                     NewWindow.bookmarksDrawer.closeDrawers();
                     break;
                 case R.id.bookmark_delete:
+
+
                     AlertDialog.Builder removeFavorite = new AlertDialog.Builder(context);
-                    removeFavorite.setTitle("Remove Favorite");
+                        removeFavorite.setTitle("Remove Favorite");
                     removeFavorite.setMessage("Are you sure you would like to remove " + bookmark.getTitle() + " from your bookmarks? This action cannot be undone.");
+
+
                     removeFavorite.setPositiveButton(context.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             listBookmarks.remove(bookmark);
@@ -71,6 +75,7 @@ public class SimplicityAdapter extends Adapter<SimplicityAdapter.ViewHolderBookm
                     });
                     removeFavorite.setNegativeButton(R.string.cancel, null);
                     removeFavorite.show();
+
                     break;
                 default:
                     break;
@@ -112,4 +117,6 @@ public class SimplicityAdapter extends Adapter<SimplicityAdapter.ViewHolderBookm
         return this.listBookmarks.size();
 
     }
+
+
 }

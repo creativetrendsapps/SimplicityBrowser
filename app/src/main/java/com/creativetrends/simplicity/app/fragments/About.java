@@ -6,12 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.support.v7.app.AlertDialog;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
@@ -19,6 +16,7 @@ import android.widget.Toast;
 
 import com.creativetrends.simplicity.app.R;
 import com.creativetrends.simplicity.app.activities.EasterEggTask;
+import com.creativetrends.simplicity.app.activities.LicenseActivity;
 
 public class About extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 
@@ -39,12 +37,12 @@ public class About extends PreferenceFragment implements Preference.OnPreference
             Log.wtf("", "Error getting our own package name");
         }
 
-        Preference rate_app = findPreference("rate_simplicity");
+
         Preference libraries = findPreference("libraries");
         Preference google_plus = findPreference("google_plus");
         Preference on_twitter = findPreference("on_twitter");
         Preference more_apps = findPreference("more_apps");
-        rate_app.setOnPreferenceClickListener(this);
+
         libraries.setOnPreferenceClickListener(this);
         google_plus.setOnPreferenceClickListener(this);
         on_twitter.setOnPreferenceClickListener(this);
@@ -56,27 +54,13 @@ public class About extends PreferenceFragment implements Preference.OnPreference
     public boolean onPreferenceClick(Preference preference) {
         String key = preference.getKey();
         switch (key) {
-            case "rate_simplicity":
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getActivity().getApplicationContext().getPackageName())));
-                break;
 
             case "libraries":
-                AlertDialog.Builder builder =
-                        new AlertDialog.Builder(getActivity());
-                builder.setTitle("Libraries & Software Used");
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-                    builder.setMessage(Html.fromHtml(getResources().getString(R.string.about_text), Html.FROM_HTML_MODE_LEGACY));
-                }else{
-                    //noinspection deprecation
-                    builder.setMessage(Html.fromHtml(getResources().getString(R.string.about_text)));
-                }
-                builder.setPositiveButton(getResources().getString(R.string.ok), null);
-                builder.setNegativeButton(null, null);
-                builder.show();
+                startActivity(new Intent(getActivity(), LicenseActivity.class));
                 break;
 
             case "google_plus":
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/communities/116238843585710616103")));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/communities/100742350714968811564")));
                 break;
 
 

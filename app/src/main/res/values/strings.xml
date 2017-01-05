@@ -4,34 +4,21 @@
 <resources>
 
     <string name="app_name">Simplicity</string>
-    <string name="home">Home</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
-    <string name="share">Share</string>
-    <string name="add_to_home_screen">Add to home screen</string>
     <string name="shortcut_name">Shortcut name</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="create">Create</string>
     <string name="privacy_settings">Privacy Settings</string>
     <string name="general_settings">General Settings</string>
-    <string name="privateMode">Private mode</string>
-    <string name="findinpage">Find in page</string>
     <string name="no_connection">No connection</string>
-    <string name="refresh">Refresh</string>
     <string name="help">Help</string>
     <string name="bookmarks">Bookmarks</string>
-    <string name="addPage"/>
-    <string name="removePage">Remove Bookmark</string>
     <string name="error">Error</string>
-    <string name="app_restart">Restart to apply changes.</string>
-    <string name="stop_loading">Stop loading</string>
-    <string name="refresh_page">Refresh page</string>
 
     <string name="default_font_size">Default Font Size</string>
 
-    <string name="exit">Exit</string>
-    <string name="close_window">Close window</string>
     <string name="small_donation">Small Donation</string>
     <string name="medium_donation">Medium Donation</string>
     <string name="large_donation">Large Donation</string>
@@ -58,48 +45,37 @@
 
 
 
-    <string name="about_text"><![CDATA[
-
-   	<i><b>#SOONBACKANSWER</b></i>
-    ]]></string>
 
     <string name="choose_email_client">Choose e-mail client</string>
-    <string name="google_play" translatable="false">Google Play</string>
 
-    <string name="loading">Loading&#8230;</string>
-    <string name="loading_error">Feed cannot be loaded</string>
-    <string name="please_configure">Please specify feed URL</string>
-    <string name="zero_items">No items to display</string>
-    <string name="preference_category1">General</string>
-    <string name="preference_category2">Predefined feeds</string>
-    <string name="preference_category3">Notifications</string>
-    <string name="preference_category4">Author</string>
-    <string name="notifications_feed_url">Notifications feed</string>
-    <string name="interval_pref">Time interval for checking</string>
-    <string name="interval_pref_description">Feed will be checked every %s.</string>
-    <string name="activate_notifications">Activate notifications</string>
-    <string name="all_notifications">All notifications</string>
-    <string name="notification_sound">Notification sound</string>
-    <string name="notification_sound_description">Choose a ringtone or silence: \u0020</string>
-    <string name="silent">No sound</string>
-    <string name="vibrate">Vibrations</string>
-    <string name="led_light">LED light</string>
-    <string name="led_color">LED light color</string>
-    <string name="led_color_description">Current blinking color is %s.</string>
-    <string name="new_item">New feed item</string>
-    <string name="new_items">new feed items</string>
-    <string name="date_null">No date</string>
-    <string name="rss">Rss reader</string>
     <string name="current_setting">Current: %s.</string>
     <string name="rate">Rate</string>
     <string name="bugs">Report bug</string>
     <string name="helpfeed">Feedback</string>
-    <string name="go_back">Back</string>
-    <string name="go_forward">Forward</string>
-    <string name="new_window_new">Window</string>
-    <string name="jump_to_top">Top</string>
     <string name="removed">Removed:</string>
     <string name="from_bookmarks">from bookmarks.</string>
+    <string name="private_info">Your connection to this site is private.</string>
+    <string name="none_private_info">Your connection to this site is not private.</string>
+
+    <string name="new_lock">Setup New 4-digit Smart-Pass</string>
+    <string name="welcome">Enter Your 4-digit Smart-Pass</string>
+    <string name="saved_pin_message">If you forget your pin, please clear Simplicity\'s data from your phones application manager.</string>
+    <string name="your_pin">Your PIN is:</string>
+
+
+    <string name="about_new" translatable="false"><![CDATA[
+    <br>
+    <b>New in this version.</b>
+    <br>
+    <br>
+    Fixed an issue with the overflow menu not being available when using the Omnibox.
+    <br>
+    <br>
+    Speed improvements.
+    <br>
+    ]]></string>
+    <string name="lock_wrong">Incorrect Smart-Pass, Try again.</string>
+	<string name="licenses">Licences</string>
 
 
 </resources>

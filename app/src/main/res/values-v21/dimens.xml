@@ -5,5 +5,6 @@
     <dimen name="favorites_height">80dp</dimen>
     <dimen name="favorites_text">20dp</dimen>
     <dimen name="favorites_add">22dp</dimen>
+    <bool name="isTablet">false</bool>
 
 </resources>

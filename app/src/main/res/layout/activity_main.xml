@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
 
 
@@ -18,8 +19,7 @@
 
         <FrameLayout
             android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:fitsSystemWindows="true">
+            android:layout_width="match_parent">
 
             <android.support.design.widget.CoordinatorLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
@@ -27,7 +27,9 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 tools:context=".activities.MainActivity"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
 
                 <android.support.design.widget.AppBarLayout
                     android:id="@+id/appbar"
@@ -37,6 +39,7 @@
                     android:theme="@style/AppTheme.AppBarOverlay"
                     tools:targetApi="lollipop">
 
+
                     <android.support.v7.widget.Toolbar
                         android:id="@+id/appBar"
                         android:layout_width="match_parent"
@@ -44,71 +47,149 @@
                         android:background="?attr/colorPrimary"
                         app:layout_scrollFlags="scroll|enterAlways"
                         app:popupTheme="@style/AppTheme.PopupOverlay"
+                        android:contentInsetStart="0dp"
+                        app:contentInsetStart="0dp"
                         app:contentInsetStartWithNavigation="0dp">
 
 
-                        <FrameLayout
-                            xmlns:tools="http://schemas.android.com/tools"
-                            android:id="@+id/addressBarFrameLayout"
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:layout_width="fill_parent"
-                            android:layout_height="40dp"
-                            android:layout_marginStart="30dp"
-                            android:background="@drawable/lock_border"
-                            android:elevation="2dp">
 
 
-                            <RelativeLayout
-                                android:layout_width="match_parent"
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="?attr/actionBarSize"
+                            android:layout_margin="-0.5dp"
+                            android:layout_alignParentStart="true"
+                            android:foreground="?attr/selectableItemBackground"
+                            app:cardCornerRadius="2dp"
+                            app:cardUseCompatPadding="true">
+
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/home_button"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                tools:ignore="UselessParent">
+                                android:layout_gravity="start|center"
+                                android:adjustViewBounds="true"
+                                android:src="@drawable/ic_home_about"
+                                android:background="@color/white"
+                                tools:ignore="ContentDescription"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentStart="true"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"/>
+
+                            <View
+                                android:id="@+id/separator"
+                                android:layout_width="1dp"
+                                android:layout_height="fill_parent"
+                                android:background="@color/black_semi_transparent"
+                                android:layout_toEndOf="@+id/home_button"/>
 
 
 
-                                <ImageView
-                                    android:id="@+id/favoriteIcon"
-                                    android:layout_width="22dp"
-                                    android:layout_height="22dp"
-                                    android:padding="3dp"
-                                    android:layout_marginStart="5dp"
-                                    android:src="@drawable/ic_secure_white"
-                                    android:background="@android:color/transparent"
-                                    android:layout_gravity="start|center_vertical"
-                                    android:layout_centerVertical="true"
-                                    android:layout_alignParentStart="true"
-                                    tools:ignore="ContentDescription,RtlSymmetry,TooDeepLayout"
-                                    android:visibility="gone"/>
+                            <AutoCompleteTextView
+                            android:id="@+id/omniBox"
+                            android:layout_width="300dp"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:imeOptions="actionGo"
+                            android:inputType="textUri|textAutoComplete|textWebEditText|textShortMessage"
+                            android:paddingBottom="1dp"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="5dp"
+                            android:paddingTop="1dp"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:textColor="@color/black"
+                            android:textSize="15sp"
+                            android:selectAllOnFocus="true"
+                            tools:ignore="LabelFor,UnusedAttribute"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentTop="true"
+                            android:textCursorDrawable="@null"
+                            android:hint="@string/omnibox_hint"
+                            android:layout_toEndOf="@+id/favoriteIcon"
+                            android:layout_toStartOf="@+id/refresh_page"
+                            android:completionThreshold="1"
+                            android:alpha="0.5"/>
+
+
+                            <ImageView
+                            android:id="@+id/stop_loading"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end|center"
+                            android:gravity="center_horizontal"
+                            android:layout_margin="2dp"
+                            android:paddingEnd="4dp"
+                            android:adjustViewBounds="false"
+                            android:src="@drawable/ic_stop_loading"
+                            android:background="@color/white"
+                            tools:ignore="ContentDescription,RtlSymmetry"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true"
+                            android:visibility="gone"/>
+
+                            <ImageView
+                                android:id="@+id/refresh_page"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start|center"
+                                android:gravity="center_horizontal"
+                                android:layout_margin="2dp"
+                                android:paddingEnd="4dp"
+                                android:adjustViewBounds="true"
+                                android:clickable="true"
+                                android:src="@drawable/ic_overflow_dark"
+                                tools:ignore="ContentDescription,RtlSymmetry"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentEnd="true"
+                                android:background="?attr/selectableItemBackgroundBorderless"/>
+
+
+                            <ImageView
+                                android:id="@+id/favoriteIcon"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:padding="3dp"
+                                android:adjustViewBounds="true"
+                                android:src="@drawable/ic_secure_white"
+                                android:tint="@color/md_blue_600"
+                                android:background="@android:color/transparent"
+                                tools:ignore="ContentDescription,RtlSymmetry,TooDeepLayout"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="5dp"
+                                android:layout_toEndOf="@+id/home_button"
+                                android:visibility="gone"/>
+
+
+                        </RelativeLayout>
+
+                        </android.support.v7.widget.CardView>
 
 
 
-                                <com.creativetrends.simplicity.app.ui.SimplicityOmniBox
-                                    android:id="@+id/omniBox"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@android:color/transparent"
-                                    android:imeOptions="actionGo"
-                                    android:inputType="textUri|textAutoComplete|textWebEditText|textShortMessage"
-                                    android:paddingBottom="1dp"
-                                    android:paddingLeft="5dp"
-                                    android:paddingRight="5dp"
-                                    android:paddingTop="1dp"
-                                    android:maxLines="1"
-                                    android:textColor="@color/black"
-                                    android:textSize="15sp"
-                                    android:selectAllOnFocus="true"
-                                    tools:ignore="LabelFor,UnusedAttribute"
-                                    android:layout_alignParentBottom="true"
-                                    android:layout_alignParentTop="true"
-                                    android:textCursorDrawable="@null"
-                                    android:layout_toEndOf="@+id/favoriteIcon"
-                                    android:hint="@string/omnibox_hint"/>
 
-
-                            </RelativeLayout>
-
-
-                    </FrameLayout>
                     </android.support.v7.widget.Toolbar>
+
+
+                    <ProgressBar
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:id="@+id/progressBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxHeight="2dip"
+                        android:minHeight="2dip"
+                        android:progressDrawable="@drawable/simplicity_progress"/>
+
+
                 </android.support.design.widget.AppBarLayout>
 
 
@@ -138,17 +219,69 @@
                 </android.support.v4.widget.SwipeRefreshLayout>
 
 
-                <android.support.design.widget.BottomNavigationView
-                    android:id="@+id/bottom_navigation"
+
+
+                <com.akiniyalocts.minor.MinorLayout
+                    android:id="@+id/bottom_tabs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
+                    android:padding="6dp"
+                    android:elevation="10dp"
                     android:background="@color/white"
-                    app:itemIconTint="@color/white"
-                    app:itemTextColor="@color/white"
-                    app:menu="@menu/bottom_navigation_main"
                     app:layout_behavior="com.creativetrends.simplicity.app.behavior.BottomBehavior"
-                    android:visibility="gone"/>
+                    app:layout_anchor="@+id/mainWebView"
+                    app:layout_anchorGravity="bottom"
+                    app:minor_center_items="true"
+                    android:visibility="gone">
+
+                    <com.akiniyalocts.minor.MinorView
+                        android:id="@+id/sim_back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:minor_icon_view="@layout/sim_back_menu"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:soundEffectsEnabled="false"/>
+
+                    <com.akiniyalocts.minor.MinorView
+                        android:id="@+id/sim_forward"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:minor_icon_view="@layout/sim_forward_menu"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:soundEffectsEnabled="false"/>
+
+
+                    <com.akiniyalocts.minor.MinorView
+                        android:id="@+id/sim_newwindow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:minor_icon_view="@layout/sim_newwindow_menu"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:soundEffectsEnabled="false"/>
+
+                    <com.akiniyalocts.minor.MinorView
+                        android:id="@+id/sim_jump"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:minor_icon_view="@layout/sim_jump_menu"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:soundEffectsEnabled="false"/>
+
+                </com.akiniyalocts.minor.MinorLayout>
+
+
+                <FrameLayout
+                    android:id="@+id/menu_holder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="false"
+                    android:elevation="4dp"
+                    android:focusable="false"
+                    android:soundEffectsEnabled="false"
+                    tools:ignore="UnusedAttribute">
+                    <include layout="@layout/simplicity_overflow" />
+                </FrameLayout>
+
 
             </android.support.design.widget.CoordinatorLayout>
 
@@ -201,7 +334,8 @@
             android:src="@drawable/ic_add_mark"
             tools:ignore="ContentDescription"
             android:layout_alignTop="@+id/textView"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:visibility="invisible"/>
         </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
@@ -214,7 +348,6 @@
 
         </android.support.design.widget.NavigationView>
     </android.support.v4.widget.DrawerLayout>
-
 
 
 </RelativeLayout>

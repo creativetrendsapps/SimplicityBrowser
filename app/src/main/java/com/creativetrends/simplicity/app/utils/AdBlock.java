@@ -20,7 +20,7 @@ import okio.BufferedSource;
 import okio.Okio;
 
 public class AdBlock {
-    private static final String AD_HOSTS_FILE = "hosts.txt";
+    private static final String AD_HOSTS_FILE = "blocked.sites.txt";
     private static final Set<String> AD_HOSTS = new HashSet<>();
 
     public static void init(final Context context) {
@@ -29,8 +29,8 @@ public class AdBlock {
             protected Void doInBackground(Void... params) {
                 try {
                     loadFromAssets(context);
-                } catch (IOException ignored) {
-
+                } catch (IOException e) {
+                    // noop
                 }
                 return null;
             }
@@ -38,7 +38,7 @@ public class AdBlock {
     }
 
     @WorkerThread
-    private static Void loadFromAssets(Context context) throws IOException {
+    private static void loadFromAssets(Context context) throws IOException {
         InputStream stream = context.getAssets().open(AD_HOSTS_FILE);
         BufferedSource buffer = Okio.buffer(Okio.source(stream));
         String line;
@@ -47,7 +47,6 @@ public class AdBlock {
         }
         buffer.close();
         stream.close();
-        return null;
     }
 
     public static boolean isAd(String url) {
@@ -55,7 +54,7 @@ public class AdBlock {
         return isAdHost(httpUrl != null ? httpUrl.host() : "");
     }
 
-    private static boolean isAdHost(String host) {
+    public static boolean isAdHost(String host) {
         if (TextUtils.isEmpty(host)) {
             return false;
         }

@@ -93,5 +93,16 @@ public class PreferencesUtility {
         putString("simplicity_bookmarks", array.toString());
     }
 
+    public static String getAppVersionName(Context context) {
+        String res = "0.0.0.0";
+        try {
+            res = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
+
 
 }

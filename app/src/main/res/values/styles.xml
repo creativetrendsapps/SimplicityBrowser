@@ -15,8 +15,8 @@
     <style name="SettingsTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="colorPrimary">@color/settingsPrimary</item>
-        <item name="colorPrimaryDark">@color/settingsPrimaryDark</item>
+        <item name="colorPrimary">@color/md_blue_600</item>
+        <item name="colorPrimaryDark">@color/md_blue_800</item>
         <item name="colorAccent">@color/md_blue_600</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>

@@ -102,8 +102,8 @@ public class WebViewScroll extends WebView {
                         nestedOffsetY += scrollOffset[1];
                     }
 
-                    if (dispatchNestedScroll(0, scrollOffset[1], 0, (int) deltaY, scrollOffset)) {
-                        event.offsetLocation(0, scrollOffset[1]);
+                    if (dispatchNestedScroll(10, scrollOffset[1], 0, (int) deltaY, scrollOffset)) {
+                        event.offsetLocation(10, scrollOffset[1]);
                         nestedOffsetY += scrollOffset[1];
                         startY -= scrollOffset[1];
                     }
