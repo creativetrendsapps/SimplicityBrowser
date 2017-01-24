@@ -10,14 +10,14 @@
 
         <com.creativetrends.simplicity.app.preferences.SwitchPreference
             android:key="show_home"
-            android:title="Show Home Icon"
-            android:summary="Shows home icon on toolbar."
+            android:title="@string/show_home_icon"
+            android:summary="@string/show_home_icon_hint"
             android:icon="@drawable/ic_home_about"
             android:defaultValue="true" />
 
         <com.creativetrends.simplicity.app.preferences.MaterialEditText
             android:key="homepage"
-            android:title="Home Page"
+            android:title="@string/home_page"
             android:summary="%s."
             android:icon="@drawable/ic_start"
             android:defaultValue="https://www.google.com"
@@ -35,15 +35,15 @@
 
         <com.creativetrends.simplicity.app.preferences.SwitchPreference
             android:key="confirm_close"
-            android:title="Confirm Close"
+            android:title="@string/confirm_close"
             android:icon="@drawable/ic_confirm_close"
-            android:summary="Confirm you'd like to close Simplicity."
+            android:summary="@string/confirm_close_hint"
             android:defaultValue="true" />
 
         <com.creativetrends.simplicity.app.preferences.SwitchPreference
             android:key="merge_windows"
-            android:title="Merge Windows"
-            android:summary="Merge new windows within recent apps."
+            android:title="@string/merge_windows"
+            android:summary="@string/merge_windows_hint"
             android:icon="@drawable/ic_merge"
             android:defaultValue="true" />
 
@@ -62,52 +62,52 @@
 
         <com.creativetrends.simplicity.app.preferences.SwitchPreference
             android:key="smart_pass"
-            android:title="Smart-Pass"
-            android:summary="Lock Simplicity with a 4-digit pin."
+            android:title="@string/smart_pass_title"
+            android:summary="@string/smart_pass_hint"
             android:icon="@drawable/ic_smart"
             android:defaultValue="false" />
 
         <com.creativetrends.simplicity.app.preferences.SwitchPreference
             android:key="javascript_enabled"
-            android:title="Enable Javascript"
-            android:summary="Allows websites to load Javascript."
+            android:title="@string/enable_javascript"
+            android:summary="@string/enable_javascript_hint"
             android:icon="@drawable/ic_privacy_web"
             android:defaultValue="true" />
 
 
         <com.creativetrends.simplicity.app.preferences.SwitchPreference
             android:key="third_party_cookies_enabled"
-            android:title="Enable Cookies"
-            android:summary="Allows websites to save cookies."
+            android:title="@string/enable_cookies"
+            android:summary="@string/enable_cookies_hint"
             android:icon="@drawable/ic_privacy_web"
             android:defaultValue="true" />
 
 
         <com.creativetrends.simplicity.app.preferences.SwitchPreference
             android:key="enable_location"
-            android:title="Enable Location"
-            android:summary="Allows websites to obtain your location."
+            android:title="@string/enable_location"
+            android:summary="@string/enable_location_hint"
             android:icon="@drawable/ic_location_about"
             android:defaultValue="false"/>
 
         <com.creativetrends.simplicity.app.preferences.SwitchPreference
             android:key="clear_data"
-            android:title="Clear Data Automatically"
-            android:summary="Clear Simplicity's cookies, history and data when closing the app."
+            android:title="@string/clear_all_data"
+            android:summary="@string/clear_all_data_hint"
             android:icon="@drawable/ic_clear_data"
             android:defaultValue="false"/>
 
         <com.creativetrends.simplicity.app.preferences.SwitchPreference
             android:key="no_track"
-            android:title="Do Not Track"
-            android:summary="Enable to ask sites not to track your browsing data."
+            android:title="@string/do_not_track"
+            android:summary="@string/do_not_track_hint"
             android:icon="@drawable/ic_no_track"
             android:defaultValue="true"/>
 
         <com.creativetrends.simplicity.app.preferences.SwitchPreference
             android:key="show_history"
-            android:title="History Items"
-            android:summary="Add suggestions from history to Omnibox."
+            android:title="@string/history_items"
+            android:summary="@string/history_items_hint"
             android:icon="@drawable/ic_history"
             android:defaultValue="false" />
 
@@ -128,21 +128,21 @@
 
         <com.creativetrends.simplicity.app.preferences.SwitchPreference
             android:key="no_ads"
-            android:title="Ad Block (Beta)"
-            android:summary="Block ads on websites. This feature is still in beta."
+            android:title="@string/ad_block"
+            android:summary="@string/ad_block_hint"
             android:icon="@drawable/ic_ad_block"
             android:defaultValue="false" />
 
         <com.creativetrends.simplicity.app.preferences.SwitchPreference
             android:key="scroll_toolbar"
-            android:title="Hide Toolbar &amp; Navigation"
-            android:summary="Hide toolbar and navigation bar on scroll."
+            android:title="@string/hide_toolbar"
+            android:summary="@string/hide_toolbar_hint"
             android:icon="@drawable/ic_hide_toolbar"
             android:defaultValue="true" />
 
         <com.creativetrends.simplicity.app.preferences.SwitchPreference
             android:key="nav_color"
-            android:title="Color Navigation"
+            android:title="@string/color_navigation"
             android:icon="@drawable/ic_colorize"
             android:defaultValue="false" />
 
@@ -173,19 +173,19 @@
         <Preference
             android:key="about_app"
             android:title="@string/about"
-            android:summary="About Simplicity."
+            android:summary="@string/about_simplicity"
             android:icon="@drawable/ic_about_about"/>
 
         <Preference
             android:key="whats_new"
-            android:title="What\'s New."
+            android:title="@string/whatsnew"
             android:icon="@drawable/ic_about_about"/>
 
         <Preference
             android:icon="@drawable/github_circle"
             android:key="get_source"
-            android:summary="Build Simplicity from source"
-            android:title="Simplicity Source Code">
+            android:summary="@string/source_code_hint"
+            android:title="@string/source_code">
             <intent android:action="android.intent.action.VIEW"
                 android:data="https://github.com/creativetrendsapps/simplicitybrowser" />
         </Preference>
