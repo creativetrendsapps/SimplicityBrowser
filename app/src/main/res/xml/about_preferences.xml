@@ -13,14 +13,14 @@
 
         <Preference
             android:key="version_number"
-            android:title="Version"
+            android:title="@string/version"
             android:icon="@drawable/ic_about_about" />
 
 
         <Preference
             android:key="libraries"
-            android:title="Libraries &amp; Software Used"
-            android:summary="Open source software used in Simplicity."
+            android:title="@string/used_libraries"
+            android:summary="@string/used_libraries_hint"
             android:icon="@drawable/dictionary"/>
 
         <Preference
@@ -39,27 +39,24 @@
 
 
         <Preference
-            android:title="Creative Trends Apps"
+            android:title="@string/creativetrends"
             android:icon="@drawable/account"
             android:selectable="false" />
 
         <Preference
             android:key="google_plus"
-            android:title="Google+ Community"
-            android:summary="Get help and support."
+            android:title="@string/google_plus"
             android:icon="@drawable/google_plus"/>
 
 
         <Preference
             android:key="on_twitter"
-            android:title="Creative Trends on Twitter"
-            android:summary="Follow on Twitter."
+            android:title="@string/on_twitter"
             android:icon="@drawable/twitter"/>
 
         <Preference
             android:key="more_apps"
-            android:title="More Apps"
-            android:summary="More on Google Play."
+            android:title="@string/get_apps"
             android:icon="@drawable/google_play"/>
 
         <Preference
