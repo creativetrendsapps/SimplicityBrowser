@@ -8,8 +8,8 @@ android {
         applicationId "com.creativetrends.simplicity.app"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 28
-        versionName "2.4"
+        versionCode 33
+        versionName "2.4.4"
     }
 
     lintOptions {
@@ -75,10 +75,9 @@ dependencies {
     compile 'uk.co.samuelwall:material-tap-target-prompt:1.6.3'
     compile project(':bottomnav')
     compile 'com.andrognito.pinlockview:pinlockview:1.0.1'
-    compile('com.mikepenz:aboutlibraries:5.9.1@aar') {
-        transitive = true
-    }
-
+    compile 'com.yarolegovich:lovely-dialog:1.0.4'
+    compile 'com.valdesekamdem.library:md-toast:0.8.0'
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 
 }
 apply plugin: 'com.google.gms.google-services'
