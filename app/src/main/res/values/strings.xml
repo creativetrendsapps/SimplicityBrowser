@@ -68,14 +68,55 @@
     <b>New in this version.</b>
     <br>
     <br>
-    Fixed an issue with the overflow menu not being available when using the Omnibox.
+    Updated strings.
     <br>
-    <br>
-    Speed improvements.
     <br>
     ]]></string>
     <string name="lock_wrong">Incorrect Smart-Pass, Try again.</string>
 	<string name="licenses">Licences</string>
+    <string name="show_home_icon">Show Home Icon</string>
+    <string name="show_home_icon_hint">Shows home icon on toolbar.</string>
+    <string name="home_page">Home Page</string>
+    <string name="confirm_close">Confirm Close</string>
+    <string name="confirm_close_hint">Confirm you\'d like to close Simplicity.</string>
+    <string name="merge_windows">Merge Windows</string>
+    <string name="merge_windows_hint">Merge new windows within recent apps.</string>
+    <string name="smart_pass_title">Smart-Pass</string>
+    <string name="smart_pass_hint">Lock Simplicity with a 4-digit pin.</string>
+    <string name="enable_javascript">Enable Javascript</string>
+    <string name="enable_javascript_hint">Allows websites to load Javascript.</string>
+    <string name="enable_cookies">Enable Cookies</string>
+    <string name="enable_cookies_hint">Allows websites to save cookies.</string>
+    <string name="enable_location">Enable Location</string>
+    <string name="enable_location_hint">Allows websites to obtain your location.</string>
+    <string name="clear_all_data">Clear Data Automatically</string>
+    <string name="clear_all_data_hint">Clear Simplicity\'s cookies, history and data when closing the app.</string>
+    <string name="do_not_track">Do Not Track</string>
+    <string name="do_not_track_hint">Enable to ask sites not to track your browsing data.</string>
+    <string name="source_code">Simplicity Source Code</string>
+    <string name="source_code_hint">Build Simplicity from source</string>
+    <string name="whatsnew">What\'s New.</string>
+    <string name="about_simplicity">About Simplicity.</string>
+    <string name="color_navigation">Color Navigation</string>
+    <string name="hide_toolbar">Hide Toolbar &amp; Navigation</string>
+    <string name="hide_toolbar_hint">Hide toolbar and navigation bar on scroll.</string>
+    <string name="ad_block">Ad Block (Beta)</string>
+    <string name="ad_block_hint">Block ads on websites. This feature is still in beta.</string>
+    <string name="history_items">History Items</string>
+    <string name="history_items_hint">Add suggestions from history to Omnibox.</string>
+    <string name="version">Version</string>
+    <string name="used_libraries">Libraries &amp; Software Used</string>
+    <string name="used_libraries_hint">Open source software used in Simplicity.</string>
+    <string name="creativetrends">Creative Trends Apps</string>
+    <string name="google_plus">Google+ Community</string>
+    <string name="on_twitter">Creative Trends on Twitter</string>
+    <string name="get_apps">Get More Apps</string>
+    <string name="not_supported">Your device does not support this feature.</string>
+    <string name="enable_color">Enable to color the navigation bar.</string>
+    <string name="include">Please include https: or http: in the address</string>
+    <string name="adaway">AdAway detected, turn this option off.</string>
+    <string name="current_option">Current:</string>
+    <string name="help_feedback">Get help and support by choosing one of the options below.</string>
 
 
 </resources>
