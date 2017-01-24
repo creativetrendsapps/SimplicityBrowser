@@ -73,7 +73,6 @@ dependencies {
     compile 'net.grandcentrix.tray:tray:0.10.0'
     compile 'com.google.firebase:firebase-crash:10.0.1'
     compile 'uk.co.samuelwall:material-tap-target-prompt:1.6.3'
-    compile project(':bottomnav')
     compile 'com.andrognito.pinlockview:pinlockview:1.0.1'
     compile 'com.yarolegovich:lovely-dialog:1.0.4'
     compile 'com.valdesekamdem.library:md-toast:0.8.0'
