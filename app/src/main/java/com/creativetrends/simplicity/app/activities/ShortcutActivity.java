@@ -43,7 +43,7 @@ public class ShortcutActivity extends AppCompatDialogFragment {
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Create a drawable version of the favorite icon.
-        Drawable favoriteIconDrawable = new BitmapDrawable(getResources(), MainActivity.favoriteIcon);
+        Drawable favoriteIconDrawable = new BitmapDrawable(getResources(), favoriteIcon);
 
         // Use AlertDialog.Builder to create the AlertDialog
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
