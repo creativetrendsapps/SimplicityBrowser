@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements ShortcutActivity.
     private Set<String> history;
     NavigationView bookmarkFavs;
     public static Bitmap favoriteIcon;
-    public static WebViewScroll webView;
+    public WebViewScroll webView;
     private RelativeLayout header;
     private static final int REQUEST_SELECT_FILE = 234;
     private ValueCallback<Uri[]> uploadMessage;
