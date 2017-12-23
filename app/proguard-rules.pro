@@ -21,8 +21,6 @@
 # hide the original source file name.
 -renamesourcefileattribute SourceFile
 
--keep class android.support.v7.widget.SearchView { *; }
-
 -keepclassmembers class * {
     @android.webkit.JavascriptInterface <methods>;
 }
