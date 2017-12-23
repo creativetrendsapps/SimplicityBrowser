@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
-    <dimen name="pref_title_space">8dp</dimen>
-    <dimen name="dialog_frame_margin">24dp</dimen>
-    <dimen name="dialog_content_padding_top">8dp</dimen>
-    <dimen name="dialog_content_padding_bottom">8dp</dimen>
-    <dimen name="dialog_content_textsize">14sp</dimen>
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="favorites_height">55dp</dimen>
-    <dimen name="favorites_text">6dp</dimen>
-    <dimen name="favorites_add">15dp</dimen>
+
 
     <dimen name="app_defaultsize_w">632.0dip</dimen>
     <dimen name="app_defaultsize_h">598.0dip</dimen>
     <dimen name="app_minimumsize_w">632.0dip</dimen>
     <dimen name="app_minimumsize_h">598.0dip</dimen>
+    <dimen name="pref_title_space">16dp</dimen>
 
-    <dimen name="toolbar_height">56dp</dimen>
-    <dimen name="search_icon_padding">12dp</dimen>
-    <bool name="isTablet">false</bool>
+    <dimen name="dots_height">30dp</dimen>
+    <dimen name="dots_margin_bottom">80dp</dimen>
+    <dimen name="img_width_height">100dp</dimen>
+    <dimen name="slide_title">30dp</dimen>
+    <dimen name="slide_desc">16dp</dimen>
+    <dimen name="desc_padding">40dp</dimen>
+
+    <dimen name="dialog_frame_margin">24dp</dimen>
+    <dimen name="dialog_content_padding_top">8dp</dimen>
+    <dimen name="dialog_content_padding_bottom">8dp</dimen>
+    <dimen name="dialog_content_textsize">14sp</dimen>
 </resources>

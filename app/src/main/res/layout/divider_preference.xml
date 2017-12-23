@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false">
 
@@ -10,13 +10,13 @@
     <View
         android:background="@drawable/shadow_three"
         android:layout_width = "fill_parent"
-        android:layout_height="3dp"
+        android:layout_height="5dp"
         android:clipToPadding="false"/>
 
     <View
         android:background="@color/black_semi_transparent"
         android:layout_width = "fill_parent"
-        android:layout_height="7dp"
+        android:layout_height="10dp"
         android:clipToPadding="false"/>
 
     <View

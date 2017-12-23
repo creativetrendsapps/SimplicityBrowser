@@ -1,122 +1,197 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-
 <resources>
+    <string name="app_name" translatable="false">Simplicity</string>
+    <string name="go_back">Go Back</string>
+    <string name="go_forward">Go Forward</string>
+    <string name="go_window">New Tab</string>
+    <string name="go_jump">Jump To Top</string>
 
-    <string name="app_name">Simplicity</string>
     <string name="settings">Settings</string>
-    <string name="about">About</string>
-    <string name="shortcut_name">Shortcut name</string>
+    <string name="about" translatable="false">About</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
-    <string name="create">Create</string>
     <string name="privacy_settings">Privacy Settings</string>
     <string name="general_settings">General Settings</string>
-    <string name="no_connection">No connection</string>
-    <string name="help">Help</string>
     <string name="bookmarks">Bookmarks</string>
-    <string name="error">Error</string>
 
-    <string name="default_font_size">Default Font Size</string>
-
-    <string name="small_donation">Small Donation</string>
-    <string name="medium_donation">Medium Donation</string>
-    <string name="large_donation">Large Donation</string>
-    <string name="donate">Donate</string>
-    <string name="omnibox_hint">Search or browse</string>
     <string name="search_engine_choice">Search Engine Choice</string>
-    <string name="about_donations">About Donations</string>
-    <string name="donations">Donations are optional and help support future development.</string>
 
-    <string-array name="search_engine">
-        <item>DuckDuckGo</item>
-        <item>Google</item>
+
+    <string-array name="search_engine" translatable="false">
+        <item>AOL</item>
+        <item>Ask</item>
         <item>Bing</item>
-        <item>Yahoo</item>
+        <item>DuckDuckGo</item>
+        <item>Ecosia</item>
+        <item>Google</item>
+        <item>InfoSpace</item>
+        <item>MyWebSearch</item>
+        <item>Searx</item>
         <item>StartPage</item>
+        <item>WebCrawler</item>
+        <item>Wow</item>
+        <item>Yandex</item>
+        <item>Yahoo</item>
     </string-array>
+
     <string-array name="search_engine_values" translatable="false">
-        <item>https://duckduckgo.com/?q=</item>
-        <item>https://www.google.com/search?q=</item>
+        <item>https://search.aol.com/aol/search?s_chn=prt_ticker-test-g&amp;q=</item>
+        <item>http://www.ask.com/web?q=</item>
         <item>https://www.bing.com/search?q=</item>
-        <item>https://search.yahoo.com/mobile/s?p=</item>
+        <item>https://duckduckgo.com/?q=</item>
+        <item>https://ecosia.org/search?q=</item>
+        <item>https://www.google.com/search?q=</item>
+        <item>http://search.infospace.com/search/web?q=</item>
+        <item>http://int.search.mywebsearch.com/mywebsearch/GGmain.jhtml?searchfor=</item>
+        <item>https://searx.me/?q=</item>
         <item>https://www.startpage.com/do/search?q=</item>
+        <item>https://www.webcrawler.com/serp?q=</item>
+        <item>http://www.wow.com/search?s_it=search-thp&amp;v_t=na&amp;q=</item>
+        <item>https://www.yandex.com/search/?text=</item>
+        <item>https://search.yahoo.com/mobile/s?p=</item>
+
     </string-array>
 
 
-
-
-    <string name="choose_email_client">Choose e-mail client</string>
-
-    <string name="current_setting">Current: %s.</string>
-    <string name="rate">Rate</string>
     <string name="bugs">Report bug</string>
-    <string name="helpfeed">Feedback</string>
-    <string name="removed">Removed:</string>
-    <string name="from_bookmarks">from bookmarks.</string>
-    <string name="private_info">Your connection to this site is private.</string>
-    <string name="none_private_info">Your connection to this site is not private.</string>
-
-    <string name="new_lock">Setup New 4-digit Smart-Pass</string>
-    <string name="welcome">Enter Your 4-digit Smart-Pass</string>
-    <string name="saved_pin_message">If you forget your pin, please clear Simplicity\'s data from your phones application manager.</string>
-    <string name="your_pin">Your PIN is:</string>
+    <string name="private_info">Secure connection. Your information (for example, passwords or credit card numbers) is private when it is sent to this site.</string>
+    <string name="none_private_info">Your connection to this site is not private. You should not enter any sensitive information on this site (for example, passwords or credit cards), because it could be stolen by attackers.</string>
 
 
-    <string name="about_new" translatable="false"><![CDATA[
-    <br>
-    <b>New in this version.</b>
-    <br>
-    <br>
-    Updated strings.
-    <br>
-    <br>
-    ]]></string>
-    <string name="lock_wrong">Incorrect Smart-Pass, Try again.</string>
-	<string name="licenses">Licences</string>
-    <string name="show_home_icon">Show Home Icon</string>
-    <string name="show_home_icon_hint">Shows home icon on toolbar.</string>
-    <string name="home_page">Home Page</string>
-    <string name="confirm_close">Confirm Close</string>
-    <string name="confirm_close_hint">Confirm you\'d like to close Simplicity.</string>
-    <string name="merge_windows">Merge Windows</string>
-    <string name="merge_windows_hint">Merge new windows within recent apps.</string>
-    <string name="smart_pass_title">Smart-Pass</string>
-    <string name="smart_pass_hint">Lock Simplicity with a 4-digit pin.</string>
-    <string name="enable_javascript">Enable Javascript</string>
-    <string name="enable_javascript_hint">Allows websites to load Javascript.</string>
-    <string name="enable_cookies">Enable Cookies</string>
-    <string name="enable_cookies_hint">Allows websites to save cookies.</string>
-    <string name="enable_location">Enable Location</string>
-    <string name="enable_location_hint">Allows websites to obtain your location.</string>
-    <string name="clear_all_data">Clear Data Automatically</string>
-    <string name="clear_all_data_hint">Clear Simplicity\'s cookies, history and data when closing the app.</string>
-    <string name="do_not_track">Do Not Track</string>
-    <string name="do_not_track_hint">Enable to ask sites not to track your browsing data.</string>
-    <string name="source_code">Simplicity Source Code</string>
-    <string name="source_code_hint">Build Simplicity from source</string>
-    <string name="whatsnew">What\'s New.</string>
-    <string name="about_simplicity">About Simplicity.</string>
-    <string name="color_navigation">Color Navigation</string>
-    <string name="hide_toolbar">Hide Toolbar &amp; Navigation</string>
-    <string name="hide_toolbar_hint">Hide toolbar and navigation bar on scroll.</string>
-    <string name="ad_block">Ad Block (Beta)</string>
-    <string name="ad_block_hint">Block ads on websites. This feature is still in beta.</string>
-    <string name="history_items">History Items</string>
-    <string name="history_items_hint">Add suggestions from history to Omnibox.</string>
-    <string name="version">Version</string>
-    <string name="used_libraries">Libraries &amp; Software Used</string>
-    <string name="used_libraries_hint">Open source software used in Simplicity.</string>
-    <string name="creativetrends">Creative Trends Apps</string>
     <string name="google_plus">Google+ Community</string>
-    <string name="on_twitter">Creative Trends on Twitter</string>
-    <string name="get_apps">Get More Apps</string>
-    <string name="not_supported">Your device does not support this feature.</string>
-    <string name="enable_color">Enable to color the navigation bar.</string>
-    <string name="include">Please include https: or http: in the address</string>
-    <string name="adaway">AdAway detected, turn this option off.</string>
-    <string name="current_option">Current:</string>
-    <string name="help_feedback">Get help and support by choosing one of the options below.</string>
+    <string name="private_mode">Incognito mode</string>
+    <string name="history">History</string>
+    <string name="share">Share…</string>
+    <string name="find_in">Find in page</string>
+    <string name="add_to_home">Add to home screen</string>
+    <string name="request_desk">Request desktop site</string>
+    <string name="clear_history">Clear History</string>
+    <string name="image_chooser">Choose Image</string>
+    <string name="help_trans">Help Translate Simple</string>
+    <string name="about_app">About</string>
+    <string name="new_tab">New tab</string>
+    <string name="action_search">Search</string>
+    <string name="ratesimple">Rate Simplicity</string>
+    <string name="rate_summary">Help others enjoy Simplicity by rating the app on Google Play.</string>
 
+
+    <string name="mus">Web Browser</string>
+    <string name="version_spectrum">Version</string>
+    <string name="whats_new">Changelog</string>
+    <string name="author">Author</string>
+    <string name="follow_twitter">Follow on Twitter</string>
+    <string name="like_facebook">Like on Facebook</string>
+    <string name="web_site">Visit Website</string>
+    <string name="support_dev">Support Development</string>
+    <string name="simplicity_close">Press back again to close Simplicity</string>
+    <string name="error">Problem with this link</string>
+    <string name="search_bookmarks">Search bookmarks</string>
+    <string name="search_history">Search history</string>
+    <string name="delete_bookmark">Delete bookmark</string>
+    <string name="rename_bookmark">Rename bookmark</string>
+    <string name="share_bookmark">Share bookmark</string>
+    <string name="rename_titile">Rename Bookmark</string>
+    <string name="rename_message">Would you like to rename this bookmark?</string>
+    <string name="remove_bookmark">Remove Bookmark?</string>
+    <string name="are_you_sure">Are you sure you would like to remove</string>
+    <string name="from_bookmark">from your bookmarks?</string>
+    <string name="settings_more">More</string>
+    <string name="terms">Terms</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="clear_all">Clear all</string>
+    <string name="clear_bookmarks">Clear Bookmarks</string>
+    <string name="are_you_sure_bookmarks">Are you sure you would like to clear all of your bookmarks? This action cannot be undone.</string>
+    <string name="are_you_sure_history">Are you sure you would like to clear all of your history? This action cannot be undone.</string>
+
+    <string name="policy_about" translatable="false">
+    <![CDATA[<b>WHAT DO WE DO WITH YOUR INFORMATION?</b><br><br>
+    Nothing!<br><br>
+    Your data is your data. We Do not. Will not and have never collected your data.<br><br>]]>
+    </string>
+
+
+    <string name="eula_string" translatable="false">EULA, Terms &amp; Policies:\n\n
+
+\nCopyright 2016 - 2017 Creative Trends. All Rights Reserved.
+
+\n\nThis software may not, in whole or in any part, be copied, reproduced, transmitted, translated (into any
+language, natural or computer), stored in a retrieval system, reduced to any electronic medium or machine readable
+format, or by any other form or means without prior consent, in writing, from Creative Trends.
+
+\n\nYou are granted a limited license to use this software. The software may be used or copied only in accordance
+with the terms of that license, which is described in the following paragraphs.
+
+\n\nTRADEMARKS:
+\n\nSimplicity, MySource News, Tui for Twitter, Simple for Facebook, NewsBite, Creative Trends, Creative Trends Apps LLC. All Creative Trends logos, artwork and apps made or produced by Creative Trends.
+
+\n\nLICENSE:
+\n\n\"THE SOFTWARE\" shall be taken to mean the software contained in this app and any subsequent versions
+or upgrades received as a result of having purchased this app. \"BUYER\" shall be taken as the original
+purchaser of the software.
+
+\n\nBuyer has the non-exclusive right to the use of software only on a single device. Buyer may not electronically
+transfer the program from one device to another over any type of network. Buyer may not distribute copies
+of the software or the accompanying documentation to others either for a fee or without charge. Buyer may not modify
+or translate the program or documentation. User may not disassemble the program or allow it to be disassembled
+into its constituent source code. Buyer\'s use of the software indicates his/her acceptance of these terms
+and conditions. If buyer does not agree to these conditions, return the distribution media, documentation, and
+associated materials to the vendor from whom the software was purchased, and/or uninstall the software from the device,
+and erase the software from any and all storage devices upon which it may have been installed.
+
+\n\nThis license agreement shall be governed by the laws of The United States of America, New Jersey and
+shall inure to the benefit of Creative Trends or its assigns.
+
+\n\nREFUNDS:
+\n\nCreative Trends will grant the buyer of any of our apps a full refund of their purchase at our sole discretion.
+
+\n\nCHANGES:
+\n\nYou agree that Creative Trends has the right to test and remove features at it\'s discretion without further notice to you.
+
+\n\nDISCLAIMER / LIMITATION OF LIABILITY:
+\n\nBuyer acknowledges that the software may not be free from defects and may not satisfy all of buyer\'s
+needs. The software and any accompanying written materials are licensed \"AS IS\". Buyer\'s exclusive
+remedy during the warranty period (if any) shall be fixes via software updates if needed. In no event will Creative Trends be liable for direct, indirect, incidental or consequential damage or
+damages resulting from loss of use, or loss of anticipated profits resulting from any defect in the software,
+even if it has been advised of the possibility of such damage. Some laws do not allow exclusion or limitation
+of implied warranties or liabilities for incidental or consequential damages, so the above limitations or
+exclusion may not apply.
+
+\n\nSPECIFIC RESTRICTIONS:
+\n\nIn accordance with the COMPUTER SOFTWARE RENTAL ACT OF 1990, this software may not be rented, lent or leased.
+\n\nThe software and accompanying documentation may not be provided by a \"Backup Service\" or any other vendor
+which does not provide an original package as composed of Creative Trends, including but not limited to all original
+distribution media, documentation, registration cards, and insertions.</string>
+    <string name="create_shortcut">Create Shortcut</string>
+    <string name="added_to_home">added to your home screen.</string>
+    <string name="added_to_bookmarks">added to your bookmarks.</string>
+    <string name="add_home">Add to Home screen</string>
+    <string name="add">Add</string>
+    <string name="print_page">Print…</string>
+    <string name="reader_mode">Reader Mode</string>
+    <string name="incognito_mode">Incognito Mode</string>
+    <string name="color_nav">Color Navigation</string>
+    <string name="default_font_zoom">Default Font Zoom</string>
+    <string name="bottom_navigation">Show Bottom Navigation</string>
+    <string name="bottom_navigation_sum">When enabled Simplicity will show the bottom navigation bar for back, forward, new tab and jump to top. Disable to remove.</string>
+    <string name="ad_block">Ad Block</string>
+    <string name="ad_block_sum">Block ads on websites.</string>
+    <string name="do_not_track">Do Not Track</string>
+    <string name="do_not_track_sum">Enable to ask sites not to track your browsing data.</string>
+    <string name="clear_data">Clear Data Automatically</string>
+    <string name="clear_data_sum">Clear Simplicity\'s cookies, history and data when closing the app.</string>
+    <string name="location">Enable Location</string>
+    <string name="location_sum">Allows websites to obtain your location.</string>
+    <string name="merge_tabs">Show Tabs In Recents</string>
+    <string name="merge_tabs_sum">Show all new tabs within recent apps.</string>
+    <string name="confirm">Confirm Close</string>
+    <string name="confirm_sum">Confirm you\'d like to close Simplicity with a double back press.</string>
+    <string name="home_page">Home Page</string>
+    <string name="remember">Remember Last Page</string>
+    <string name="remember_sum">Enable to save and open your last visted page when opening Simplicity.</string>
+    <string name="show_home_icon">Show Home Icon</string>
+    <string name="show_home_sum">Enable to show a home icon on the toolbar.</string>
+    <string name="bookmarks_hint">Long press bookmarks to sort them.</string>
+    <string name="voice_search_button">Voice Search</string>
+    <string name="voice_search_button_sum">Enable to search with your voice.</string>
+    <!-- Suggestions provider: no suggestions provider -->
 
 </resources>

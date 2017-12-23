@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="iconPreferenceColor" format="reference|color" />
+    <attr name="progressBackgroundColor" format="color" />
+    <attr name="mp_colorAccent" format="reference|color" />
+</resources>

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="46dp"
-    android:background="@android:color/transparent">
+    tools:ignore="UseCompoundDrawables">
 
 
     <ImageView
@@ -11,17 +13,18 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         android:background="@android:color/transparent"
-        android:paddingLeft="@dimen/search_icon_padding"
-        android:paddingRight="@dimen/search_icon_padding"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:focusable="false"
-        android:src="@drawable/ic_about_about" />
+        android:src="@drawable/ic_search_engine"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/suggestion_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/search_icon_padding"
-        android:paddingRight="@dimen/search_icon_padding"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:textColor="#727272"
         android:layout_gravity="center_vertical"
         android:focusable="false"

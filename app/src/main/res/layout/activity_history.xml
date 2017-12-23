@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/background_color"
+    android:fitsSystemWindows="false"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.hugocastelani.waterfalltoolbar.library.WaterfallToolbar
+        android:id="@+id/waterfall_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"/>
+    </com.hugocastelani.waterfalltoolbar.library.WaterfallToolbar>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_history"
+        android:background="@color/background"
+        android:paddingTop="2dp"
+        android:clipToPadding="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:overScrollMode="ifContentScrolls" />
+</android.support.design.widget.CoordinatorLayout>

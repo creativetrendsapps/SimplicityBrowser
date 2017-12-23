@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+    <shortcut
+        android:shortcutId="new_incognito_tab"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_incognito"
+        android:shortcutShortLabel="@string/incognito_mode"
+        android:shortcutLongLabel="@string/incognito_mode"
+        android:shortcutDisabledMessage="@string/incognito_mode"
+        tools:targetApi="n_mr1">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="new_incognito_tab"
+            android:targetPackage="com.creativetrends.simplicity.app"
+            android:targetClass="com.creativetrends.app.simplicity.activities.MainActivity" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+
+    <!-- Specify more shortcuts here. -->
+</shortcuts>

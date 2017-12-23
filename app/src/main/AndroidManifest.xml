@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.creativetrends.simplicity.app"
-    android:installLocation="auto"
-    tools:ignore="GradleOverrides">
-
+    android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -13,154 +11,93 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="com.android.vending.BILLING" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" tools:node="remove" />
-    <uses-feature android:name="android.hardware.location.gps"/>
-    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
-
-
-
+    <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS"/>
 
     <application
-        android:name=".activities.SimplicityApplication"
-        android:allowBackup="false"
+        android:name="com.creativetrends.app.simplicity.SimplicityApplication"
+        android:allowBackup="true"
         android:fullBackupContent="false"
-        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        tools:replace="android:allowBackup,android:theme"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/MainTheme"
         android:launchMode="singleTask">
 
-
-
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.creativetrends.app.simplicity.activities.WelcomeActivity"
             android:label="@string/app_name"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:windowSoftInputMode="adjustResize"
-            android:resizeableActivity="true"
+            android:theme="@style/WelcomeTheme"
+            android:parentActivityName="com.creativetrends.app.simplicity.activities.MainActivity"
             tools:ignore="UnusedAttribute">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <category android:name="android.intent.category.APP_BROWSER"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-
-                <data android:scheme="file"/>
-                <data android:mimeType="text/html"/>
-                <data android:mimeType="text/plain"/>
-                <data android:mimeType="application/xhtml+xml"/>
-                <data android:mimeType="application/vnd.wap.xhtml+xml"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-
-                <data android:scheme="http"/>
-                <data android:scheme="https"/>
-                <data android:scheme="about"/>
-                <data android:scheme="javascript"/>
-            </intent-filter>
-            <!--
-                  For these schemes where any of these particular MIME types
-                  have been supplied, we are a good candidate.
-            -->
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-
-                <data android:scheme="http"/>
-                <data android:scheme="https"/>
-                <data android:scheme="inline"/>
-                <data android:mimeType="text/html"/>
-                <data android:mimeType="text/plain"/>
-                <data android:mimeType="application/xhtml+xml"/>
-                <data android:mimeType="application/vnd.wap.xhtml+xml"/>
-            </intent-filter>
-            <!-- For viewing saved web archives. -->
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-
-                <data android:scheme="http"/>
-                <data android:scheme="https"/>
-                <data android:scheme="file"/>
-                <data android:mimeType="application/x-webarchive-xml"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.WEB_SEARCH"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-
-                <data android:scheme="http"/>
-                <data android:scheme="https"/>
             </intent-filter>
 
-        </activity>
-
-
-        <activity
-            android:name=".activities.SettingsActivity"
-            android:theme="@style/SettingsTheme"
-            android:label="@string/settings"
-            android:parentActivityName=".activities.MainActivity"
-            tools:ignore="UnusedAttribute">
             <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MainActivity" />
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
 
         <activity
-            android:name=".activities.DonationActivity"
-            android:theme="@style/SettingsTheme"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:label="@string/donate"/>
-
-        <activity
-            android:name=".activities.LicenseActivity"
-            android:theme="@style/SettingsTheme"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:label="@string/licenses"/>
-
-        <activity
-            android:name=".activities.NewWindow"
-            android:theme="@style/AppTheme"
-            android:label="@string/app_name"
+            android:name="com.creativetrends.app.simplicity.activities.MainActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:windowSoftInputMode="adjustResize"
             android:resizeableActivity="true"
+            android:theme="@style/MainTheme"
             tools:ignore="UnusedAttribute">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+            </intent-filter>
+
+
+
         </activity>
 
         <activity
-            android:name=".lock.SmartPassLock"
-            android:theme="@style/SettingsTheme"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:label="@string/settings"/>
+            android:name="com.creativetrends.app.simplicity.activities.BookmarksActivity"
+            android:label="@string/bookmarks"
+            android:theme="@style/BookMarksTheme">
+
+
+        <intent-filter>
+            <action android:name="android.intent.action.SEARCH" />
+        </intent-filter>
+        </activity>
 
         <activity
-            android:name=".lock.SmartPassUnlock"
-            android:theme="@style/SettingsTheme"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:label="@string/settings" />
+            android:name="com.creativetrends.app.simplicity.activities.HistoryActivity"
+            android:label="@string/history"
+            android:theme="@style/BookMarksTheme"/>
 
+        <activity
+            android:name="com.creativetrends.app.simplicity.activities.SettingsActivity"
+            android:label="@string/settings"
+            android:theme="@style/SettingsTheme"/>
 
+        <activity
+            android:name="com.creativetrends.app.simplicity.activities.AboutActivity"
+            android:label="@string/about_app"
+            android:theme="@style/SettingsTheme"/>
+        <activity
+            android:name="com.creativetrends.app.simplicity.activities.ReadingActivity"
+            android:label="@string/reader_mode"
+            android:theme="@style/BookMarksTheme"/>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
 
         <uses-library
             android:name="com.sec.android.app.multiwindow"
@@ -185,7 +122,9 @@
             android:name="com.sec.android.multiwindow.MINIMUM_SIZE_H"
             android:resource="@dimen/app_minimumsize_h" />
 
-
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.5" />
     </application>
 
 </manifest>

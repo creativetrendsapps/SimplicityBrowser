@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+    <com.creativetrends.app.simplicity.preferences.PreferenceCategory
+        android:title="@string/about_app">
+
+        <com.creativetrends.app.simplicity.preferences.Preference
+            android:icon="@drawable/ic_public"
+            android:summary="@string/mus"
+            android:title="@string/app_name"
+            android:selectable="false"/>
+
+
+        <com.creativetrends.app.simplicity.preferences.Preference
+            android:key="version_simple"
+            android:icon="@drawable/ic_info_version"
+            android:title="@string/version_spectrum" />
+
+        <com.creativetrends.app.simplicity.preferences.Preference
+            android:key="change"
+            android:icon="@drawable/ic_most_recent"
+            android:title="@string/whats_new" />
+
+
+
+        <Preference
+            android:title="divider"
+            android:selectable="false"
+            android:layout="@layout/divider_preference"/>
+
+    </com.creativetrends.app.simplicity.preferences.PreferenceCategory>
+
+
+
+    <com.creativetrends.app.simplicity.preferences.PreferenceCategory
+        android:title="@string/author">
+
+
+        <com.creativetrends.app.simplicity.preferences.Preference
+            android:key="goog"
+            android:icon="@drawable/ic_google_about"
+            android:title="@string/google_plus">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://plus.google.com/communities/100742350714968811564" />
+        </com.creativetrends.app.simplicity.preferences.Preference>
+
+        <com.creativetrends.app.simplicity.preferences.Preference
+            android:key="twit"
+            android:icon="@drawable/ic_twitter_about"
+            android:title="@string/follow_twitter">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://twitter.com/creativetrendsa" />
+        </com.creativetrends.app.simplicity.preferences.Preference>
+
+        <com.creativetrends.app.simplicity.preferences.Preference
+            android:key="face"
+            android:icon="@drawable/ic_facebook_about"
+            android:title="@string/like_facebook">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://facebook.com/creativetrendsapps" />
+        </com.creativetrends.app.simplicity.preferences.Preference>
+
+        <com.creativetrends.app.simplicity.preferences.Preference
+            android:key="web"
+            android:icon="@drawable/ic_public"
+            android:title="@string/web_site">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://creativetrendsapps.com" />
+        </com.creativetrends.app.simplicity.preferences.Preference>
+
+        <Preference
+            android:title="divider"
+            android:selectable="false"
+            android:layout="@layout/divider_preference"/>
+
+    </com.creativetrends.app.simplicity.preferences.PreferenceCategory>
+
+
+    <com.creativetrends.app.simplicity.preferences.PreferenceCategory
+        android:title="@string/support_dev">
+
+        <com.creativetrends.app.simplicity.preferences.Preference
+            android:key="bugs"
+            android:icon="@drawable/ic_bug_report"
+            android:title="@string/bugs" >
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://plus.google.com/communities/100742350714968811564" />
+        </com.creativetrends.app.simplicity.preferences.Preference>
+
+        <com.creativetrends.app.simplicity.preferences.Preference
+            android:key="trans"
+            android:icon="@drawable/ic_translate"
+            android:title="@string/help_trans"  >
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://creativetrendsapps.oneskyapp.com/collaboration/project/96132" />
+        </com.creativetrends.app.simplicity.preferences.Preference>
+
+        <com.creativetrends.app.simplicity.preferences.Preference
+            android:key="rate"
+            android:icon="@drawable/ic_thumbs_up"
+            android:summary="@string/rate_summary"
+            android:title="@string/ratesimple" >
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://play.google.com/store/apps/details?id=com.creativetrends.simplicity.app" />
+        </com.creativetrends.app.simplicity.preferences.Preference>
+
+
+        <Preference
+            android:title="divider"
+            android:selectable="false"
+            android:layout="@layout/divider_preference"/>
+
+    </com.creativetrends.app.simplicity.preferences.PreferenceCategory>
+
+</PreferenceScreen>
