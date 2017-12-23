@@ -1,18 +1,23 @@
-# Simplicity Web Browser
-
+#### Simplicity Web Browser
 This is the source for Simplicity.
-
-This repo will be updated as much as possbile.
-
-# Update:
-12/12/17 Fixes tab getting stuck. This update converts most all of the drawables used in Simplicity to vector drawables. This reduces the apps size and also helps with scaling images for different screen resolutions better. You must include this library in your project to build successfully: https://github.com/Batterii/Minor. Simplicity now uses Firebase crash reeporting, you must supply your own Google-json file to use this service. You can remove the need for this if you are using a different service for crash and bug reporting. 
  
 
-# Screenshots:
+#### Screenshots:
 <img src="https://github.com/creativetrendsapps/SimplicityBrowser/blob/master/Screenshots/Screenshot_2017-01-05-09-15-02.png" width="22%" height=""> <img src="https://github.com/creativetrendsapps/SimplicityBrowser/blob/master/Screenshots/Screenshot_2017-01-05-09-15-17.png" width="22%" height=""> <img src="https://github.com/creativetrendsapps/SimplicityBrowser/blob/master/Screenshots/Screenshot_2017-01-05-09-15-41.png" width="22%" height="">
 
-# Google Play Link:
+#### Google Play Link:
 <a href='https://play.google.com/store/apps/details?id=com.creativetrends.simplicity.app&hl=en&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="22%" height=""/></a>
 
 
 #### License
+```
+Copyright 2017 Jorell Rutledge
+
+Lightning Browser
+
+   This Source Code Form is subject to the terms of the 
+   Mozilla Public License, v. 2.0. If a copy of the MPL 
+   was not distributed with this file, You can obtain one at 
+   
+   http://mozilla.org/MPL/2.0/
+```
