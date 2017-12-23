@@ -1,82 +1,61 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "24.0.3"
+    compileSdkVersion 27
+    buildToolsVersion '27.0.2'
+
+    lintOptions {
+        checkReleaseBuilds true
+        abortOnError true
+    }
 
     defaultConfig {
         applicationId "com.creativetrends.simplicity.app"
         minSdkVersion 21
-        targetSdkVersion 25
-        versionCode 33
-        versionName "2.4.4"
-    }
-
-    lintOptions {
-        // if true, stop the gradle build if errors are found
-        abortOnError true
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
-
-    Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-    signingConfigs {
-        debug {
-            if (properties.getProperty("KEYSTORE_PATH") != null) {
-                storeFile file(properties.getProperty("KEYSTORE_PATH"))
-                storePassword properties.getProperty("KEYSTORE_PASSWORD")
-                keyAlias properties.getProperty("KEY_ALIAS")
-                keyPassword properties.getProperty("KEY_PASSWORD")
-            }
-            return void
-        }
-        release {
-            if (properties.getProperty("KEYSTORE_PATH") != null) {
-                storeFile file(properties.getProperty("KEYSTORE_PATH"))
-                storePassword properties.getProperty("KEYSTORE_PASSWORD")
-                keyAlias properties.getProperty("KEY_ALIAS")
-                keyPassword properties.getProperty("KEY_PASSWORD")
-            }
-            return void
-        }
-
+        targetSdkVersion 27
+        versionCode 314
+        versionName "3.1.4"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
+            zipAlignEnabled true
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
         }
     }
-    return void
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:cardview-v7:25.1.0'
-    compile 'com.android.support:design:25.1.0'
-    compile 'com.android.support:palette-v7:25.1.0'
-    compile 'com.android.support:support-v4:25.1.0'
-    compile 'com.squareup.okio:okio:1.9.0'
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'
-    //noinspection GradleDynamicVersion
-    compile 'com.anjlab.android.iab.v3:library:1.0.+'
-    compile 'net.grandcentrix.tray:tray:0.10.0'
-    compile 'com.google.firebase:firebase-crash:10.0.1'
-    compile 'uk.co.samuelwall:material-tap-target-prompt:1.6.3'
-    compile 'com.andrognito.pinlockview:pinlockview:1.0.1'
-    compile 'com.yarolegovich:lovely-dialog:1.0.4'
-    compile 'com.valdesekamdem.library:md-toast:0.8.0'
-    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    testImplementation 'junit:junit:4.12'
+
+    //google
+    implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'com.android.support:recyclerview-v7:27.0.2'
+    implementation 'com.android.support:design:27.0.2'
+    implementation 'com.android.support:palette-v7:27.0.2'
+    implementation 'com.android.support:cardview-v7:27.0.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    //other libraries
+    implementation 'com.github.clans:fab:1.6.4'
+    implementation 'com.github.hugocastelani:waterfall-toolbar:0.1.1'
+    implementation 'org.jsoup:jsoup:1.11.2'
+    implementation 'com.anthonycr.progress:animated-progress:1.0'
+    implementation 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
+
+
+    //customized libraries
+    compile project(':bottomsheetbuilder')
+
 
 }
-apply plugin: 'com.google.gms.google-services'
