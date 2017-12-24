@@ -3,8 +3,8 @@ This is the source for Simplicity.
  
 
 ## Screenshots:
-<img src="https://lh3.googleusercontent.com/HoVDJV8wMQePn0rX12RyETY7xDeU4qqL9ppkTJQ7C6Ixr7nyHK4yxFr_7VLgATqnbQ=h900-rw" width="25%" height=""> <img src="https://lh3.googleusercontent.com/qCAyLaMRxnfi4_7XxNUpgcqj_2OuSC4VMDfKO4iViL03DKLQjwGVkQCduQHuo2dDevg=h900-rw" width="25%" height=""> <img src="https://lh3.googleusercontent.com/CWBccglg_3sTI9ix11PXAThKVARfpivH_7f69j_SHu6_sW2fFqvUIkBW_mF1GarfEQ=h900-rw" width="25%" height="">
-<img src="https://lh3.googleusercontent.com/LsF1DNqe_aK0IpmlLlsCCBQXcR43OrgdSrrdz3O-ODUeZWlC-xJO9fbsJHVtnmwfWWs=h900-rw" width="25%" height="">
+<img src="https://lh3.googleusercontent.com/HoVDJV8wMQePn0rX12RyETY7xDeU4qqL9ppkTJQ7C6Ixr7nyHK4yxFr_7VLgATqnbQ=h900-rw" width="22%" height=""> <img src="https://lh3.googleusercontent.com/qCAyLaMRxnfi4_7XxNUpgcqj_2OuSC4VMDfKO4iViL03DKLQjwGVkQCduQHuo2dDevg=h900-rw" width="22%" height=""> <img src="https://lh3.googleusercontent.com/CWBccglg_3sTI9ix11PXAThKVARfpivH_7f69j_SHu6_sW2fFqvUIkBW_mF1GarfEQ=h900-rw" width="22%" height="">
+<img src="https://lh3.googleusercontent.com/LsF1DNqe_aK0IpmlLlsCCBQXcR43OrgdSrrdz3O-ODUeZWlC-xJO9fbsJHVtnmwfWWs=h900-rw" width="22%" height="">
 
 
 ## Google Play Link:
