@@ -2,19 +2,16 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.2'
-
     lintOptions {
-        checkReleaseBuilds true
-        abortOnError true
+        abortOnError false
     }
 
     defaultConfig {
         applicationId "com.creativetrends.simplicity.app"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 314
-        versionName "3.1.4"
+        versionCode 318
+        versionName "3.1.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -22,9 +19,10 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
@@ -49,7 +47,7 @@ dependencies {
     implementation 'com.github.clans:fab:1.6.4'
     implementation 'com.github.hugocastelani:waterfall-toolbar:0.1.1'
     implementation 'com.anthonycr.progress:animated-progress:1.0'
-    implementation 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
+    //implementation 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
 
 
     //customized libraries
