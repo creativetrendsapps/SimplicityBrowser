@@ -27,10 +27,6 @@
 -keep class android.support.v7.widget.** { *; }
 -keep class * extends android.webkit.WebChromeClient { *; }
 
--keep public class android.support.design.widget.BottomNavigationView { *; }
--keep public class android.support.design.internal.BottomNavigationMenuView { *; }
--keep public class android.support.design.internal.BottomNavigationPresenter { *; }
--keep public class android.support.design.internal.BottomNavigationItemView { *; }
 
 -keepclassmembers class * {
     @android.webkit.JavascriptInterface <methods>;
