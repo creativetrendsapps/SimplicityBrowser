@@ -129,6 +129,22 @@ public class UserPreferences {
         }
         putString("simplicity_history", array.toString());
     }
+    
+    public static boolean isStarred(String bookmark) {
+        if (bookmark == null || bookmark.isEmpty()) {
+            return false;
+        }
+        String removeStart = removeStart(bookmark);
+        for (Bookmark url : getBookmarks()) {
+            if (removeStart(url.getUrl()).equals(removeStart)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    private static String removeStart(String url) {
+        return url.replaceFirst("^(http(?>s)://\\.|http(?>s)://)", "");
+    }
 
 }
