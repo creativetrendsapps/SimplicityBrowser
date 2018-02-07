@@ -19,7 +19,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -49,8 +48,12 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.util.Patterns;
+import android.util.TypedValue;
+import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -74,13 +77,16 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.anthonycr.progress.AnimatedProgressBar;
 import com.creativetrends.app.simplicity.SimplicityApplication;
 import com.creativetrends.app.simplicity.suggestions.SuggestionsAdapter;
+import com.creativetrends.app.simplicity.ui.CustomBehavior;
 import com.creativetrends.app.simplicity.utils.Bookmark;
 import com.creativetrends.app.simplicity.utils.CreateShortcut;
+import com.creativetrends.app.simplicity.utils.CustomGestureDetector;
 import com.creativetrends.app.simplicity.utils.History;
 import com.creativetrends.app.simplicity.utils.StaticUtils;
 import com.creativetrends.app.simplicity.utils.UserPreferences;
@@ -88,7 +94,6 @@ import com.creativetrends.app.simplicity.webview.NestedWebView;
 import com.creativetrends.simplicity.app.R;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -120,10 +125,10 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
     String UrlCleaner;
     String defaultSearch, defaultProvider;
 
-    ImageView mHomebutton, mSecure, mOverflow, vSearch;
+    ImageView mHomebutton, mSecure, mOverflow, vSearch, bookmarkicon, mForward;
     public static Bitmap favoriteIcon;
     AppBarLayout mAppbar;
-    BottomNavigationViewEx mTabs;
+    //BottomNavigationViewEx mTabs;
     HashMap<String, String> extraHeaders = new HashMap<>();
     CardView mCardView;
     ScrollView mScroll;
@@ -153,6 +158,9 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
     // the same for Android 5.0 methods only
     private ValueCallback<Uri[]> mFilePathCallback;
     private String mCameraPhotoPath;
+    ArrayList<Bookmark> listBookmarks = new ArrayList<>();
+    Bookmark bookmark;
+    boolean TopTabs;
 
     private final View.OnClickListener onClickListener = new View.OnClickListener() {
         @SuppressWarnings("deprecation")
@@ -166,31 +174,46 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                     showMenu();
                     return;
 
-                case R.id.sim_go_forward:
-                    hideMenu();
+                case R.id.secure_site:
                     AlertDialog.Builder info = new AlertDialog.Builder(MainActivity.this);
-                    info.setTitle(mWebView.getUrl());
-                    if (mWebView.getUrl().contains("https://")) {
-                        info.setMessage(getResources().getString(R.string.private_info));
-                    } else {
-                        info.setMessage(getResources().getString(R.string.none_private_info));
-                    }
-                    info.setPositiveButton("OKAY", (arg0, arg1) -> {
+                    if(mWebView != null) {
+                        info.setTitle(getUrlDomainName(mWebView.getUrl()));
+                        if (mWebView.getUrl().contains("https://")) {
+                            info.setMessage(getResources().getString(R.string.private_info));
+                        } else {
+                            info.setMessage(getResources().getString(R.string.none_private_info));
+                        }
+                        info.setPositiveButton("OKAY", (arg0, arg1) -> {
 
-                    });
-                    info.setNeutralButton(null, null);
-                    info.show();
+                        });
+                        info.setNeutralButton(null, null);
+                        info.show();
+                    }
+                    return;
+
+                case R.id.sim_go_forward:
+                    if(mWebView != null && !mWebView.canGoForward()){
+                        return;
+                    }
+                    if(mWebView != null && mWebView.canGoForward()){
+                        hideMenu();
+                        mWebView.goForward();
+                    }
                     return;
 
                 case R.id.sim_bookmark:
                     hideMenu();
-                    ArrayList<Bookmark> listBookmarks = UserPreferences.getBookmarks();
-                    Bookmark bookmark = new Bookmark();
-                    bookmark.setTitle(mWebView.getTitle());
-                    bookmark.setUrl(mWebView.getUrl());
-                    listBookmarks.add(bookmark);
-                    UserPreferences.saveBookmarks(listBookmarks);
-                    Toast.makeText(MainActivity.this, mWebView.getTitle().replace("", "") +" " +getResources().getString(R.string.added_to_bookmarks), Toast.LENGTH_SHORT).show();
+                    if(UserPreferences.isStarred(mWebView.getUrl())){
+                        Toast.makeText(MainActivity.this, mWebView.getTitle().replace("", "") + " " + getResources().getString(R.string.already_to_bookmarks), Toast.LENGTH_SHORT).show();
+                    }else {
+                        listBookmarks = UserPreferences.getBookmarks();
+                        bookmark = new Bookmark();
+                        bookmark.setTitle(mWebView.getTitle());
+                        bookmark.setUrl(mWebView.getUrl());
+                        listBookmarks.add(bookmark);
+                        UserPreferences.saveBookmarks(listBookmarks);
+                        Toast.makeText(MainActivity.this, mWebView.getTitle().replace("", "") + " " + getResources().getString(R.string.added_to_bookmarks), Toast.LENGTH_SHORT).show();
+                    }
                     return;
 
                 case R.id.sim_refresh:
@@ -311,7 +334,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                         isDesktop = false;
 
                     } else {
-                        mWebSettings.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.41 Safari/537.36");
+                        mWebSettings.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36");
                         mWebSettings.setLoadWithOverviewMode(true);
                         mWebSettings.setUseWideViewPort(true);
                         mWebView.reload();
@@ -346,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                         isDesktop = false;
 
                     } else {
-                        mWebSettings.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.41 Safari/537.36");
+                        mWebSettings.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36");
                         mWebSettings.setLoadWithOverviewMode(true);
                         mWebSettings.setUseWideViewPort(true);
                         mWebView.reload();
@@ -388,6 +411,20 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                     promptSpeechInput();
                     return;
 
+                case R.id.sim_close:
+                    hideMenu();
+                    finish();
+                    if(mPreferences.getBoolean("clear_data", false) && getIntent().getBooleanExtra("isNewTab", false)){
+                        StaticUtils.deleteCache(SimplicityApplication.getContextOfApplication());
+                        ArrayList<History> listHistory = UserPreferences.getHistory();
+                        listHistory.clear();
+                        UserPreferences.saveHistory(listHistory);
+                        mPreferences.edit().putString("last_page_reminder", homepage).apply();
+                    }
+                    return;
+
+
+
                 default:
                     hideMenu();
 
@@ -401,32 +438,37 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        PreferenceManager.setDefaultValues(this, R.xml.settings, false);
+
+        TopTabs = UserPreferences.getInstance(this).getTabs().equals("top");
+        super.onCreate(savedInstanceState);
+        if (TopTabs) {
+            setContentView(R.layout.activity_main);
+        } else {
+            setContentView(R.layout.activity_main_bottom);
+        }
         mHomebutton = findViewById(R.id.toolbar_home);
         customViewContainer = findViewById(R.id.customViewContainer);
         background_color = findViewById(R.id.background_color);
         mSecure = findViewById(R.id.secure_site);
+        bookmarkicon = findViewById(R.id.sim_bookmark);
         mOverflow = findViewById(R.id.overflow_button);
-        mTabs = findViewById(R.id.bottom_navigation);
         mProgress = findViewById(R.id.progressBar);
         vSearch = findViewById(R.id.voice_button);
-        if(mPreferences.getBoolean("show_bottom", false)){
-            setBottomTabs();
-        }else{
-            mTabs.setVisibility(View.GONE);
-        }
+        mForward = findViewById(R.id.sim_go_forward);
+
         mAppbar = findViewById(R.id.appbar);
         mToolbar = findViewById(R.id.toolbar);
         if (getSupportActionBar() != null) {
             setSupportActionBar(mToolbar);
-
+        }
+        if (!TopTabs) {
+            CustomBehavior.FABbehavior = true;
         }
         mSearchView = findViewById(R.id.search_box);
         mWebView = findViewById(R.id.webView);
-        // set webview clients
+
+
 
         forClicks();
         mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -456,9 +498,114 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         extraHeaders.put("DNT", "1");
         homepage = mPreferences.getString("homepage", "");
         defaultSearch = mPreferences.getString("search_engine", "");
-        // Initialize `webViewTitle`.
         webViewTitle = getString(R.string.app_name);
-        // Initialize `favoriteIconBitmap`.  We have to use `ContextCompat` until API >= 21.
+        mWebView.setOnLongClickListener(view1 -> {
+
+
+            if (mWebView.getHitTestResult().getType() == WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE || mWebView.getHitTestResult().getType() == WebView.HitTestResult.IMAGE_TYPE) {
+                BottomSheetMenuDialog dialog = new BottomSheetBuilder(MainActivity.this, null)
+                        .setMode(BottomSheetBuilder.MODE_LIST)
+                        .setMenu(R.menu.menu_image)
+                        .delayDismissOnItemClick(false)
+                        .setItemClickListener(item -> {
+                            switch (item.getItemId()) {
+                                case R.id.image_save:
+                                    urlToGrab = mWebView.getHitTestResult().getExtra();
+                                    requestStoragePermission();
+                                    break;
+
+                                case R.id.image_open:
+                                    if (mPreferences.getBoolean("merge_windows", false)) {
+                                        Intent intent13 = new Intent(MainActivity.this, MainActivity.class);
+                                        intent13.setFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                                        intent13.setData(Uri.parse(mWebView.getHitTestResult().getExtra()));
+                                        intent13.putExtra("isNewTab", true);
+                                        startActivity(intent13);
+                                    } else {
+                                        Intent intent13 = new Intent(MainActivity.this, MainActivity.class);
+                                        intent13.setData(Uri.parse(mWebView.getHitTestResult().getExtra()));
+                                        intent13.putExtra("isNewTab", true);
+                                        startActivity(intent13);
+                                    }
+                                    break;
+
+                                case R.id.image_copy:
+                                    ClipboardManager clipboard = (ClipboardManager) MainActivity.this.getSystemService(Context.CLIPBOARD_SERVICE);
+                                    ClipData clip = ClipData.newUri(getContentResolver(), "URI", Uri.parse(mWebView.getHitTestResult().getExtra()));
+                                    if (clipboard != null) {
+                                        clipboard.setPrimaryClip(clip);
+                                    }
+                                    break;
+
+
+                                case R.id.image_share:
+                                    Intent share = new Intent(Intent.ACTION_SEND);
+                                    share.setType("text/plain");
+                                    share.putExtra(Intent.EXTRA_TEXT, mWebView.getHitTestResult().getExtra());
+                                    startActivity(Intent.createChooser(share, "Share via"));
+                                    break;
+                            }
+
+                        })
+                        .createDialog();
+
+                dialog.show();
+                return true;
+            } else if (mWebView.getHitTestResult().getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE) {
+                BottomSheetMenuDialog dialog = new BottomSheetBuilder(MainActivity.this, null)
+                        .setMode(BottomSheetBuilder.MODE_LIST)
+                        .setMenu(R.menu.menu_link)
+                        .delayDismissOnItemClick(false)
+                        .setItemClickListener(item -> {
+
+                            switch (item.getItemId()) {
+
+                                case R.id.link_open:
+                                    if (mPreferences.getBoolean("merge_windows", false)) {
+                                        Intent intent12 = new Intent(MainActivity.this, MainActivity.class);
+                                        intent12.setFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                                        intent12.setData(Uri.parse(mWebView.getHitTestResult().getExtra()));
+                                        intent12.putExtra("isNewTab", true);
+                                        startActivity(intent12);
+                                    } else {
+                                        Intent intent12 = new Intent(MainActivity.this, MainActivity.class);
+                                        intent12.setData(Uri.parse(mWebView.getHitTestResult().getExtra()));
+                                        intent12.putExtra("isNewTab", true);
+                                        startActivity(intent12);
+                                    }
+                                    break;
+
+                                case R.id.link_copy:
+                                    ClipboardManager clipboard = (ClipboardManager) MainActivity.this.getSystemService(Context.CLIPBOARD_SERVICE);
+                                    ClipData clip = ClipData.newUri(getContentResolver(), "URI", Uri.parse(mWebView.getHitTestResult().getExtra()));
+                                    if (clipboard != null) {
+                                        clipboard.setPrimaryClip(clip);
+                                    }
+                                    break;
+
+
+                                case R.id.link_share:
+                                    Intent share = new Intent(Intent.ACTION_SEND);
+                                    share.setType("text/plain");
+                                    share.putExtra(Intent.EXTRA_TEXT, Uri.parse(mWebView.getHitTestResult().getExtra()));
+                                    startActivity(Intent.createChooser(share, "Share via"));
+                                    break;
+
+
+                            }
+
+                        })
+                        .createDialog();
+                dialog.show();
+                return true;
+            } else if (mWebView.getHitTestResult().getType() == WebView.HitTestResult.PHONE_TYPE) { // Phone number click
+                Intent intent14 = new Intent(Intent.ACTION_DIAL);
+                intent14.setData(Uri.parse(mWebView.getHitTestResult().getExtra()));
+                startActivity(intent14);
+                return true;
+            }
+            return true;
+        });
 
         final Intent intent = getIntent();
 
@@ -502,136 +649,32 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             @SuppressWarnings("deprecation")
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url.startsWith("market:")
-                        || url.startsWith("https://play.google.com") || url.startsWith("magnet:")
-                        || url.startsWith("mailto:") || url.startsWith("intent:")
-                        || url.startsWith("geo:") || url.startsWith("google.streetview:")) {
-                    try {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(url));
-                        startActivity(intent);
-                    } catch (Exception exc) {
-                        Toast.makeText(MainActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
+                try {
+                    if ((url.contains("market://")
+                            || url.contains("mailto:")
+                            || url.contains("play.google")
+                            || url.contains("tel:")
+                            || url.contains("intent:")
+                            || url.contains("geo:")
+                            || url.contains("streetview:")
+                            || url.contains("ebay:"))) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        try {
+                            view.getContext().startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+
+                            e.printStackTrace();
+                        }
+
+                        return true;
                     }
+                } catch (NullPointerException npe) {
+                    npe.printStackTrace();
                     return true;
-                } else if (url.startsWith("tel:")) {
-                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
-                    startActivity(intent);
                 }
-                mWebView.setOnLongClickListener(view1 -> {
-
-                    // Click on image
-                    if (mWebView.getHitTestResult().getType() == WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE
-                            || mWebView.getHitTestResult().getType() == WebView.HitTestResult.IMAGE_ANCHOR_TYPE
-                            || mWebView.getHitTestResult().getType() == WebView.HitTestResult.IMAGE_TYPE) {
-                        BottomSheetMenuDialog dialog = new BottomSheetBuilder(MainActivity.this, null)
-                                .setMode(BottomSheetBuilder.MODE_LIST)
-                                .setMenu(R.menu.menu_image)
-                                .delayDismissOnItemClick(false)
-                                .setItemClickListener(item -> {
-                                    switch (item.getItemId()) {
-                                        case R.id.image_save:
-                                            urlToGrab = mWebView.getHitTestResult().getExtra();
-                                            requestStoragePermission();
-                                            break;
-
-                                        case R.id.image_open:
-                                            if (mPreferences.getBoolean("merge_windows", false)) {
-                                                Intent intent13 = new Intent(MainActivity.this, MainActivity.class);
-                                                intent13.setFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                                                intent13.setData(Uri.parse(mWebView.getHitTestResult().getExtra()));
-                                                intent13.putExtra("isNewTab", true);
-                                                startActivity(intent13);
-                                            } else {
-                                                Intent intent13 = new Intent(MainActivity.this, MainActivity.class);
-                                                intent13.setData(Uri.parse(mWebView.getHitTestResult().getExtra()));
-                                                intent13.putExtra("isNewTab", true);
-                                                startActivity(intent13);
-                                            }
-                                            break;
-
-                                        case R.id.image_copy:
-                                            ClipboardManager clipboard = (ClipboardManager) MainActivity.this.getSystemService(Context.CLIPBOARD_SERVICE);
-                                            ClipData clip = ClipData.newUri(getContentResolver(), "URI", Uri.parse(mWebView.getHitTestResult().getExtra()));
-                                            if (clipboard != null) {
-                                                clipboard.setPrimaryClip(clip);
-                                            }
-                                            break;
-
-
-                                        case R.id.image_share:
-                                            Intent share = new Intent(Intent.ACTION_SEND);
-                                            share.setType("text/plain");
-                                            share.putExtra(Intent.EXTRA_TEXT, mWebView.getHitTestResult().getExtra());
-                                            startActivity(Intent.createChooser(share, "Share via"));
-                                            break;
-                                    }
-
-                                })
-                                .createDialog();
-
-                        dialog.show();
-                        return true;
-                    } else if (mWebView.getHitTestResult().getType() == WebView.HitTestResult.ANCHOR_TYPE // Link click
-                            || mWebView.getHitTestResult().getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE) {
-                        BottomSheetMenuDialog dialog = new BottomSheetBuilder(MainActivity.this, null)
-                                .setMode(BottomSheetBuilder.MODE_LIST)
-                                .setMenu(R.menu.menu_link)
-                                .delayDismissOnItemClick(false)
-                                .setItemClickListener(item -> {
-
-                                    switch (item.getItemId()) {
-
-                                        case R.id.link_open:
-                                            if (mPreferences.getBoolean("merge_windows", false)) {
-                                                Intent intent12 = new Intent(MainActivity.this, MainActivity.class);
-                                                intent12.setFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                                                intent12.setData(Uri.parse(mWebView.getHitTestResult().getExtra()));
-                                                intent12.putExtra("isNewTab", true);
-                                                startActivity(intent12);
-                                            } else {
-                                                Intent intent12 = new Intent(MainActivity.this, MainActivity.class);
-                                                intent12.setData(Uri.parse(mWebView.getHitTestResult().getExtra()));
-                                                intent12.putExtra("isNewTab", true);
-                                                startActivity(intent12);
-                                            }
-                                            break;
-
-                                        case R.id.link_copy:
-                                            ClipboardManager clipboard = (ClipboardManager) MainActivity.this.getSystemService(Context.CLIPBOARD_SERVICE);
-                                            ClipData clip = ClipData.newUri(getContentResolver(), "URI", Uri.parse(mWebView.getHitTestResult().getExtra()));
-                                            if (clipboard != null) {
-                                                clipboard.setPrimaryClip(clip);
-                                            }
-                                            break;
-
-
-                                        case R.id.link_share:
-                                            Intent share = new Intent(Intent.ACTION_SEND);
-                                            share.setType("text/plain");
-                                            share.putExtra(Intent.EXTRA_TEXT, Uri.parse(mWebView.getHitTestResult().getExtra()));
-                                            startActivity(Intent.createChooser(share, "Share via"));
-                                            break;
-
-
-                                    }
-
-                                })
-                                .createDialog();
-                        dialog.show();
-                        return  true;
-                    } else if (mWebView.getHitTestResult().getType() == WebView.HitTestResult.PHONE_TYPE) { // Phone number click
-                        Intent intent14 = new Intent(Intent.ACTION_DIAL);
-                        intent14.setData(Uri.parse(mWebView.getHitTestResult().getExtra()));
-                        startActivity(intent14);
-                        return true;
-                    } else {
-                        return false;
-                    }
-                });
                 return false;
-            }
 
+            }
 
             @SuppressWarnings("deprecation")
             @Override
@@ -662,13 +705,8 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                mSearchView.setText(mWebView.getUrl());
                 try {
-                    if (view.getUrl().contains("https://")) {
-                        mSecure.setVisibility(View.VISIBLE);
-                    }else{
-                        mSecure.setVisibility(View.GONE);
-                    }
+                    mSecure.setVisibility(View.GONE);
                     findViewById(R.id.sim_stop).setVisibility(View.VISIBLE);
                     findViewById(R.id.sim_refresh).setVisibility(View.GONE);
                 }catch (NullPointerException ignored){
@@ -678,23 +716,50 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             }
 
             @Override
+            public void onLoadResource(WebView view, String url){
+                super.onLoadResource(view, url);
+                String str;
+                if (view.getUrl().contains("https://")) {
+                    str = view.getUrl().replace("https://", "<font color='#0b8043'>https</font>"+"<font color='#9D9D9D'>://</font>");
+                    mSearchView.setText(Html.fromHtml(str), TextView.BufferType.SPANNABLE);
+                    mSecure.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_secure_white));
+                    mSecure.setVisibility(View.VISIBLE);
+                }else{
+                    str = view.getUrl().replace("http://", "");
+                    mSearchView.setText(Html.fromHtml(str), TextView.BufferType.SPANNABLE);
+                    mSecure.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_unsecure_white));
+                    mSecure.setVisibility(View.VISIBLE);
+                }
+
+                if (mWebView.canGoForward()) {
+                    mForward.setAlpha(0.9f);
+                }else{
+                    mForward.setAlpha(0.2f);
+                }
+            }
+
+
+
+            @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                mSearchView.setText(mWebView.getUrl());
+                if(mWebView.getTitle().equals("No Connection")) {
+                    mSearchView.setText(mWebView.getTitle());
+                }else {
+                    mSearchView.setText(mWebView.getUrl());
+                }
                 try {
-                    if (view.getUrl().contains("https://")) {
-                        mSecure.setVisibility(View.VISIBLE);
-                    }else{
-                        mSecure.setVisibility(View.GONE);
-                    }
                     findViewById(R.id.sim_stop).setVisibility(View.GONE);
                     findViewById(R.id.sim_refresh).setVisibility(View.VISIBLE);
-                    //mWebView.loadUrl("javascript:window.INTERFACE.processContent(document.getElementsByTagName('body')[0].innerText,document.title);");
+
+                    //filter(listBookmarks, mWebView.getUrl());
                 }catch (NullPointerException ignored){
                 }catch(Exception e){
                     e.printStackTrace();
                 }
             }
+
+
         });
 
 
@@ -768,6 +833,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                     loadUrlFromTextBox();
                     mSearchView.setCursorVisible(false);
                     mSearchView.clearFocus();
+                    mWebView.isFocused();
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -791,8 +857,8 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         mSearchView.setOnItemClickListener((parent, view, position, rowId) -> {
             try {
                 loadUrlFromTextBox();
-                mSearchView.setCursorVisible(false);
                 mSearchView.clearFocus();
+                mWebView.hasFocus();
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -811,10 +877,22 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
 
         mAppbar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
-            if(mPreferences.getBoolean("show_bottom", false)) {
-                mTabs.setTranslationY((float) (verticalOffset * -1.1));
-            }
+
         });
+
+
+        mOverflow.setOnLongClickListener(view -> {
+            try {
+                if (mWebView != null && mWebView.getScrollY() > 10) {
+                    scrollToTop(mWebView);
+                }
+            }catch(Exception ignored) {
+
+            }
+            return false;
+        });
+
+
     }
 
 
@@ -924,6 +1002,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                 ArrayList<History> listBookmarks = UserPreferences.getHistory();
                 listBookmarks.clear();
                 UserPreferences.saveHistory(listBookmarks);
+                mPreferences.edit().putString("last_page_reminder", homepage).apply();
             }
         }
     }
@@ -1018,7 +1097,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             });
             colorAnimation.start();
         }
-        int colorFrom = ContextCompat.getColor(this, !isIncognito ? R.color.md_grey_900 : R.color.colorPrimary);
+        int colorFrom = ContextCompat.getColor(this, !isIncognito ? R.color.md_grey_900 : R.color.no_fav);
         Drawable backgroundFrom = mToolbar.getBackground();
         if (backgroundFrom instanceof ColorDrawable)
             colorFrom = ((ColorDrawable) backgroundFrom).getColor();
@@ -1026,17 +1105,38 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         colorAnimation.setDuration(100);
         colorAnimation.addUpdateListener(animator -> {
             mToolbar.setBackgroundColor((int) animator.getAnimatedValue());
-            mProgress.setBackgroundColor((int) animator.getAnimatedValue());
-            if(mPreferences.getBoolean("show_bottom", false)) {
-                mTabs.setBackgroundColor((int) animator.getAnimatedValue());
+            if (TopTabs) {
+                mProgress.setBackgroundColor((int) animator.getAnimatedValue());
             }
+
         });
         colorAnimation.start();
 
     }
 
+    protected void getBookmarkIcon() {
+            if (bookmarkicon != null && UserPreferences.isStarred(mWebView.getUrl())) {
+                bookmarkicon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_star_full));
+            } else if (bookmarkicon != null) {
+                bookmarkicon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_star_border));
+        }
+    }
 
-    public void setBottomTabs(){
+    public String getUrlDomainName(String url) {
+        String domainName = url;
+        int index = domainName.indexOf("://");
+        if (index != -1) {
+            domainName = domainName.substring(index + 3);
+        }
+        index = domainName.indexOf('/');
+        if (index != -1) {
+            domainName = domainName.substring(0, index);
+        }
+        return domainName;
+    }
+
+
+   /* public void setBottomTabs(){
         mTabs.enableAnimation(false);
         mTabs.enableShiftingMode(false);
         mTabs.enableItemShiftingMode(false);
@@ -1088,12 +1188,27 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             return true;
         });
 
-    }
+    }*/
 
 
 
     private void forClicks() {
+
         mCardView = findViewById(R.id.sim_menu);
+        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 245, getResources().getDisplayMetrics());
+        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 450, getResources().getDisplayMetrics());
+        int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics());
+        if(TopTabs){
+            CardView.LayoutParams params = new CardView.LayoutParams(width, CardView.LayoutParams.MATCH_PARENT);
+            params.gravity = Gravity.TOP | Gravity.END;
+            params.setMargins(0, 4, 8, 8);
+            mCardView.setLayoutParams(params);
+        }else{
+            CardView.LayoutParams params = new CardView.LayoutParams(width, height);
+            params.gravity = Gravity.BOTTOM | Gravity.END;
+            params.setMargins(0, 4, 8, margin);
+            mCardView.setLayoutParams(params);
+        }
         mScroll = findViewById(R.id.scroller);
         mHolder = findViewById(R.id.main_menu_holder);
         pri = findViewById(R.id.sim_private_check);
@@ -1102,6 +1217,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         mHolder.setClickable(false);
         mHolder.setFocusable(false);
         findViewById(R.id.sim_go_forward).setOnClickListener(onClickListener);
+        findViewById(R.id.secure_site).setOnClickListener(onClickListener);
         findViewById(R.id.sim_bookmark).setOnClickListener(onClickListener);
         findViewById(R.id.sim_history).setOnClickListener(onClickListener);
         findViewById(R.id.sim_refresh).setOnClickListener(onClickListener);
@@ -1120,10 +1236,12 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         findViewById(R.id.overflow_button).setOnClickListener(onClickListener);
         findViewById(R.id.sim_reader).setOnClickListener(onClickListener);
         findViewById(R.id.voice_button).setOnClickListener(onClickListener);
+        findViewById(R.id.sim_close).setOnClickListener(onClickListener);
     }
 
 
     private void showMenu() {
+        getBookmarkIcon();
         mScroll.setScrollY(0);
         Animation grow = AnimationUtils.loadAnimation(this, R.anim.grow_menu);
         grow.setAnimationListener(new Animation.AnimationListener() {
@@ -1184,8 +1302,10 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         } else {
             mWebSettings.setGeolocationEnabled(false);
         }
-
-        isKeyBoardShowing();
+        if(mPreferences.getBoolean("gestures_ok", false)){
+            //noinspection deprecation
+            mWebView.setGestureDetector(new GestureDetector(new CustomGestureDetector(mWebView, this)));
+        }
     }
 
     private void applyHomeButton() {
@@ -1194,12 +1314,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         }else{
             mHomebutton.setVisibility(View.VISIBLE);
         }
-        if(!mPreferences.getBoolean("show_bottom", false)){
-            mTabs.setVisibility(View.GONE);
-        }else{
-            mTabs.setVisibility(View.VISIBLE);
-            setBottomTabs();
-        }
+
         defaultSearch = mPreferences.getString("search_engine", "");
         defaultProvider = mPreferences.getString("search_suggestions", "");
         if(mPreferences.getBoolean("v_search", false)){
@@ -1215,33 +1330,14 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         } else {
             mWebSettings.setGeolocationEnabled(false);
         }
-        isKeyBoardShowing();
-    }
-
-
-    void isKeyBoardShowing() {
-        try {
-            background_color.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-                Rect r = new Rect();
-                background_color.getWindowVisibleDisplayFrame(r);
-                int screenHeight = background_color.getRootView().getHeight();
-                int keypadHeight = screenHeight - r.bottom;
-                if (keypadHeight > screenHeight * 0.15) {
-                    mTabs.setVisibility(View.GONE);
-                } else {
-                    if(!mPreferences.getBoolean("show_bottom", false)) {
-                        mTabs.setVisibility(View.GONE);
-                    }else{
-                        mTabs.setVisibility(View.VISIBLE);
-                    }
-                }
-
-            });
-
-        } catch (Exception ignored) {
-
+        if(mPreferences.getBoolean("gestures_ok", false)){
+            //noinspection deprecation
+            mWebView.setGestureDetector(new GestureDetector(new CustomGestureDetector(mWebView, this)));
         }
+
     }
+
+
 
 
     private void requestStoragePermission() {
@@ -1485,7 +1581,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         public void onProgressChanged(WebView view, int progress) {
             if (progress < 100 && mProgress.getVisibility() == ProgressBar.GONE)
                 mProgress.setVisibility(ProgressBar.VISIBLE);
-            mProgress.setProgress(progress);
+                mProgress.setProgress(progress);
             if (progress == 100)
                 mProgress.setVisibility(ProgressBar.GONE);
         }
@@ -1500,10 +1596,9 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             try {
                 favoriteIcon = icon;
                 if (icon != null && StaticUtils.isLollipop()) {
-                    setColor(Palette.from(icon).generate().getVibrantColor(Palette.from(icon).generate().getMutedColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark))));
-
+                    setColor(Palette.from(icon).generate().getVibrantColor(Palette.from(icon).generate().getMutedColor(ContextCompat.getColor(MainActivity.this, R.color.no_fav))));
                 }else{
-                    setColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+                    setColor(ContextCompat.getColor(MainActivity.this, R.color.no_fav));
 
                 }
 
@@ -1627,9 +1722,6 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             mWebView.setVisibility(View.GONE);
             mToolbar.setVisibility(View.GONE);
             mAppbar.setVisibility(View.GONE);
-            mTabs.setVisibility(View.GONE);
-
-
 
             // show customViewContainer
             customViewContainer.setVisibility(View.VISIBLE);
@@ -1653,14 +1745,9 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             customViewCallback.onCustomViewHidden();
 
             // show swipeRefreshLayout and mWebView
-                mWebView.setVisibility(View.VISIBLE);
+            mWebView.setVisibility(View.VISIBLE);
             mToolbar.setVisibility(View.VISIBLE);
             mAppbar.setVisibility(View.VISIBLE);
-            if(!mPreferences.getBoolean("show_bottom", false)) {
-                mTabs.setVisibility(View.GONE);
-            }else{
-                mTabs.setVisibility(View.VISIBLE);
-            }
 
             mCustomView = null;
 
@@ -1670,6 +1757,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
 
     }
+
 
 
 
