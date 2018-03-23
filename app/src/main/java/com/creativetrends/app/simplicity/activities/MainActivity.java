@@ -322,24 +322,19 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
                 case R.id.sim_desktop:
                     hideMenu();
-                    if (desk.isChecked()) {
-                        desk.setChecked(false);
-                    } else {
-                        desk.setChecked(true);
-                    }
-                    if (isDesktop) {
+                    isDesktop = !isDesktop;
+                    desk.setChecked(isDesktop);
+                    if (!isDesktop) {
                         mWebSettings.setUserAgentString("");
                         mWebSettings.setLoadWithOverviewMode(true);
                         mWebView.reload();
                         isDesktop = false;
-
                     } else {
                         mWebSettings.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36");
                         mWebSettings.setLoadWithOverviewMode(true);
                         mWebSettings.setUseWideViewPort(true);
                         mWebView.reload();
                         isDesktop = true;
-
                     }
                     return;
 
@@ -357,24 +352,19 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
                 case R.id.sim_desktop_check:
                     hideMenu();
-                    if (desk.isChecked()) {
-                        desk.setChecked(false);
-                    } else {
-                        desk.setChecked(true);
-                    }
-                    if (isDesktop) {
+                    isDesktop = !isDesktop;
+                    desk.setChecked(isDesktop);
+                    if (!isDesktop) {
                         mWebSettings.setUserAgentString("");
                         mWebSettings.setLoadWithOverviewMode(true);
                         mWebView.reload();
                         isDesktop = false;
-
                     } else {
                         mWebSettings.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36");
                         mWebSettings.setLoadWithOverviewMode(true);
                         mWebSettings.setUseWideViewPort(true);
                         mWebView.reload();
                         isDesktop = true;
-
                     }
                     return;
 
