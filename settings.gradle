@@ -1,1 +1,1 @@
-include ':app', ':bottomsheetbuilder'
+include ':app'
