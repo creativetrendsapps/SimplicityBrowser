@@ -47,11 +47,7 @@ dependencies {
     implementation 'com.github.clans:fab:1.6.4'
     implementation 'com.github.hugocastelani:waterfall-toolbar:0.1.1'
     implementation 'com.anthonycr.progress:animated-progress:1.0'
-    //implementation 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
-
-
-    //customized libraries
-    compile project(':bottomsheetbuilder')
+    implementation 'com.github.rubensousa:bottomsheetbuilder:1.6.0'
 
 
 }
