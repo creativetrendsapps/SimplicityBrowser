@@ -1,191 +1,202 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<android.support.v4.widget.DrawerLayout
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<android.support.design.widget.CoordinatorLayout
     android:id="@+id/background_color"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
+    <FrameLayout
+        android:id="@+id/color_frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        app:elevation="1dp">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:contentInsetStart="0dp"
-            app:contentInsetStartWithNavigation="0dp">
+            android:layout_height="match_parent"
+            tools:context=".activities.MainActivity">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/search_card"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent">
+
+
+
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_margin="4dp"
-                android:foreground="?attr/selectableItemBackground"
-                app:cardCornerRadius="2dp"
-                app:cardUseCompatPadding="true" >
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/no_fav"
+                android:layout_gravity="center_vertical"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:elevation="0dp"
+                android:contentInsetStart="0dp"
+                app:contentInsetStart="0dp"
+                app:contentInsetStartWithNavigation="0dp">
 
-                <LinearLayout
-                    android:orientation="vertical"
+                <android.support.v7.widget.CardView
+                    android:id="@+id/search_card"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:animateLayoutChanges="true">
-                    <RelativeLayout
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="2dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:animateLayoutChanges="true"
                         tools:ignore="UselessParent">
-                        <ImageView
-                            android:id="@+id/toolbar_home"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:layout_width="wrap_content"
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
-                            android:src="@drawable/ic_home_about"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="10dp"
-                            android:layout_alignParentStart="true"
-                            tools:ignore="ContentDescription"/>
+                            tools:ignore="UselessParent">
+                            <ImageView
+                                android:id="@+id/toolbar_home"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:src="@drawable/ic_home_about"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_alignParentStart="true"
+                                tools:ignore="ContentDescription,TooDeepLayout"/>
 
 
-                        <View
-                            android:id="@+id/separator"
-                            android:layout_width="1dp"
-                            android:layout_height="fill_parent"
-                            android:background="@color/black_semi_transparent"
-                            android:layout_toEndOf="@+id/toolbar_home"/>
+                            <View
+                                android:id="@+id/separator"
+                                android:layout_width="1dp"
+                                android:layout_height="fill_parent"
+                                android:background="@color/black_semi_transparent"
+                                android:layout_toEndOf="@+id/toolbar_home"/>
 
-                        <LinearLayout
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:layout_width="0px"
-                            android:layout_height="0px"
-                            tools:ignore="UselessLeaf" />
-
-
-                        <ImageView
-                            android:id="@+id/secure_site"
-                            android:layout_width="22dp"
-                            android:layout_height="22dp"
-                            android:padding="3dp"
-                            android:adjustViewBounds="true"
-                            android:src="@drawable/ic_secure_white"
-                            android:tint="@color/md_green_700"
-                            android:background="@android:color/transparent"
-                            tools:ignore="ContentDescription,RtlSymmetry,TooDeepLayout"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="5dp"
-                            android:layout_toEndOf="@+id/toolbar_home"
-                            android:visibility="gone"/>
-
-                        <AutoCompleteTextView
-                            android:id="@+id/search_box"
-                            android:layout_width="300dp"
-                            android:layout_height="wrap_content"
-                            android:nextFocusUp="@+id/search_card"
-                            android:nextFocusLeft="@+id/search_card"
-                            android:background="@android:color/transparent"
-                            android:imeOptions="actionGo"
-                            android:inputType="textUri|textAutoComplete|textWebEditText|textShortMessage"
-                            android:paddingBottom="1dp"
-                            android:paddingStart="12dp"
-                            android:paddingEnd="5dp"
-                            android:paddingTop="1dp"
-                            android:maxLines="1"
-                            android:ellipsize="end"
-                            android:textColor="@color/md_grey_900"
-                            android:textSize="16sp"
-                            android:selectAllOnFocus="true"
-                            tools:ignore="HardcodedText,LabelFor,UnusedAttribute"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentTop="true"
-                            android:textCursorDrawable="@null"
-                            android:hint="Search or browse"
-                            android:layout_toEndOf="@+id/secure_site"
-                            android:layout_toStartOf="@+id/voice_button"
-                            android:completionThreshold="1"/>
-
-                        <ImageView
-                            android:id="@+id/voice_button"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start|center"
-                            android:gravity="center_horizontal"
-                            android:layout_marginEnd="6dp"
-                            android:adjustViewBounds="true"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:src="@drawable/ic_voice_search"
-                            android:tint="#656565"
-                            tools:ignore="ContentDescription,RtlSymmetry"
-                            android:layout_centerVertical="true"
-                            android:layout_toStartOf="@+id/overflow_button"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:visibility="gone"/>
-
-                        <ImageView
-                            android:id="@+id/overflow_button"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start|center"
-                            android:gravity="center_horizontal"
-                            android:layout_marginEnd="6dp"
-                            android:adjustViewBounds="true"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:src="@drawable/ic_overflow_dark"
-                            tools:ignore="ContentDescription,RtlSymmetry"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentEnd="true"
-                            android:background="?attr/selectableItemBackgroundBorderless"/>
+                            <LinearLayout
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
+                                android:layout_width="0px"
+                                android:layout_height="0px"
+                                tools:ignore="UselessLeaf" />
 
 
+                            <ImageView
+                                android:id="@+id/secure_site"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:padding="0.5dp"
+                                android:adjustViewBounds="true"
+                                android:src="@drawable/ic_secure_white"
+                                android:background="@android:color/transparent"
+                                tools:ignore="ContentDescription,RtlSymmetry,TooDeepLayout"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="6dp"
+                                android:layout_toEndOf="@+id/toolbar_home"/>
 
-                    </RelativeLayout>
-                </LinearLayout>
+                            <AutoCompleteTextView
+                                android:id="@+id/search_box"
+                                android:layout_width="300dp"
+                                android:layout_height="wrap_content"
+                                android:nextFocusUp="@+id/search_card"
+                                android:nextFocusLeft="@+id/search_card"
+                                android:background="@android:color/transparent"
+                                android:imeOptions="actionGo"
+                                android:inputType="textUri|textAutoComplete|textWebEditText|textShortMessage"
+                                android:paddingBottom="1dp"
+                                android:paddingStart="12dp"
+                                android:paddingEnd="5dp"
+                                android:paddingTop="1dp"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:textColor="@color/md_grey_900"
+                                android:textSize="16sp"
+                                android:selectAllOnFocus="true"
+                                tools:ignore="HardcodedText,LabelFor,UnusedAttribute"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentTop="true"
+                                android:textCursorDrawable="@null"
+                                android:hint="Search or browse"
+                                android:layout_toEndOf="@+id/secure_site"
+                                android:layout_toStartOf="@+id/voice_button"
+                                android:completionThreshold="1"/>
+
+                            <ImageView
+                                android:id="@+id/voice_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start|center"
+                                android:gravity="center_horizontal"
+                                android:layout_marginEnd="6dp"
+                                android:adjustViewBounds="true"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:src="@drawable/ic_voice_search"
+                                android:tint="#656565"
+                                tools:ignore="ContentDescription,RtlSymmetry"
+                                android:layout_centerVertical="true"
+                                android:layout_toStartOf="@+id/overflow_button"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:visibility="gone"/>
+
+                            <ImageView
+                                android:id="@+id/overflow_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start|center"
+                                android:gravity="center_horizontal"
+                                android:layout_marginEnd="6dp"
+                                android:adjustViewBounds="true"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:src="@drawable/ic_overflow_dark"
+                                tools:ignore="ContentDescription,RtlSymmetry"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentEnd="true"
+                                android:background="?attr/selectableItemBackgroundBorderless"/>
+                        </RelativeLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </android.support.v7.widget.Toolbar>
+
+            <RelativeLayout
+                android:id="@+id/progress_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.anthonycr.progress.AnimatedProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:background="@color/black_semi_transparent"
+                    custom:bidirectionalAnimate="true"
+                    custom:progressColor="@color/white"/>
+            </RelativeLayout>
+        </android.support.design.widget.AppBarLayout>
+
+            <com.creativetrends.app.simplicity.webview.NestedWebView
+                android:id="@+id/webView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 
-            </android.support.v7.widget.CardView>
 
-
-        </android.support.v7.widget.Toolbar>
-        <com.anthonycr.progress.AnimatedProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background="@color/black_semi_transparent"
-            android:layout_gravity="bottom"
-            custom:bidirectionalAnimate="false"
-            custom:progressColor="@color/white"/>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <com.creativetrends.app.simplicity.webview.NestedWebView
-        android:id='@+id/webView'
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-    <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="?attr/colorPrimary"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
-        app:menu="@menu/menu_bottom_navigation"
-        android:visibility="gone"/>
+        </android.support.design.widget.CoordinatorLayout>
+    </FrameLayout>
 
 
 
@@ -212,3 +223,15 @@
         android:clickable="false"
         android:visibility="gone"/>
     </android.support.design.widget.CoordinatorLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/tabDrawer"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:headerLayout="@layout/tabs_header"
+        app:itemTextColor="@color/black"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true">
+
+    </android.support.design.widget.NavigationView>
+</android.support.v4.widget.DrawerLayout>
