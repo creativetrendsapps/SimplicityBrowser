@@ -3,6 +3,8 @@ package com.creativetrends.app.simplicity.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
@@ -13,12 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.creativetrends.app.simplicity.utils.Bookmark;
-import com.creativetrends.app.simplicity.utils.TouchHelperAdapter;
+import com.creativetrends.app.simplicity.ui.CustomShadow;
 import com.creativetrends.app.simplicity.utils.OnStartDragListener;
+import com.creativetrends.app.simplicity.utils.TouchHelperAdapter;
 import com.creativetrends.simplicity.app.R;
 
 import java.util.ArrayList;
@@ -34,7 +37,7 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
     private static AdapterBookmarks adapter;
     private Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<Bookmark> listBookmarks = new ArrayList<>();
+    private ArrayList<Bookmark> listBookmarks;
     private ArrayList <Bookmark> filteredBookmarks;
     private onBookmarkSelected onBookmarkSelected;
 
@@ -46,16 +49,20 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
         EditText et;
         private Bookmark bookmark;
         private RelativeLayout bookmarkHolder;
-        private ImageView delete, pin_image;
-        private TextView title, url;
+        private ImageView delete;
+        private TextView title, url, letter;
+        private LinearLayout card;
 
         ViewHolderBookmark(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.bookmark_title);
             url = itemView.findViewById(R.id.bookmark_url);
             delete = itemView.findViewById(R.id.bookmark_delete);
-            pin_image = itemView.findViewById(R.id.bookmark_image);
+            letter = itemView.findViewById(R.id.bookmark_letter);
             bookmarkHolder = itemView.findViewById(R.id.bookmark_holder);
+            card = itemView.findViewById(R.id.bookmark_card);
+            card.setOutlineProvider(new CustomShadow(2));
+            card.setClipToOutline(true);
 
         }
 
@@ -63,13 +70,22 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
             this.bookmark = bookmark;
             title.setText(bookmark.getTitle());
             url.setText(bookmark.getUrl());
+            if(bookmark.getLetter()!=null && !bookmark.getLetter().isEmpty()) {
+                letter.setText(bookmark.getLetter());
+                letter.setBackgroundColor(bookmark.getImage());
+            }else{
+                String part1 = bookmark.getTitle();
+                String bt = part1.substring(0,1);
+                letter.setText(bt);
+                letter.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent));
+            }
             bookmarkHolder.setOnClickListener(this);
             delete.setOnClickListener(this);
             et = new EditText(context);
         }
 
 
-        void deleteAlert() {
+        private void deleteAlert() {
             AlertDialog.Builder removeFavorite = new AlertDialog.Builder(context);
             removeFavorite.setTitle(R.string.remove_bookmark);
             removeFavorite.setMessage(context.getResources().getString(R.string.are_you_sure) + " " + bookmark.getTitle() + " " + context.getResources().getString(R.string.from_bookmark));
@@ -96,6 +112,9 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
                 et.setHint(bookmark.getTitle());
                 createFile.setPositiveButton(R.string.ok, (arg0, arg1) -> {
                     bookmark.setTitle(et.getText().toString());
+                    String part1 = et.getText().toString();
+                    String bt = part1.substring(0,1);
+                    bookmark.setLetter(bt);
                     adapter.notifyDataSetChanged();
                 });
                 createFile.setNegativeButton(R.string.cancel, null);
@@ -118,10 +137,15 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
                         editAlert();
                         return true;
                     case R.id.menu_share:
-                        Intent share = new Intent(Intent.ACTION_SEND);
-                        share.setType("text/plain");
-                        share.putExtra(Intent.EXTRA_TEXT, bookmark.getUrl());
-                        context.startActivity(Intent.createChooser(share, context.getResources().getString(R.string.share_bookmark)));
+                        try {
+                            Intent share = new Intent(Intent.ACTION_SEND);
+                            share.setType("text/plain");
+                            share.putExtra(Intent.EXTRA_TEXT, bookmark.getUrl());
+                            context.startActivity(Intent.createChooser(share, context.getResources().getString(R.string.share_bookmark)));
+                        }catch (ActivityNotFoundException ignored){                            
+                        }catch (Exception i){
+                            i.printStackTrace();
+                        }
                         return true;
                     default:
                         return false;
@@ -164,22 +188,22 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
 
     }
 
-    public ViewHolderBookmark onCreateViewHolder(ViewGroup parent, int viewType) {
+    @NonNull
+    public ViewHolderBookmark onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolderBookmark(layoutInflater.inflate(R.layout.bookmark_items, parent, false));
     }
 
 
+    @SuppressWarnings("deprecation")
     @SuppressLint("ClickableViewAccessibility")
-    public void onBindViewHolder(final ViewHolderBookmark holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolderBookmark holder, int position) {
         holder.bind(filteredBookmarks.get(position));
-
-        holder.pin_image.setOnTouchListener((v, event) -> {
+        holder.letter.setOnTouchListener((v, event) -> {
             if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
                 mDragStartListener.onStartDrag(holder);
             }
             return false;
         });
-
     }
 
     @Override
