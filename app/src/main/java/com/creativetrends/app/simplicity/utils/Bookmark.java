@@ -1,6 +1,4 @@
-package com.creativetrends.app.simplicity.utils;
-
-import android.graphics.Bitmap;
+package com.creativetrends.app.simplicity.adapters;
 
 /**
  * Created by Creative Trends Apps.
@@ -9,25 +7,40 @@ import android.graphics.Bitmap;
 public class Bookmark {
     private String title;
     private String url;
-    private Bitmap image;
+    private String letter;
+    private int color;
 
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public void setImage(Bitmap image) {
-        this.image = image;
-    }
-
-    public String getTitle() {
-        return this.title;
+    public void setImage(int color) {
+        this.color = color;
     }
 
     public void setUrl(String url) {
         this.url = url;
     }
 
+    public void setLetter(String letter) {
+        this.letter = letter;
+    }
+
+
+    public String getTitle() {
+        return title;
+    }
+
+    public int getImage() {
+        return color;
+    }
+
+
     public String getUrl() {
-        return this.url;
+        return url;
+    }
+
+    public String getLetter() {
+        return letter;
     }
 }
