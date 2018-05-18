@@ -206,10 +206,14 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                     if(UserPreferences.isStarred(mWebView.getUrl())){
                         Toast.makeText(MainActivity.this, mWebView.getTitle().replace("", "") + " " + getResources().getString(R.string.already_to_bookmarks), Toast.LENGTH_SHORT).show();
                     }else {
+                        String getWebTitle = webViewTitle;
+                        String setLetter = getWebTitle.substring(0,1);
                         listBookmarks = UserPreferences.getBookmarks();
                         bookmark = new Bookmark();
                         bookmark.setTitle(mWebView.getTitle());
                         bookmark.setUrl(mWebView.getUrl());
+                        bookmark.setLetter(setLetter);
+                        bookmark.setImage(Palette.from(favoriteIcon).generate().getVibrantColor(Palette.from(favoriteIcon).generate().getMutedColor(ContextCompat.getColor(MainActivity.this, R.color.no_fav))));
                         listBookmarks.add(bookmark);
                         UserPreferences.saveBookmarks(listBookmarks);
                         Toast.makeText(MainActivity.this, mWebView.getTitle().replace("", "") + " " + getResources().getString(R.string.added_to_bookmarks), Toast.LENGTH_SHORT).show();
