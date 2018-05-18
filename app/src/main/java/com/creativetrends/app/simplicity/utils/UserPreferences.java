@@ -64,6 +64,8 @@ public class UserPreferences {
                 Bookmark bookmark = new Bookmark();
                 bookmark.setTitle(ob.getString("title"));
                 bookmark.setUrl(ob.getString("url"));
+                bookmark.setLetter(ob.getString("letter"));
+                bookmark.setImage(ob.getInt("color"));
                 listBookmarks.add(bookmark);
             }
         } catch (JSONException e) {
@@ -71,7 +73,7 @@ public class UserPreferences {
         }
         return listBookmarks;
     }
-
+    
     public static void saveBookmarks(ArrayList<Bookmark> listBookmarks) {
         JSONArray array = new JSONArray();
         Iterator it = listBookmarks.iterator();
@@ -82,6 +84,8 @@ public class UserPreferences {
                 try {
                     ob.put("title", bookmark.getTitle());
                     ob.put("url", bookmark.getUrl());
+                    ob.put("letter", bookmark.getLetter());
+                    ob.put("color", bookmark.getImage());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
