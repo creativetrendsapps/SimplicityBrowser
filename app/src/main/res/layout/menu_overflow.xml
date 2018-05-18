@@ -20,8 +20,8 @@
         android:layout_marginTop="4dp"
         android:visibility="invisible"
         android:soundEffectsEnabled="false"
-        app:cardElevation="10dp"
-        app:cardCornerRadius="2dp"
+        app:cardElevation="2dp"
+        app:cardCornerRadius="12dp"
         tools:ignore="RtlHardcoded">
 
         <RelativeLayout
