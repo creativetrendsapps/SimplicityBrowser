@@ -42,24 +42,20 @@
                             layout="@layout/search_bar"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_above="@+id/progressBar"
                             android:layout_marginBottom="-1dp" />
-
-                        <com.anthonycr.progress.AnimatedProgressBar
-                            android:id="@+id/progressBar"
-                            android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:layout_alignParentBottom="true"
-                            android:max="100"
-                            android:paddingTop="2dp"
-                            android:progress="54"
-                            android:background="@color/black_semi_transparent"
-                            custom:bidirectionalAnimate="true"
-                            custom:progressColor="@color/white"/>
 
 
                     </RelativeLayout>
                 </android.support.v7.widget.Toolbar>
+                <com.anthonycr.progress.AnimatedProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:layout_below="@+id/toolbar_search_bar"
+                    android:max="100"
+                    android:background="@color/black_semi_transparent"
+                    custom:bidirectionalAnimate="true"
+                    custom:progressColor="@color/white"/>
             </android.support.design.widget.AppBarLayout>
 
 
@@ -68,6 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
 
 
 
@@ -97,5 +94,16 @@
         android:layout_alignParentTop="true"
         android:background="#000"
         android:clickable="false"
+        android:visibility="gone"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/jumpTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_jump"
+        app:fabSize="mini"
+        android:layout_gravity="bottom|end"
         android:visibility="gone"/>
 </android.support.design.widget.CoordinatorLayout>
