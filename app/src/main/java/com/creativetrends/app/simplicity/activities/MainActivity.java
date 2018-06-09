@@ -499,7 +499,9 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             if (mWebView.getHitTestResult().getType() == WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE || mWebView.getHitTestResult().getType() == WebView.HitTestResult.IMAGE_TYPE) {
                 BottomSheetMenuDialog dialog = new BottomSheetBuilder(MainActivity.this, null)
                         .setMode(BottomSheetBuilder.MODE_LIST)
+
                         .setMenu(R.menu.menu_image)
+                        .addTitleItem(R.string.image_actions)
                         .delayDismissOnItemClick(false)
                         .setItemClickListener(item -> {
                             switch (item.getItemId()) {
@@ -597,6 +599,8 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                 intent14.setData(Uri.parse(mWebView.getHitTestResult().getExtra()));
                 startActivity(intent14);
                 return true;
+            } else if (mWebView.getHitTestResult().getType() == WebView.HitTestResult.UNKNOWN_TYPE) {
+                return false;
             }
             return true;
         });
