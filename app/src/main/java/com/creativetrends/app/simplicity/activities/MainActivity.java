@@ -1616,7 +1616,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     setTaskDescription(new ActivityManager.TaskDescription("Simplicity - " + mWebView.getTitle(), null, StaticUtils.fetchColorPrimary(MainActivity.this)));
                 }
-                if(!isIncognito) {
+                if(!isIncognito && !mSearchView.getText().toString().equals(homepage)) {
                     ArrayList<History> listBookmarks = UserPreferences.getHistory();
                     History bookmark = new History();
                     bookmark.setTitle(mWebView.getTitle());
