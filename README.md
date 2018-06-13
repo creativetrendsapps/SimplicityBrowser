@@ -1,4 +1,4 @@
-[![License: Mozilla Public License 2.0](https://img.shields.io/crates/l/rustc-serialize.svg)](https://www.mozilla.org/en-US/MPL/2.0/)
+[![License: Mozilla Public License 2.0](https://img.shields.io/crates/l/rustc-serialize.svg?style=for-the-badge)](https://www.mozilla.org/en-US/MPL/2.0/)
 
 ## Simplicity Web Browser
 This is the source for Simplicity.
