@@ -111,6 +111,15 @@
         android:title="Appearance" >
 
 
+        <com.creativetrends.app.simplicity.preferences.MaterialList
+            android:key="address_bar"
+            android:icon="@drawable/ic_address"
+            android:title="@string/omnibar_location"
+            android:summary="%s"
+            android:entries="@array/default_address_bar_titles"
+            android:entryValues="@array/default_address_bar_entries"
+            android:defaultValue="bottom"/>
+
 
         <com.creativetrends.app.simplicity.preferences.SwitchPreference
             android:key="no_ads"
@@ -127,12 +136,7 @@
             android:icon="@drawable/ic_colorize"
             android:defaultValue="false" />
 
-        <com.creativetrends.app.simplicity.preferences.SwitchPreference
-            android:key="show_bottom"
-            android:title="@string/bottom_navigation"
-            android:summary="@string/bottom_navigation_sum"
-            android:icon="@drawable/ic_bottom"
-            android:defaultValue="false" />
+
 
         <com.creativetrends.app.simplicity.preferences.MaterialList
             android:key="font_pref"
@@ -142,6 +146,7 @@
             android:entries="@array/default_font_size_entries"
             android:entryValues="@array/default_font_size_entry_values"
             android:defaultValue="100" />
+
 
         <Preference
             android:title="divider"
@@ -156,6 +161,21 @@
 
     <com.creativetrends.app.simplicity.preferences.PreferenceCategory
         android:title="@string/settings_more">
+
+       <!-- <com.creativetrends.app.simplicity.preferences.Preference
+            android:key="sim_cloud"
+            android:title="@string/simplicity_cloud_title"
+            android:summary="@string/simplicity_cloud_sum"/>-->
+
+        <com.creativetrends.app.simplicity.preferences.Preference
+            android:key="back_restore"
+            android:title="@string/backup_restore_title"
+            android:summary="@string/backup_restore_sum"/>
+
+        <!--<com.creativetrends.app.simplicity.preferences.Preference
+            android:key="sim_cloud"
+            android:title="@string/simplicity_cloud_title"
+            android:summary="@string/simplicity_cloud_sum"/>-->
 
         <com.creativetrends.app.simplicity.preferences.Preference
             android:key="about_app"

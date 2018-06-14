@@ -9,6 +9,8 @@
         android:id="@+id/image_open"
         android:icon="@drawable/ic_open_in_new"
         android:title="Open image in new tab" />
+
+
     <item
         android:id="@+id/image_copy"
         android:icon="@drawable/ic_content_copy"

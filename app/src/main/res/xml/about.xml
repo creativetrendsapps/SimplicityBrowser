@@ -18,12 +18,6 @@
             android:icon="@drawable/ic_info_version"
             android:title="@string/version_spectrum" />
 
-        <com.creativetrends.app.simplicity.preferences.Preference
-            android:key="change"
-            android:icon="@drawable/ic_most_recent"
-            android:title="@string/whats_new" />
-
-
 
         <Preference
             android:title="divider"
@@ -105,12 +99,6 @@
             <intent android:action="android.intent.action.VIEW"
                 android:data="https://play.google.com/store/apps/details?id=com.creativetrends.simplicity.app" />
         </com.creativetrends.app.simplicity.preferences.Preference>
-
-
-        <Preference
-            android:title="divider"
-            android:selectable="false"
-            android:layout="@layout/divider_preference"/>
 
     </com.creativetrends.app.simplicity.preferences.PreferenceCategory>
 

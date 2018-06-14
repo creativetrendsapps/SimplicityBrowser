@@ -7,7 +7,7 @@
     <shortcut
         android:shortcutId="new_incognito_tab"
         android:enabled="true"
-        android:icon="@drawable/ic_shortcut_incognito"
+        android:icon="@mipmap/ic_shortcut_incognito"
         android:shortcutShortLabel="@string/incognito_mode"
         android:shortcutLongLabel="@string/incognito_mode"
         android:shortcutDisabledMessage="@string/incognito_mode"

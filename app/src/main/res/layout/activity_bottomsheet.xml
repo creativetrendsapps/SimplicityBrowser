@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text="@string/app_name"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:textSize="14sp"
+        android:text="@string/download_warning"
+        android:textColor="?android:attr/textColorPrimary" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/inputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:textColorHint="#FFFFFF"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFFFFF"
+            android:inputType="text"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#B3FFFFFF"
+            android:textCursorDrawable="@null"
+            tools:ignore="LabelFor"
+            tools:targetApi="lollipop" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_margin="4dp"
+            android:text="@string/cancel"
+            android:textColor="@color/colorAccent"
+            android:background="@android:color/transparent"
+            android:stateListAnimator="@null" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_margin="4dp"
+            android:text="@string/ok"
+            android:textColor="@color/white"
+            android:background="@color/colorAccent"
+            android:stateListAnimator="@null" />
+
+    </LinearLayout>
+
+</LinearLayout>

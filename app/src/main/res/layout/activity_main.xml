@@ -58,12 +58,19 @@
                     custom:progressColor="@color/white"/>
             </android.support.design.widget.AppBarLayout>
 
-
-            <com.creativetrends.app.simplicity.webview.NestedWebView
-                android:id="@+id/webView"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefresh"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+                <com.creativetrends.app.simplicity.webview.NestedWebView
+                    android:id="@+id/webView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            </android.support.v4.widget.SwipeRefreshLayout>
 
 
 

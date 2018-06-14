@@ -3,8 +3,8 @@
     <color name="colorAccent">#8E24AA</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#FF000000</color>
-    <color name="grey_color">#757575</color>
-   
+    <color name="grey_color">#959595</color>
+    <!--grey-->
     <color name="md_grey_400">#bdbdbd</color>
     <color name="md_blue_600">#8E24AA</color>
     <color name="background">#F5F5F5</color>
@@ -14,13 +14,17 @@
     <color name="bcP">#C2185B</color>
     <color name="md_amber_500">#ffc107</color>
     <color name="md_white_1000_25">#CDCDCD</color>
-    <color name="no_fav">#F2F2F2</color>
+    <color name="no_fav">#CDCDCD</color>
+    <color name="colorSemiWhite">#4dffffff</color>
 
+
+    <!-- dots inactive colors -->
     <color name="dot_dark_screen1">#10000000</color>
     <color name="dot_dark_screen2">#10000000</color>
     <color name="dot_dark_screen3">#10000000</color>
     <color name="dot_dark_screen4">#10000000</color>
 
+    <!-- dots active colors -->
     <color name="dot_light_screen1">#FFFFFF</color>
     <color name="dot_light_screen2">#FFFFFF</color>
     <color name="dot_light_screen3">#FFFFFF</color>

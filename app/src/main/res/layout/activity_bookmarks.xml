@@ -4,9 +4,10 @@
     android:id="@+id/background_color"
     android:fitsSystemWindows="false"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
-    <com.hugocastelani.waterfalltoolbar.library.WaterfallToolbar
+    <com.hugocastelani.waterfalltoolbar.WaterfallToolbar
         android:id="@+id/waterfall_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -16,15 +17,15 @@
             android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"/>
-    </com.hugocastelani.waterfalltoolbar.library.WaterfallToolbar>
+    </com.hugocastelani.waterfalltoolbar.WaterfallToolbar>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_bookmarks"
-        android:background="@color/background"
         android:paddingTop="2dp"
         android:clipToPadding="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:layout_marginTop="?attr/actionBarSize"
         android:overScrollMode="ifContentScrolls" />
 </android.support.design.widget.CoordinatorLayout>

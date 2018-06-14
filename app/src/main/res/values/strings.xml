@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">Simplicity</string>
-    <string name="ad_id">ca-app-pub-00000000000000/000000000</string>
     <string name="settings">Settings</string>
     <string name="about" translatable="false">About</string>
     <string name="cancel">Cancel</string>
@@ -79,7 +78,6 @@
 
     <string name="mus">Web Browser</string>
     <string name="version_spectrum">Version</string>
-    <string name="whats_new">Changelog</string>
     <string name="author">Author</string>
     <string name="follow_twitter">Follow on Twitter</string>
     <string name="like_facebook">Like on Facebook</string>
@@ -193,8 +191,6 @@ distribution media, documentation, registration cards, and insertions.</string>
     <string name="bookmarks_hint">Long press bookmarks to sort them.</string>
     <string name="voice_search_button">Voice Search</string>
     <string name="voice_search_button_sum">Enable to search with your voice.</string>
-    <string name="webview_gestures_title">WebView Gestures</string>
-    <string name="webview_gestures_sum">Enable to swipe right to go back to previous pages. Swipe left to go forward.</string>
     <string name="omnibar_location">Address Bar Position</string>
     <string name="close_app">Exit</string>
     <string name="already_to_bookmarks">already added to your bookmarks.</string>
@@ -203,13 +199,39 @@ distribution media, documentation, registration cards, and insertions.</string>
     <!-- Suggestions provider: no suggestions provider -->
 
 
-    <string name="loading">Loading…</string>
-
     <string name="backup_restore_title">Local Backup And Restore</string>
     <string name="backup_restore_sum">Backup and restore your bookmarks and history locally.</string>
     <string name="backup_restore_message">Backup or restore your bookmarks and history. Backing up settings will replace any older backup file you\'ve previously created.</string>
     <string name="backup">Backup</string>
     <string name="restore">Restore</string>
     <string name="backup_restore">Backup &amp; Restore</string>
+    <string name="full_screen_sum">Enable to turn on immersive mode, while using the top address bar.</string>
+    <string name="full_screen_title">Immersive Mode</string>
+
+    <string name="view_ssl_certificate">View SSL Certificate</string>
+    <string name="no_ssl_certificate">Communication with this website is not encrypted by an SSL certificate.</string>
+    <string name="issued_to">Issued To</string>
+    <string name="issued_by">Issued By</string>
+    <string name="common_name">Common Name:</string>
+    <string name="organization">Organization:</string>
+    <string name="organizational_unit">Organizational Unit:</string>
+    <string name="valid_dates">Valid Dates</string>
+    <string name="start_date">Start Date:</string>
+    <string name="end_date">End Date:</string>
+
+    <!-- SSL Certificate Error. -->
+    <string name="ssl_certificate_error">SSL Certificate Error</string>
+    <string name="future_certificate">The certificate start date is in the future</string>
+    <string name="expired_certificate">The certificate is expired</string>
+    <string name="cn_mismatch">The Common Name does not match the hostname</string>
+    <string name="untrusted">The certificate authority is not trusted</string>
+    <string name="invalid_date">The date on the certificate is invalid</string>
+    <string name="invalid_certificate">The certificate is invalid</string>
+    <string name="url">URL</string>
+    <string name="url_label">URL:</string>
+
+    <string name="ssl_certificate">SSL Certificate</string>
+    <string name="unencrypted_website">Unencrypted Website</string>
+    <string name="image_actions">Icon Acions</string>
 
 </resources>

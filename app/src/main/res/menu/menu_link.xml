@@ -6,6 +6,12 @@
         android:id="@+id/link_open"
         android:icon="@drawable/ic_open_in_new"
         android:title="Open in new tab" />
+
+    <!--<item
+        android:id="@+id/link_open_popup"
+        android:icon="@drawable/ic_popup"
+        android:title="Open in popup window" />-->
+
     <item
         android:id="@+id/link_copy"
         android:icon="@drawable/ic_content_copy"
