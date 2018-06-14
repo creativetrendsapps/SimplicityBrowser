@@ -1,15 +1,17 @@
 package com.creativetrends.app.simplicity.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,7 +20,8 @@ import com.creativetrends.app.simplicity.adapters.AdapterHistory;
 import com.creativetrends.app.simplicity.utils.History;
 import com.creativetrends.app.simplicity.utils.UserPreferences;
 import com.creativetrends.simplicity.app.R;
-import com.hugocastelani.waterfalltoolbar.library.WaterfallToolbar;
+import com.hugocastelani.waterfalltoolbar.Dp;
+import com.hugocastelani.waterfalltoolbar.WaterfallToolbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,32 +34,33 @@ public class HistoryActivity extends AppCompatActivity implements AdapterHistory
     AdapterHistory adapterBookmarks;
     ArrayList<History> listHistory = new ArrayList<>();
     RecyclerView recyclerBookmarks;
-    WaterfallToolbar mToolbar;
     private SearchView searchView;
-
-
+    WaterfallToolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+        setSupportActionBar(findViewById(R.id.toolbar));
         mToolbar = findViewById(R.id.waterfall_toolbar);
-        mToolbar.setInitialElevation(0);
-        mToolbar.setFinalElevation(8);
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        mToolbar.setInitialElevation(new Dp(0).toPx());
+        mToolbar.setFinalElevation(new Dp(8).toPx());
+        mToolbar.setScrollFinalPosition(8);
+        setSupportActionBar(findViewById(R.id.toolbar));
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(getResources().getString(R.string.history));
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
         listHistory = UserPreferences.getHistory();
         recyclerBookmarks = findViewById(R.id.recycler_history);
+        mToolbar.setRecyclerView(recyclerBookmarks);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setReverseLayout(true);
         mLayoutManager.setStackFromEnd(true);
         recyclerBookmarks.setLayoutManager(mLayoutManager);
         adapterBookmarks = new AdapterHistory(this, listHistory, this);
         recyclerBookmarks.setAdapter(adapterBookmarks);
-        mToolbar.addRecyclerView(recyclerBookmarks);
+
     }
 
 
@@ -68,7 +72,7 @@ public class HistoryActivity extends AppCompatActivity implements AdapterHistory
     public void loadBookmark(final String title, final String url) {
         Intent peekIntent = new Intent(HistoryActivity.this, MainActivity.class);
         peekIntent.setData(Uri.parse(url));
-        peekIntent.putExtra("isNewTab" , true);
+        peekIntent.putExtra("isNewTab" , false);
         startActivity(peekIntent);
         finish();
     }

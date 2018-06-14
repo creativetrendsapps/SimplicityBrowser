@@ -1,10 +1,12 @@
 package com.creativetrends.app.simplicity.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.creativetrends.app.simplicity.SimplicityApplication;
+import com.creativetrends.app.simplicity.adapters.Bookmark;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,13 +19,20 @@ import java.util.Iterator;
  * Created by Creative Trends Apps.
  */
 
-public class UserPreferences {
+public final class UserPreferences {
     private static final String FONT_SIZE = "font_pref";
+    private static final String TOOLBAR_STYLE = "address_bar";
+    private static final String SIMPLICITY_BOOKMARKS = "simplicity_bookmarks";
+    private static final String SIMPLICITY_HISTORY = "simplicity_history";
+    private static final String KEY_COOKIE = "key_cookie";
     private static SharedPreferences mPreferences;
+    @SuppressLint("StaticFieldLeak")
     private static UserPreferences sInstance;
+    @SuppressLint("StaticFieldLeak")
+    private static Context mContext;
 
-
-    private UserPreferences(final Context context) {
+    UserPreferences(final Context context) {
+        mContext = context;
         mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
@@ -47,10 +56,14 @@ public class UserPreferences {
     }
 
 
+    public String getTabs() {
+        return mPreferences.getString(TOOLBAR_STYLE, "top");
+    }
 
     public String getFont() {
         return mPreferences.getString(FONT_SIZE, "default_font");
     }
+
 
 
     //bookmarks
@@ -73,7 +86,7 @@ public class UserPreferences {
         }
         return listBookmarks;
     }
-    
+
     public static void saveBookmarks(ArrayList<Bookmark> listBookmarks) {
         JSONArray array = new JSONArray();
         Iterator it = listBookmarks.iterator();
@@ -133,7 +146,29 @@ public class UserPreferences {
         }
         putString("simplicity_history", array.toString());
     }
-    
+
+
+    String getSimplicityBookmarks() {
+        return mPreferences.getString(SIMPLICITY_BOOKMARKS, "");
+    }
+
+    void setSimplicityBookmarks(String marks) {
+        PreferenceManager.getDefaultSharedPreferences(mContext).edit().putString(SIMPLICITY_BOOKMARKS, marks).apply();
+    }
+
+    String getSimplicityHistory() {
+        return mPreferences.getString(SIMPLICITY_HISTORY , "");
+    }
+
+    void setSimplicityHistory(String his) {
+        PreferenceManager.getDefaultSharedPreferences(mContext).edit().putString(SIMPLICITY_HISTORY , his).apply();
+    }
+
+    public static boolean getCookie(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean(KEY_COOKIE, true);
+    }
+
     public static boolean isStarred(String bookmark) {
         if (bookmark == null || bookmark.isEmpty()) {
             return false;
@@ -150,5 +185,30 @@ public class UserPreferences {
     private static String removeStart(String url) {
         return url.replaceFirst("^(http(?>s)://\\.|http(?>s)://)", "");
     }
+
+
+    private static String getHome(String url) {
+        return url.replaceFirst("^(http(?>s)://\\.|http(?>s)://)", "");
+    }
+
+
+    public static boolean isDownloadableFile(String url) {
+        int index = url.indexOf("?");
+        if (index > -1) {
+            url = url.substring(0, index);
+        }
+        url = url.toLowerCase();
+
+        for (String type : DOWNLOAD_FILE_TYPES) {
+            if (url.endsWith(type)) return true;
+        }
+
+        return false;
+    }
+
+    private static final String[] DOWNLOAD_FILE_TYPES = {
+            ".apk", ".exe", ".jar", ".bat", ".xls",
+            ".js", ".sh", ".bin"
+    };
 
 }

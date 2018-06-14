@@ -2,7 +2,6 @@ package com.creativetrends.app.simplicity.fragments;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -15,16 +14,20 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.KeyCharacterMap;
-import android.view.KeyEvent;
+import android.view.Display;
 import android.view.View;
 import android.widget.ListView;
 
+import com.codekidlabs.storagechooser.StorageChooser;
 import com.creativetrends.app.simplicity.SimplicityApplication;
 import com.creativetrends.app.simplicity.activities.AboutActivity;
 import com.creativetrends.app.simplicity.preferences.MaterialEditText;
+import com.creativetrends.app.simplicity.utils.ExportUtils;
 import com.creativetrends.simplicity.app.R;
+
+import java.io.File;
 
 /**
  * Created by Creative Trends Apps.
@@ -36,8 +39,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     private SharedPreferences.OnSharedPreferenceChangeListener myPrefListner;
     private SharedPreferences preferences;
     private static final int REQUEST_LOCATION = 1;
+    private static final int REQUEST_STORAGE = 2;
     private static final String TAG = SettingsFragment.class.getSimpleName();
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,21 +52,22 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         if (pref.getText().contains("http://") || pref.getText().contains("https://")) {
             pref.setSummary(pref.getText());
         } else if (!pref.getText().contains("http://") || !pref.getText().contains("https://")) {
-            pref.setSummary("http://"+pref.getText());
+            pref.setSummary("http://" + pref.getText());
         }
 
-        if(!isNavigationBarAvailable() && android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            colored_nav.setEnabled(false);
-            colored_nav.setSelectable(false);
-            colored_nav.setSummary("Your device does not support this feature.");
-            Log.i("Hardware buttons", "disable this preference");
-        }else {
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isNavigationBarAvailable()) {
+        try {
+            if (hasSoftKeys() && android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 colored_nav.setEnabled(true);
                 colored_nav.setSelectable(true);
                 colored_nav.setSummary("Enable to color the navigation bar.");
+            } else if (!hasSoftKeys() && android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                colored_nav.setEnabled(false);
+                colored_nav.setSelectable(false);
+                colored_nav.setSummary("Your device does not support this feature.");
             }
+        } catch (Exception ignored) {
         }
+
 
 
         myPrefListner = (prefs, key) -> {
@@ -76,8 +80,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                         pref1.setSummary(pref1.getText());
                         preferences.edit().putString("homepage", pref1.getText()).apply();
                     } else if (!pref1.getText().contains("http://") || !pref1.getText().contains("https://")) {
-                        pref1.setSummary("http://"+ pref1.getText());
-                        preferences.edit().putString("homepage", "http://"+ pref1.getText()).apply();
+                        pref1.setSummary("http://" + pref1.getText());
+                        preferences.edit().putString("homepage", "http://" + pref1.getText()).apply();
                     }
                     break;
                 case "enable_location":
@@ -88,6 +92,10 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                     }
                     break;
 
+                case "address_bar":
+                    preferences.edit().putString("needs_change", "true").apply();
+                    break;
+
                 default:
                     break;
             }
@@ -96,10 +104,15 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         Preference overflow = findPreference("about_app");
         Preference terms = findPreference("terms_set");
+        //Preference sync = findPreference("sim_cloud");
+        Preference backup_restore = findPreference("back_restore");
         Preference policy = findPreference("privacy_policy_set");
         overflow.setOnPreferenceClickListener(this);
         terms.setOnPreferenceClickListener(this);
         policy.setOnPreferenceClickListener(this);
+        //sync.setOnPreferenceClickListener(this);
+        backup_restore.setOnPreferenceClickListener(this);
+
 
     }
 
@@ -109,6 +122,27 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         String key = preference.getKey();
         switch (key) {
 
+           /* case "sim_cloud":
+                Intent intent = new Intent(getActivity(), SimplicitySignIn.class);
+                startActivity(intent);
+                break;*/
+
+            case "back_restore":
+                if (!hasStoragePermission()) {
+                    requestStoragePermission();
+                } else {
+                    AlertDialog.Builder bnr = new AlertDialog.Builder(getActivity());
+                    bnr.setTitle(getResources().getString(R.string.backup_restore));
+                    bnr.setMessage(getResources().getString(R.string.backup_restore_message));
+                    bnr.setPositiveButton(R.string.backup, (arg0, arg1) -> backupSettings());
+                    bnr.setNegativeButton(R.string.restore, (arg0, arg1) -> restoreSettings());
+                    bnr.setNeutralButton(R.string.cancel, null);
+                    bnr.show();
+
+                }
+                return true;
+
+            
             case "about_app":
                 Intent Intent = new Intent(getActivity(), AboutActivity.class);
                 startActivity(Intent);
@@ -145,11 +179,28 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             Log.e(TAG, "We already have storage permission.");
     }
 
-    public boolean isNavigationBarAvailable() {
-        boolean hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
-        boolean hasHomeKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_HOME);
-        boolean hasMenuKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_MENU);
-        return (!(hasBackKey && hasHomeKey && !hasMenuKey));
+    public boolean hasSoftKeys(){
+        boolean hasSoftwareKeys;
+        //c = context; use getContext(); in fragments, and in activities you can
+        //directly access the windowManager();
+
+        Display d = getActivity().getWindowManager().getDefaultDisplay();
+
+        DisplayMetrics realDisplayMetrics = new DisplayMetrics();
+        d.getRealMetrics(realDisplayMetrics);
+
+        int realHeight = realDisplayMetrics.heightPixels;
+        int realWidth = realDisplayMetrics.widthPixels;
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        d.getMetrics(displayMetrics);
+
+        int displayHeight = displayMetrics.heightPixels;
+        int displayWidth = displayMetrics.widthPixels;
+
+        hasSoftwareKeys =  (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
+
+        return hasSoftwareKeys;
     }
 
     @Override
@@ -186,40 +237,106 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         policy.setTitle(getResources().getString(R.string.privacy_policy));
         //noinspection deprecation
         policy.setMessage(Html.fromHtml(getString(R.string.policy_about)));
-        policy.setPositiveButton(R.string.ok, new AlertDialog.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
+        policy.setPositiveButton(R.string.ok, (arg0, arg1) -> {
 
-            }
         });
-        try{
-        AlertDialog dialog = policy.create();
-        dialog.getWindow().getAttributes().windowAnimations = animationSource;
-        dialog.show();
-        }catch(NullPointerException ignored){
-        }catch (Exception i){
+        try {
+            AlertDialog dialog = policy.create();
+            //noinspection ConstantConditions
+            dialog.getWindow().getAttributes().windowAnimations = animationSource;
+            dialog.show();
+        } catch (NullPointerException ignored) {
+        } catch (Exception i) {
             i.printStackTrace();
         }
     }
 
     private void buildTerms(int animationSource) {
-            AlertDialog.Builder terms = new AlertDialog.Builder(getActivity());
-            terms.setTitle(getResources().getString(R.string.terms));
-            terms.setMessage(getResources().getString(R.string.eula_string));
-            terms.setPositiveButton(R.string.ok, new AlertDialog.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface arg0, int arg1) {
+        AlertDialog.Builder terms = new AlertDialog.Builder(getActivity());
+        terms.setTitle(getResources().getString(R.string.terms));
+        terms.setMessage(getResources().getString(R.string.eula_string));
+        terms.setPositiveButton(R.string.ok, (arg0, arg1) -> {
 
-                }
-            });
+        });
         try {
             AlertDialog dialog = terms.create();
+            //noinspection ConstantConditions
             dialog.getWindow().getAttributes().windowAnimations = animationSource;
             dialog.show();
-        }catch(NullPointerException ignored){
-        }catch (Exception i){
+        } catch (NullPointerException ignored) {
+        } catch (Exception i) {
             i.printStackTrace();
         }
     }
 
-}
+    private void requestStoragePermission() {
+        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (!hasStoragePermission()) {
+            ActivityCompat.requestPermissions(getActivity(), permissions, REQUEST_STORAGE);
+        } else {
+            hasStoragePermission();
+        }
+    }
+
+
+    public boolean hasStoragePermission() {
+        String storagePermission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        int hasPermission = ContextCompat.checkSelfPermission(getActivity(), storagePermission);
+        return (hasPermission == PackageManager.PERMISSION_GRANTED);
+    }
+
+    private void backupSettings(){
+        StorageChooser chooser = new StorageChooser.Builder()
+                .setTheme(myTheme(context))
+                .withActivity(getActivity())
+                .allowAddFolder(true)
+                .allowCustomPath(true)
+                .withFragmentManager(getFragmentManager())
+                .setType(StorageChooser.DIRECTORY_CHOOSER)
+                .showFoldersInGrid(true)
+                .withMemoryBar(true)
+                .build();
+        chooser.setOnSelectListener(path -> {
+            File fil = new File(path, "simplicity.sbh");
+            ExportUtils.writeToFile(fil, context);
+        });
+        chooser.show();
+    }
+
+    private void restoreSettings(){
+        StorageChooser chooser = new StorageChooser.Builder()
+                .setTheme(myTheme(context))
+                .setDialogTitle(getString(R.string.restore))
+                .withActivity(getActivity())
+                .allowAddFolder(false)
+                .allowCustomPath(true)
+                .withFragmentManager(getFragmentManager())
+                .setType(StorageChooser.FILE_PICKER)
+                .withMemoryBar(true)
+                .build();
+        chooser.setOnSelectListener(path -> {
+            File fil = new File(path);
+            ExportUtils.readFromFile(fil, context);
+
+        });
+
+        chooser.show();
+    }
+
+
+    private StorageChooser.Theme myTheme(Context context) {
+        StorageChooser.Theme theme = new StorageChooser.Theme(context);
+        int[] myScheme;
+        myScheme = theme.getDefaultScheme();
+        myScheme[StorageChooser.Theme.OVERVIEW_HEADER_INDEX] = ContextCompat.getColor(context, R.color.colorAccent);
+        myScheme[StorageChooser.Theme.OVERVIEW_MEMORYBAR_INDEX] = ContextCompat.getColor(context, R.color.colorAccent);
+        myScheme[StorageChooser.Theme.OVERVIEW_INDICATOR_INDEX] = ContextCompat.getColor(context, R.color.colorAccent);
+        myScheme[StorageChooser.Theme.SEC_FOLDER_CREATION_BG_INDEX] = ContextCompat.getColor(context, R.color.colorAccent);
+        myScheme[StorageChooser.Theme.SEC_ADDRESS_BAR_BG] = ContextCompat.getColor(context, R.color.colorAccent);
+        myScheme[StorageChooser.Theme.SEC_SELECT_LABEL_INDEX] = ContextCompat.getColor(context, R.color.black);
+        myScheme[StorageChooser.Theme.SEC_FOLDER_TINT_INDEX] = ContextCompat.getColor(context, R.color.colorAccent);
+        myScheme[StorageChooser.Theme.SEC_TEXT_INDEX] = ContextCompat.getColor(context, R.color.black);
+        theme.setScheme(myScheme);
+        return theme;
+            }
+        }

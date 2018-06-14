@@ -2,14 +2,17 @@ package com.creativetrends.app.simplicity.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.creativetrends.app.simplicity.ui.CustomShadow;
 import com.creativetrends.app.simplicity.utils.History;
 import com.creativetrends.simplicity.app.R;
 
@@ -23,24 +26,29 @@ import java.util.List;
 public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViewHolderBookmark> {
     @SuppressLint("StaticFieldLeak")
     private static AdapterHistory adapter;
-    private Context context;
+    Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<History> listBookmarks = new ArrayList<>();
+    private ArrayList<History> listBookmarks;
     private ArrayList <History> filteredBookmarks;
     private AdapterHistory.onBookmarkSelected onBookmarkSelected;
 
     class ViewHolderBookmark extends RecyclerView.ViewHolder implements View.OnClickListener {
         private History bookmark;
         private RelativeLayout bookmarkHolder;
-        private ImageView delete;
+        private ImageView delete, icon;
         private TextView title, url;
+        private LinearLayout card;
 
         ViewHolderBookmark(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.history_title);
             url = itemView.findViewById(R.id.history_url);
             delete = itemView.findViewById(R.id.history_delete);
+            icon = itemView.findViewById(R.id.imageHistory);
             bookmarkHolder = itemView.findViewById(R.id.history_holder);
+            card = itemView.findViewById(R.id.bookmark_card);
+            card.setOutlineProvider(new CustomShadow(2));
+            card.setClipToOutline(true);
         }
 
         void bind(History bookmark) {
@@ -93,11 +101,12 @@ public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViewHold
 
     }
 
-    public AdapterHistory.ViewHolderBookmark onCreateViewHolder(ViewGroup parent, int viewType) {
+    @NonNull
+    public AdapterHistory.ViewHolderBookmark onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new AdapterHistory.ViewHolderBookmark(layoutInflater.inflate(R.layout.history_items, parent, false));
     }
 
-    public void onBindViewHolder(AdapterHistory.ViewHolderBookmark holder, int position) {
+    public void onBindViewHolder(@NonNull AdapterHistory.ViewHolderBookmark holder, int position) {
         holder.bind(filteredBookmarks.get(position));
     }
 

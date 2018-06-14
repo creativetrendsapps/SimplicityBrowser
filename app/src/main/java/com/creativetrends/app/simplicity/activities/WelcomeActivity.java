@@ -34,6 +34,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTranslucentStatus();
         super.onCreate(savedInstanceState);
 
         prefManager = new PrefManager(this);
@@ -41,7 +42,6 @@ public class WelcomeActivity extends AppCompatActivity {
             launchHomeScreen();
             finish();
         }
-        setTranslucentStatus();
 
         setContentView(R.layout.activity_welcome);
 

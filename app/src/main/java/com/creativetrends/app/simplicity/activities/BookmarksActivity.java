@@ -18,12 +18,14 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.creativetrends.app.simplicity.adapters.AdapterBookmarks;
-import com.creativetrends.app.simplicity.utils.Bookmark;
+import com.creativetrends.app.simplicity.adapters.Bookmark;
 import com.creativetrends.app.simplicity.utils.OnStartDragListener;
+import com.creativetrends.app.simplicity.utils.StaticUtils;
 import com.creativetrends.app.simplicity.utils.TouchHelperCallback;
 import com.creativetrends.app.simplicity.utils.UserPreferences;
 import com.creativetrends.simplicity.app.R;
-import com.hugocastelani.waterfalltoolbar.library.WaterfallToolbar;
+import com.hugocastelani.waterfalltoolbar.Dp;
+import com.hugocastelani.waterfalltoolbar.WaterfallToolbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +38,11 @@ public class BookmarksActivity extends AppCompatActivity implements AdapterBookm
     AdapterBookmarks adapterBookmarks;
     ArrayList<Bookmark> listBookmarks = new ArrayList<>();
     RecyclerView recyclerBookmarks;
-    WaterfallToolbar mToolbar;
     private ItemTouchHelper mItemTouchHelper;
     private SearchView searchView;
     SharedPreferences preferences;
-
+    WaterfallToolbar mToolbar;
+    // While the file names are the same, the references point to different files
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,20 +50,20 @@ public class BookmarksActivity extends AppCompatActivity implements AdapterBookm
         setContentView(R.layout.activity_bookmarks);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         mToolbar = findViewById(R.id.waterfall_toolbar);
-        mToolbar.setInitialElevation(0);
-        mToolbar.setFinalElevation(8);
+        mToolbar.setInitialElevation(new Dp(0).toPx());
+        mToolbar.setFinalElevation(new Dp(8).toPx());
+        mToolbar.setScrollFinalPosition(8);
         setSupportActionBar(findViewById(R.id.toolbar));
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(getResources().getString(R.string.bookmarks));
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
-
         listBookmarks = UserPreferences.getBookmarks();
         recyclerBookmarks = findViewById(R.id.recycler_bookmarks);
         recyclerBookmarks.setLayoutManager(new LinearLayoutManager(this));
         adapterBookmarks = new AdapterBookmarks(this, listBookmarks, this, this);
         recyclerBookmarks.setAdapter(adapterBookmarks);
-        mToolbar.addRecyclerView(recyclerBookmarks);
+        mToolbar.setRecyclerView(recyclerBookmarks);
         ItemTouchHelper.Callback callback = new TouchHelperCallback(adapterBookmarks);
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(recyclerBookmarks);
@@ -83,11 +85,16 @@ public class BookmarksActivity extends AppCompatActivity implements AdapterBookm
     public void loadBookmark(final String title, final String url) {
         Intent peekIntent = new Intent(BookmarksActivity.this, MainActivity.class);
         peekIntent.setData(Uri.parse(url));
-        peekIntent.putExtra("isNewTab" , true);
+        peekIntent.putExtra("isNewTab" , false);
         startActivity(peekIntent);
         finish();
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 
     @Override
     protected void onResume() {
@@ -146,19 +153,7 @@ public class BookmarksActivity extends AppCompatActivity implements AdapterBookm
         mItemTouchHelper.startDrag(viewHolder);
     }
 
-    private List filter(List<Bookmark> bookmarks, String query) {
-        query = query.toLowerCase();
-        List<Bookmark> filteredBookmarks = new ArrayList<>();
-        if (bookmarks != null && bookmarks.size() > 0) {
-            for (Bookmark bookmark : bookmarks) {
-                String searchCheck = bookmark.getTitle() + " ";
-                if (!(searchCheck.isEmpty() || !searchCheck.toLowerCase().contains(query.toLowerCase()))) {
-                    filteredBookmarks.add(bookmark);
-                }
-            }
-        }
-        return filteredBookmarks;
-    }
+
 
 
     @Override
@@ -175,6 +170,20 @@ public class BookmarksActivity extends AppCompatActivity implements AdapterBookm
         return true;
     }
 
+    private List filter(List<Bookmark> bookmarks, String query) {
+        query = query.toLowerCase();
+        List<Bookmark> filteredBookmarks = new ArrayList<>();
+        if (bookmarks != null && bookmarks.size() > 0) {
+            for (Bookmark bookmark : bookmarks) {
+                String searchCheck = bookmark.getTitle() + " ";
+                if (!(searchCheck.isEmpty() || !searchCheck.toLowerCase().contains(query.toLowerCase()))) {
+                    filteredBookmarks.add(bookmark);
+                }
+            }
+        }
+        return filteredBookmarks;
+    }
+
 
     void deleteAlert() {
         AlertDialog.Builder removeFavorite = new AlertDialog.Builder(this);
@@ -184,4 +193,8 @@ public class BookmarksActivity extends AppCompatActivity implements AdapterBookm
         removeFavorite.setNegativeButton(R.string.cancel, null);
         removeFavorite.show();
     }
+
+
+
+
 }

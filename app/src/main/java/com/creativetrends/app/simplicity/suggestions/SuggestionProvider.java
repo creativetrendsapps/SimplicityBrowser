@@ -65,8 +65,8 @@ abstract class SuggestionProvider {
      * @param callback    the callback to invoke for each received suggestion
      * @throws Exception throw an exception if anything goes wrong.
      */
-    void parseResults(@NonNull String content,
-                      @NonNull ResultCallback callback) throws Exception {
+    private void parseResults(@NonNull String content,
+                              @NonNull ResultCallback callback) throws Exception {
         JSONArray respArray = new JSONArray(content);
         JSONArray jsonArray = respArray.getJSONArray(1);
         for (int n = 0, size = jsonArray.length(); n < size; n++) {

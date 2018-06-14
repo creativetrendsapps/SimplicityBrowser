@@ -14,15 +14,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.creativetrends.app.simplicity.fragments.SettingsFragment;
+import com.creativetrends.app.simplicity.fragments.ExperimentalFragment;
 import com.creativetrends.app.simplicity.utils.StaticUtils;
 import com.creativetrends.simplicity.app.R;
 
 /**
- * Created by Creative Trends Apps.
+ * Created by Creative Trends Apps (Jorell Rutledge) 5/23/2018.
  */
-
-public class SettingsActivity extends AppCompatActivity {
+public class ExperimentalActivity extends AppCompatActivity {
     SharedPreferences preferences;
     Toolbar toolbar;
     //AdView adView;
@@ -47,7 +46,7 @@ public class SettingsActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), null, StaticUtils.fetchColorPrimary(this)));
         }
-        getFragmentManager().beginTransaction().replace(R.id.settings_frame, new SettingsFragment()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.settings_frame, new ExperimentalFragment()).commit();
     }
 
 
@@ -85,7 +84,7 @@ public class SettingsActivity extends AppCompatActivity {
         } else
             getFragmentManager().popBackStack();
 
-        }
+    }
 
 
     @Override

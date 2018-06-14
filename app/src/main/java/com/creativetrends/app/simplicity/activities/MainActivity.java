@@ -8,23 +8,35 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.net.http.HttpResponseCache;
+import android.net.http.SslCertificate;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.os.ResultReceiver;
 import android.preference.PreferenceManager;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
@@ -33,58 +45,71 @@ import android.print.PrintManager;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.pm.ShortcutInfoCompat;
 import android.support.v4.content.pm.ShortcutManagerCompat;
 import android.support.v4.graphics.drawable.IconCompat;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
-import android.util.Patterns;
-import android.util.TypedValue;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.GeolocationPermissions;
 import android.webkit.JavascriptInterface;
+import android.webkit.JsPromptResult;
+import android.webkit.JsResult;
+import android.webkit.PermissionRequest;
+import android.webkit.RenderProcessGoneDetail;
+import android.webkit.SafeBrowsingResponse;
+import android.webkit.SslErrorHandler;
 import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.anthonycr.progress.AnimatedProgressBar;
 import com.creativetrends.app.simplicity.SimplicityApplication;
+import com.creativetrends.app.simplicity.adapters.Bookmark;
 import com.creativetrends.app.simplicity.suggestions.SuggestionsAdapter;
 import com.creativetrends.app.simplicity.ui.CustomBehavior;
-import com.creativetrends.app.simplicity.utils.Bookmark;
+import com.creativetrends.app.simplicity.ui.SimpleAutoComplete;
+import com.creativetrends.app.simplicity.ui.ViewSslCertificate;
 import com.creativetrends.app.simplicity.utils.CreateShortcut;
 import com.creativetrends.app.simplicity.utils.CustomGestureDetector;
 import com.creativetrends.app.simplicity.utils.History;
@@ -95,15 +120,14 @@ import com.creativetrends.simplicity.app.R;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 
+import org.jsoup.nodes.Document;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -114,41 +138,41 @@ import java.util.Set;
 import static android.os.Build.VERSION_CODES.M;
 
 
-public class MainActivity extends AppCompatActivity implements CreateShortcut.CreateHomeScreenSchortcutListener {
+public class MainActivity extends AppCompatActivity implements CreateShortcut.CreateHomeScreenSchortcutListener, SwipeRefreshLayout.OnRefreshListener {
     SharedPreferences mPreferences;
     public NestedWebView mWebView;
     WebSettings mWebSettings;
     boolean isDesktop;
     boolean isIncognito;
-    AutoCompleteTextView mSearchView;
+    SimpleAutoComplete mSearchView;
     Toolbar mToolbar;
-    String UrlCleaner;
-    String defaultSearch, defaultProvider;
+    String UrlCleaner, defaultSearch, defaultProvider;
+    FloatingActionButton jump;
 
-    ImageView mHomebutton, mSecure, mOverflow, vSearch, bookmarkicon, mForward;
+    ImageView mHomebutton, mSecure, mOverflow, vSearch, bookmarkicon, mForward, mRefresh;
     public static Bitmap favoriteIcon;
     AppBarLayout mAppbar;
     //BottomNavigationViewEx mTabs;
     HashMap<String, String> extraHeaders = new HashMap<>();
     CardView mCardView;
+    LinearLayout top, items;
     ScrollView mScroll;
-    FrameLayout mHolder;
+    FrameLayout mHolder,customViewContainer;
     AppCompatCheckBox pri, desk;
     public static String homepage;
     public static CookieManager cookieManager;
     private boolean adBlockerEnabled;
     CoordinatorLayout background_color;
     private static final int STORAGE_PERMISSION_CODE = 2284, REQUEST_STORAGE = 1;
-    private static final String TAG = MainActivity.class.getSimpleName();
     private String urlToGrab;
     AnimatedProgressBar mProgress;
     private long back_pressed;
     public static String webViewTitle;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     // fullscreen videos
     private MyWebChromeClient mWebChromeClient;
     private WebChromeClient.CustomViewCallback customViewCallback;
-    private FrameLayout customViewContainer;
     private View mCustomView;
     private int previousUiVisibility;
 
@@ -161,8 +185,43 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
     ArrayList<Bookmark> listBookmarks = new ArrayList<>();
     Bookmark bookmark;
     boolean TopTabs;
+    boolean isLoading;
+    private BottomSheetDialog alertDialog;
+    public static final String EXTRA_URL = "extra_url";
+    public static final String ACTION_URL_RESOLVED = "com.creativetrends.simplicity.app.URL_RESOLVED";
+    public static String faviconUrl;
+    public static SslCertificate sslCertificate;
+    private ShareActionProvider mShareActionProvider;
+    public static Palette.Swatch swatch;
+    public int scrollPosition = 0;
+    public static int titleColor;
+    String getFaviconUrl;
+    Document doc;
+    private final BroadcastReceiver mUrlResolvedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Intent resolvedIntent = intent.getParcelableExtra(Intent.EXTRA_INTENT);
+            if (TextUtils.equals(getPackageName(), resolvedIntent.getPackage())) {
+                String url = intent.getStringExtra(EXTRA_URL);
+                mWebView.loadUrl(url);
+            } else {
+                startActivity(resolvedIntent);
+            }
+            ResultReceiver receiver = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                receiver = intent.getParcelableExtra(Intent.EXTRA_RESULT_RECEIVER);
+            }
+            if (receiver != null) {
+                receiver.send(RESULT_CANCELED, new Bundle());
+            }
+        }
+    };
+
+
+
 
     private final View.OnClickListener onClickListener = new View.OnClickListener() {
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @SuppressWarnings("deprecation")
         public void onClick(View v) {
             switch (v.getId()) {
@@ -174,28 +233,11 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                     showMenu();
                     return;
 
-                case R.id.secure_site:
-                    AlertDialog.Builder info = new AlertDialog.Builder(MainActivity.this);
-                    if(mWebView != null) {
-                        info.setTitle(getUrlDomainName(mWebView.getUrl()));
-                        if (mWebView.getUrl().contains("https://")) {
-                            info.setMessage(getResources().getString(R.string.private_info));
-                        } else {
-                            info.setMessage(getResources().getString(R.string.none_private_info));
-                        }
-                        info.setPositiveButton("OKAY", (arg0, arg1) -> {
-
-                        });
-                        info.setNeutralButton(null, null);
-                        info.show();
-                    }
-                    return;
-
                 case R.id.sim_go_forward:
-                    if(mWebView != null && !mWebView.canGoForward()){
+                    if (mWebView != null && !mWebView.canGoForward()) {
                         return;
                     }
-                    if(mWebView != null && mWebView.canGoForward()){
+                    if (mWebView != null && mWebView.canGoForward()) {
                         hideMenu();
                         mWebView.goForward();
                     }
@@ -203,9 +245,9 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
                 case R.id.sim_bookmark:
                     hideMenu();
-                    if(UserPreferences.isStarred(mWebView.getUrl())){
+                    if (UserPreferences.isStarred(mWebView.getUrl())) {
                         Toast.makeText(MainActivity.this, mWebView.getTitle().replace("", "") + " " + getResources().getString(R.string.already_to_bookmarks), Toast.LENGTH_SHORT).show();
-                    }else {
+                    } else {
                         String getWebTitle = webViewTitle;
                         String setLetter = getWebTitle.substring(0,1);
                         listBookmarks = UserPreferences.getBookmarks();
@@ -213,21 +255,43 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                         bookmark.setTitle(mWebView.getTitle());
                         bookmark.setUrl(mWebView.getUrl());
                         bookmark.setLetter(setLetter);
-                        bookmark.setImage(Palette.from(favoriteIcon).generate().getVibrantColor(Palette.from(favoriteIcon).generate().getMutedColor(ContextCompat.getColor(MainActivity.this, R.color.no_fav))));
+                        bookmark.setImage(Palette.from(favoriteIcon).generate().getVibrantColor(Palette.from(favoriteIcon).generate().getMutedColor(ContextCompat.getColor(MainActivity.this, R.color.colorAccent))));
                         listBookmarks.add(bookmark);
                         UserPreferences.saveBookmarks(listBookmarks);
                         Toast.makeText(MainActivity.this, mWebView.getTitle().replace("", "") + " " + getResources().getString(R.string.added_to_bookmarks), Toast.LENGTH_SHORT).show();
                     }
                     return;
 
+
+                case R.id.sim_downloads:
+                    try {
+                        hideMenu();
+                        Intent downloadManagerIntent = new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS);
+                        downloadManagerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(downloadManagerIntent);
+                    } catch (ActivityNotFoundException i) {
+                        i.printStackTrace();
+                    }catch (NullPointerException ignored){
+
+                    }
+                    return;
+
                 case R.id.sim_refresh:
                     hideMenu();
-                    mWebView.reload();
+                    if(isLoading){
+                        mWebView.stopLoading();
+                    }else{
+                        mWebView.reload();
+                    }
                     return;
 
                 case R.id.sim_stop:
                     hideMenu();
-                    mWebView.stopLoading();
+                    try {
+                        viewSslCertificate(mWebView);
+                    }catch (Exception i){
+                        i.printStackTrace();
+                    }
                     return;
 
                 case R.id.sim_new_window:
@@ -261,6 +325,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                         CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
                         CookieSyncManager.createInstance(MainActivity.this);
                         CookieSyncManager.getInstance().startSync();
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
                     } else {
                         //showPrivateNotification();
                         mWebView.isPrivateBrowsingEnabled();
@@ -269,6 +334,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                         mWebView.getSettings().setDatabaseEnabled(false);
                         mWebView.getSettings().setDomStorageEnabled(false);
                         setColor(ContextCompat.getColor(MainActivity.this, R.color.md_grey_900));
+                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
                     }
                     hideMenu();
@@ -331,10 +397,11 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                     if (!isDesktop) {
                         mWebSettings.setUserAgentString("");
                         mWebSettings.setLoadWithOverviewMode(true);
+                        mWebSettings.setUseWideViewPort(true);
                         mWebView.reload();
                         isDesktop = false;
                     } else {
-                        mWebSettings.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36");
+                        mWebSettings.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36");
                         mWebSettings.setLoadWithOverviewMode(true);
                         mWebSettings.setUseWideViewPort(true);
                         mWebView.reload();
@@ -361,10 +428,11 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                     if (!isDesktop) {
                         mWebSettings.setUserAgentString("");
                         mWebSettings.setLoadWithOverviewMode(true);
+                        mWebSettings.setUseWideViewPort(true);
                         mWebView.reload();
                         isDesktop = false;
                     } else {
-                        mWebSettings.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36");
+                        mWebSettings.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36");
                         mWebSettings.setLoadWithOverviewMode(true);
                         mWebSettings.setUseWideViewPort(true);
                         mWebView.reload();
@@ -388,6 +456,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                         CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
                         CookieSyncManager.createInstance(MainActivity.this);
                         CookieSyncManager.getInstance().startSync();
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
                     } else {
                         //showPrivateNotification();
                         mWebView.isPrivateBrowsingEnabled();
@@ -396,7 +465,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                         mWebView.getSettings().setDatabaseEnabled(false);
                         mWebView.getSettings().setDomStorageEnabled(false);
                         setColor(ContextCompat.getColor(MainActivity.this, R.color.md_grey_900));
-
+                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
                     }
                     hideMenu();
                     return;
@@ -416,8 +485,12 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                         mPreferences.edit().putString("last_page_reminder", homepage).apply();
                     }
                     return;
-
-
+                case R.id.jumpTop:
+                    if(scrollPosition >= 10){
+                        scrollToTop(mWebView);
+                        mAppbar.setExpanded(true, true);
+                    }
+                    return;
 
                 default:
                     hideMenu();
@@ -441,18 +514,23 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         } else {
             setContentView(R.layout.activity_main_bottom);
         }
+        jump = findViewById(R.id.jumpTop);
         mHomebutton = findViewById(R.id.toolbar_home);
         customViewContainer = findViewById(R.id.customViewContainer);
         background_color = findViewById(R.id.background_color);
         mSecure = findViewById(R.id.secure_site);
         bookmarkicon = findViewById(R.id.sim_bookmark);
         mOverflow = findViewById(R.id.overflow_button);
+        mRefresh = findViewById(R.id.sim_refresh);
         mProgress = findViewById(R.id.progressBar);
         vSearch = findViewById(R.id.voice_button);
         mForward = findViewById(R.id.sim_go_forward);
-
+        top = findViewById(R.id.root_overflow);
+        items = findViewById(R.id.sub_overflow);
         mAppbar = findViewById(R.id.appbar);
         mToolbar = findViewById(R.id.toolbar);
+        swipeRefreshLayout = findViewById(R.id.swipeRefresh);
+        swipeRefreshLayout.setOnRefreshListener(this);
         if (getSupportActionBar() != null) {
             setSupportActionBar(mToolbar);
         }
@@ -463,13 +541,11 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         mWebView = findViewById(R.id.webView);
 
 
-
         forClicks();
-        mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+
         mWebSettings = mWebView.getSettings();
         mWebSettings.setJavaScriptEnabled(true);
         mWebSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-        mWebSettings.setDomStorageEnabled(true);
         mWebSettings.setBuiltInZoomControls(true);
         mWebSettings.setDisplayZoomControls(false);
         mWebSettings.setLoadWithOverviewMode(true);
@@ -478,7 +554,9 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         mWebSettings.setDatabaseEnabled(true);
         cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
-        cookieManager.setAcceptThirdPartyCookies(mWebView, true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cookieManager.setAcceptThirdPartyCookies(mWebView, true);
+        }
         if (mPreferences.getBoolean("enable_location", false)) {
             mWebSettings.setGeolocationEnabled(true);
             //noinspection deprecation
@@ -486,6 +564,12 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         } else {
             mWebSettings.setGeolocationEnabled(false);
         }
+        mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        mWebView.getSettings().setAllowFileAccessFromFileURLs(true);
+        mWebView.getSettings().setAllowUniversalAccessFromFileURLs(true);
+        mWebView.getSettings().setDomStorageEnabled(true);
+        //noinspection deprecation
+        mWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
         mWebView.addJavascriptInterface(new ReaderHandler(MainActivity.this), "simplicity_reader");
         mWebSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
         mWebSettings.setAppCachePath(getApplicationContext().getCacheDir().getAbsolutePath());
@@ -493,6 +577,16 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         homepage = mPreferences.getString("homepage", "");
         defaultSearch = mPreferences.getString("search_engine", "");
         webViewTitle = getString(R.string.app_name);
+
+        mWebView.setOnScrollChangedCallback((l, t) -> {
+            scrollPosition = t;
+            if(scrollPosition >= 10){
+                jump.setVisibility(View.VISIBLE);
+            }else{
+                jump.setVisibility(View.GONE);
+            }
+        });
+
         mWebView.setOnLongClickListener(view1 -> {
 
 
@@ -643,19 +737,24 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
 
         mWebView.setWebViewClient(new WebViewClient() {
+            @TargetApi(Build.VERSION_CODES.N)
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                return shouldOverrideUrlLoading(view, request.getUrl().toString());
+            }
 
             @SuppressWarnings("deprecation")
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 try {
-                    if ((url.contains("market://")
+                    if ((url.contains("market://"))
                             || url.contains("mailto:")
                             || url.contains("play.google")
                             || url.contains("tel:")
                             || url.contains("intent:")
                             || url.contains("geo:")
                             || url.contains("streetview:")
-                            || url.contains("ebay:"))) {
+                            || url.contains("ebay:")) {
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                         try {
                             view.getContext().startActivity(intent);
@@ -663,14 +762,13 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
                             e.printStackTrace();
                         }
-
                         return true;
                     }
+                    return false;
                 } catch (NullPointerException npe) {
                     npe.printStackTrace();
                     return true;
                 }
-                return false;
 
             }
 
@@ -703,14 +801,123 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                try {
-                    mSecure.setVisibility(View.GONE);
-                    findViewById(R.id.sim_stop).setVisibility(View.VISIBLE);
-                    findViewById(R.id.sim_refresh).setVisibility(View.GONE);
-                }catch (NullPointerException ignored){
-                }catch(Exception e){
-                    e.printStackTrace();
+                isLoading = true;
+            }
+
+
+            @Override
+            public void onReceivedLoginRequest(WebView view, String realm, @Nullable String account, String args) {
+                super.onReceivedLoginRequest(view, realm, account, args);
+            }
+
+            @Override
+            public boolean shouldOverrideKeyEvent(WebView view, KeyEvent event) {
+                return super.shouldOverrideKeyEvent(view, event);
+            }
+
+            @Override
+            public void onUnhandledKeyEvent(WebView view, KeyEvent event) {
+                super.onUnhandledKeyEvent(view, event);
+            }
+
+
+            @Override
+            public void onScaleChanged(WebView view, float oldScale, float newScale) {
+                super.onScaleChanged(view, oldScale, newScale);
+            }
+
+            @Override
+            public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
+                super.doUpdateVisitedHistory(view, url, isReload);
+            }
+
+            @Override
+            public void onPageCommitVisible(WebView view, String url) {
+                super.onPageCommitVisible(view, url);
+            }
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public void onTooManyRedirects(WebView view, Message cancelMsg, Message continueMsg) {
+                continueMsg.sendToTarget();
+                super.onTooManyRedirects(view, cancelMsg, continueMsg);
+            }
+
+            @Override
+            public void onFormResubmission(WebView view, Message dontResend, Message resend) {
+                resend.sendToTarget();
+                super.onFormResubmission(view, dontResend, resend);
+            }
+
+            @Override
+            public void onSafeBrowsingHit(WebView view, WebResourceRequest request, int threatType, SafeBrowsingResponse callback) {
+                super.onSafeBrowsingHit(view, request, threatType, callback);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                    callback.backToSafety(true);
                 }
+                Toast.makeText(view.getContext(), "Unsafe web page blocked.", Toast.LENGTH_LONG).show();
+            }
+
+
+            @Override
+            public boolean onRenderProcessGone(WebView view, RenderProcessGoneDetail detail) {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                    return false;
+                }
+                super.onRenderProcessGone(view, detail);
+                if (!detail.didCrash()) {
+                    // Renderer was killed because the system ran out of memory.
+                    // The app can recover gracefully by creating a new WebView instance
+                    // in the foreground.
+                    Log.e("MY_APP", "System killed the WebView rendering process " +
+                            "to reclaim memory. Recreating...");
+
+                    if (view != null) {
+                        ((ViewGroup)view.getParent()).removeView(view);
+                        view.destroy();
+                    }
+                    // By this point, the instance variable "view" is guaranteed
+                    // to be null, so it's safe to reinitialize it.
+                    return true; // The app continues executing.
+                }
+                // Renderer crashed because of an internal error, such as a memory
+                // access violation.
+                Log.e("MY_APP", "The WebView rendering process crashed!");
+
+                return false;
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+            }
+
+            @Override
+            public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                String message = "SSL Certificate error.";
+                switch (error.getPrimaryError()) {
+                    case SslError.SSL_UNTRUSTED:
+                        message = "The certificate authority is not trusted.";
+                        break;
+                    case SslError.SSL_EXPIRED:
+                        message = "The certificate has expired.";
+                        break;
+                    case SslError.SSL_IDMISMATCH:
+                        message = "The certificate Hostname mismatch.";
+                        break;
+                    case SslError.SSL_NOTYETVALID:
+                        message = "The certificate is not yet valid.";
+                        break;
+                }
+                message += " Do you want to continue anyway?";
+
+                builder.setTitle("SSL Certificate Error");
+                builder.setMessage(message);
+                builder.setPositiveButton("continue", (dialog, which) -> handler.proceed());
+                builder.setNegativeButton("cancel", (dialog, which) -> handler.cancel());
+                final AlertDialog dialog = builder.create();
+                dialog.show();
             }
 
             @Override
@@ -719,45 +926,51 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                 String str;
                 if (view.getUrl().contains("https://")) {
                     str = view.getUrl().replace("https://", "<font color='#0b8043'>https</font>"+"<font color='#9D9D9D'>://</font>");
-                    mSearchView.setText(Html.fromHtml(str), TextView.BufferType.SPANNABLE);
+                    if(!mSearchView.hasFocus()) {
+                        mSearchView.setText(Html.fromHtml(str), TextView.BufferType.SPANNABLE);
+                    }
                     mSecure.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_secure_white));
                     mSecure.setVisibility(View.VISIBLE);
                 }else{
-                    str = view.getUrl().replace("http://", "");
-                    mSearchView.setText(Html.fromHtml(str), TextView.BufferType.SPANNABLE);
+                    str = view.getUrl().replace("http://", "<font color='#d32f2f'>http</font>"+"<font color='#9D9D9D'>://</font>");
+                    if(!mSearchView.hasFocus()) {
+                        mSearchView.setText(Html.fromHtml(str), TextView.BufferType.SPANNABLE);
+                    }
                     mSecure.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_unsecure_white));
                     mSecure.setVisibility(View.VISIBLE);
                 }
+
+                if(mRefresh != null) {
+                    if (isLoading) {
+                        mRefresh.setImageDrawable(ContextCompat.getDrawable(SimplicityApplication.getContextOfApplication(), R.drawable.ic_stop_loading));
+                    } else {
+                        mRefresh.setImageDrawable(ContextCompat.getDrawable(SimplicityApplication.getContextOfApplication(), R.drawable.ic_refresh_page));
+                    }
+                }
+
 
                 if (mWebView.canGoForward()) {
                     mForward.setAlpha(0.9f);
                 }else{
                     mForward.setAlpha(0.2f);
                 }
-            }
 
+            }
 
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshLayout.setEnabled(true);
+                isLoading = !(mWebView != null && mWebView.getProgress() == 100);
                 if(mWebView.getTitle().equals("No Connection")) {
                     mSearchView.setText(mWebView.getTitle());
                 }else {
                     mSearchView.setText(mWebView.getUrl());
                 }
-                try {
-                    findViewById(R.id.sim_stop).setVisibility(View.GONE);
-                    findViewById(R.id.sim_refresh).setVisibility(View.VISIBLE);
-
-                    //filter(listBookmarks, mWebView.getUrl());
-                }catch (NullPointerException ignored){
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
+                sslCertificate = view.getCertificate();
             }
-
-
         });
 
 
@@ -766,19 +979,61 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         mWebView.setWebChromeClient(mWebChromeClient);
 
         mWebView.setDownloadListener((url, userAgent, contentDisposition, mimeType, contentLength) -> {
+
             final String filename1 = URLUtil.guessFileName(url, contentDisposition, mimeType);
-            Snackbar snackbar = Snackbar.make(mWebView, "Download " + filename1 + "?", Snackbar.LENGTH_INDEFINITE);
-            snackbar.setActionTextColor(Color.parseColor("#1e88e5"));
-            snackbar.setAction("DOWNLOAD", view -> {
+            if (UserPreferences.isDownloadableFile(filename1)) {
+                if (alertDialog != null && alertDialog.isShowing()) alertDialog.dismiss();
+                alertDialog = new BottomSheetDialog(this);
+                @SuppressLint("InflateParams") View v = getLayoutInflater().inflate(R.layout.activity_bottomsheet, null, false);
+                ((TextView) v.findViewById(R.id.title)).setText(R.string.app_name);
+                ((TextView) v.findViewById(R.id.content)).setText(String.format(getString(R.string.download_warning), filename1));
+                v.findViewById(R.id.confirm).setOnClickListener(v1 -> {
+                    if (Build.VERSION.SDK_INT >= M) {
+                        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+                        } else {
+                            try {
+                                DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+
+                                String filename = URLUtil.guessFileName(url, contentDisposition, mimeType);
+
+                                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
+
+                                DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                                if (dm != null) {
+                                    dm.enqueue(request);
+                                }
+                                Intent intent1;
+                                intent1 = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                                intent1.addCategory(Intent.CATEGORY_OPENABLE);
+                                intent1.setType("*/*");
+
+
+                            } catch (Exception exc) {
+                                Toast.makeText(MainActivity.this, exc.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        alertDialog.dismiss();
+
+                    }
+                });
+
+                v.findViewById(R.id.cancel).setOnClickListener(v12 -> alertDialog.dismiss());
+
+                alertDialog.setOnDismissListener(DialogInterface::dismiss);
+
+                alertDialog.setContentView(v);
+                alertDialog.show();
+            }else {
                 if (Build.VERSION.SDK_INT >= M) {
                     if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
                     } else {
                         try {
+                            Toast.makeText(MainActivity.this, getString(R.string.downloading), Toast.LENGTH_SHORT).show();
                             DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-
                             String filename = URLUtil.guessFileName(url, contentDisposition, mimeType);
-
                             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                             request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
 
@@ -796,42 +1051,66 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                             Toast.makeText(MainActivity.this, exc.toString(), Toast.LENGTH_SHORT).show();
                         }
                     }
-                } else {
-                    try {
-                        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-
-                        String filename = URLUtil.guessFileName(url, contentDisposition, mimeType);
-
-                        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
-
-                        DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-                        if (dm != null) {
-                            dm.enqueue(request);
-                        }
-                        Intent intent1;
-                        intent1 = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                        intent1.addCategory(Intent.CATEGORY_OPENABLE);
-                        intent1.setType("*/*");
-
-
-                    } catch (Exception exc) {
-                        Toast.makeText(MainActivity.this, exc.toString(), Toast.LENGTH_SHORT).show();
-                    }
                 }
-            });
-            snackbar.show();
+            }
+
         });
 
         mSearchView.setAdapter(new SuggestionsAdapter(this));
-
-        mSearchView.setOnKeyListener((v, keyCode, event) -> {
-            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+        if (isIncognito) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                mSearchView.setImeOptions(mSearchView.getImeOptions() | EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING);
+            }
+        }
+        mSearchView.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                StaticUtils.hideKeyboard(mSearchView);
                 try {
+                if(mSearchView.getText().toString().contains("simplicity://flags")) {
+                    mSearchView.setText(mWebView.getUrl());
+                    Intent Intent = new Intent(MainActivity.this, ExperimentalActivity.class);
+                    startActivity(Intent);
+                }else if(mSearchView.getText().toString().contains("simplicity://history")) {
+                    mSearchView.setText(mWebView.getUrl());
+                    Intent history = new Intent(MainActivity.this, HistoryActivity.class);
+                    startActivity(history);
+
+                }else if(mSearchView.getText().toString().contains("simplicity://bookmarks")){
+                    mSearchView.setText(mWebView.getUrl());
+                    Intent settingsIntent = new Intent(MainActivity.this, BookmarksActivity.class);
+                    startActivity(settingsIntent);
+                }else{
                     loadUrlFromTextBox();
-                    mSearchView.setCursorVisible(false);
+                }
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                mSearchView.clearFocus();
+                return true;
+            }
+            return false;
+        });
+        mSearchView.setOnKeyListener((v, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                StaticUtils.hideKeyboard(mSearchView);
+                try {
+                    if(mSearchView.getText().toString().contains("simplicity://flags")) {
+                        mSearchView.setText(mWebView.getUrl());
+                        Intent Intent = new Intent(MainActivity.this, ExperimentalActivity.class);
+                        startActivity(Intent);
+                    }else if(mSearchView.getText().toString().contains("simplicity://history")) {
+                        mSearchView.setText(mWebView.getUrl());
+                        Intent history = new Intent(MainActivity.this, HistoryActivity.class);
+                        startActivity(history);
+
+                    }else if(mSearchView.getText().toString().contains("simplicity://bookmarks")){
+                        mSearchView.setText(mWebView.getUrl());
+                        Intent settingsIntent = new Intent(MainActivity.this, BookmarksActivity.class);
+                        startActivity(settingsIntent);
+                    }else{
+                        loadUrlFromTextBox();
+                    }
                     mSearchView.clearFocus();
-                    mWebView.isFocused();
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -846,17 +1125,14 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             if (inputMethodManager != null) {
                 inputMethodManager.showSoftInput(mWebView, 0);
             }
-            mSearchView.setCursorVisible(true);
-            mSearchView.selectAll();
-            mSearchView.hasFocus();
 
         });
 
         mSearchView.setOnItemClickListener((parent, view, position, rowId) -> {
             try {
-                loadUrlFromTextBox();
+                StaticUtils.hideKeyboard(mSearchView);
                 mSearchView.clearFocus();
-                mWebView.hasFocus();
+                loadUrlFromTextBox();
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -879,24 +1155,13 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         });
 
 
-        mOverflow.setOnLongClickListener(view -> {
-            try {
-                if (mWebView != null && mWebView.getScrollY() > 10) {
-                    scrollToTop(mWebView);
-                }
-            }catch(Exception ignored) {
-
-            }
-            return false;
-        });
-
-
     }
 
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        isKeyboardOpen();
     }
 
     @Override
@@ -928,35 +1193,43 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
     }
 
+
+
     @Override
     protected void onStart() {
         super.onStart();
+        registerReceiver(mUrlResolvedReceiver, new IntentFilter(ACTION_URL_RESOLVED));
         if (getIntent().getDataString() != null) {
             shortcutSwitch(getIntent().getDataString());
         }
+    }
 
+
+    @Override
+    protected void onStop() {
+        CookieManager.getInstance().flush();
+        unregisterReceiver(mUrlResolvedReceiver);
+        HttpResponseCache cache = HttpResponseCache.getInstalled();
+        if (cache != null) {
+            cache.flush();
+        }
+        super.onStop();
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
+        mWebView.onResume();
         applyHomeButton();
         if (mCardView.getVisibility() == View.VISIBLE) {
             hideMenu();
         }
-        mWebView.resumeTimers();
-        mWebView.onResume();
-        registerForContextMenu(mWebView);
-    }
+        CookieManager.getInstance().setAcceptCookie(!isIncognito);
 
+    }
 
     @Override
     public void onPause() {
-        if (mCardView.getVisibility() == View.VISIBLE) {
-            hideMenu();
-        }
-        unregisterForContextMenu(mWebView);
-        mWebView.pauseTimers();
         mWebView.onPause();
         super.onPause();
     }
@@ -968,8 +1241,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             hideCustomView();
         if (mCardView.getVisibility() == View.VISIBLE) {
             hideMenu();
-        }else if (mCustomView == null && mWebView.canGoBack()) {
-            mWebView.stopLoading();
+        }else if (mWebView.canGoBack()) {
             goBack();
         } else {
            finishActivity();
@@ -1006,14 +1278,6 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        if (inCustomView()) {
-            hideCustomView();
-        }
-    }
-
-    @Override
     protected void onDestroy() {
         if(mPreferences.getBoolean("clear_data", false)){
             try {
@@ -1036,42 +1300,61 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
     private void loadUrlFromTextBox() throws UnsupportedEncodingException {
         String unUrlCleaner = mSearchView.getText().toString();
-        URL unformattedUrl = null;
-        Uri.Builder formattedUri = new Uri.Builder();
-        if (Patterns.WEB_URL.matcher(unUrlCleaner).matches()) {
-            if (!unUrlCleaner.startsWith("http")) {
-                unUrlCleaner = "http://" + unUrlCleaner;
-            }
-            try {
-                unformattedUrl = new URL(unUrlCleaner);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-
-            final String scheme = unformattedUrl != null ? unformattedUrl.getProtocol() : null;
-            final String authority = unformattedUrl != null ? unformattedUrl.getAuthority() : null;
-            final String path = unformattedUrl != null ? unformattedUrl.getPath() : null;
-            final String query = unformattedUrl != null ? unformattedUrl.getQuery() : null;
-            final String fragment = unformattedUrl != null ? unformattedUrl.getRef() : null;
-
-            formattedUri.scheme(scheme).authority(authority).path(path).query(query).fragment(fragment);
-            UrlCleaner = formattedUri.build().toString();
+        if (unUrlCleaner.startsWith("www") || URLUtil.isValidUrl(unUrlCleaner)) {
+            if (!URLUtil.isValidUrl(unUrlCleaner)) unUrlCleaner = URLUtil.guessUrl(unUrlCleaner);
+            mWebView.loadUrl(unUrlCleaner);
+        } else if (unUrlCleaner.endsWith(".com") || URLUtil.isValidUrl(unUrlCleaner)) {
+            if (!URLUtil.isValidUrl(unUrlCleaner)) unUrlCleaner = URLUtil.guessUrl(unUrlCleaner);
+            mWebView.loadUrl(unUrlCleaner);
+        } else if (unUrlCleaner.endsWith(".gov") || URLUtil.isValidUrl(unUrlCleaner)) {
+            if (!URLUtil.isValidUrl(unUrlCleaner)) unUrlCleaner = URLUtil.guessUrl(unUrlCleaner);
+            mWebView.loadUrl(unUrlCleaner);
+        } else if (unUrlCleaner.endsWith(".net") || URLUtil.isValidUrl(unUrlCleaner)) {
+            if (!URLUtil.isValidUrl(unUrlCleaner)) unUrlCleaner = URLUtil.guessUrl(unUrlCleaner);
+            mWebView.loadUrl(unUrlCleaner);
+        } else if (unUrlCleaner.endsWith(".org") || URLUtil.isValidUrl(unUrlCleaner)) {
+            if (!URLUtil.isValidUrl(unUrlCleaner)) unUrlCleaner = URLUtil.guessUrl(unUrlCleaner);
+            mWebView.loadUrl(unUrlCleaner);
+        } else if (unUrlCleaner.endsWith(".mil") || URLUtil.isValidUrl(unUrlCleaner)) {
+            if (!URLUtil.isValidUrl(unUrlCleaner)) unUrlCleaner = URLUtil.guessUrl(unUrlCleaner);
+            mWebView.loadUrl(unUrlCleaner);
+        } else if (unUrlCleaner.endsWith(".edu") || URLUtil.isValidUrl(unUrlCleaner)) {
+            if (!URLUtil.isValidUrl(unUrlCleaner)) unUrlCleaner = URLUtil.guessUrl(unUrlCleaner);
+            mWebView.loadUrl(unUrlCleaner);
+        } else if (unUrlCleaner.endsWith(".int") || URLUtil.isValidUrl(unUrlCleaner)) {
+            if (!URLUtil.isValidUrl(unUrlCleaner)) unUrlCleaner = URLUtil.guessUrl(unUrlCleaner);
+            mWebView.loadUrl(unUrlCleaner);
+        } else if (unUrlCleaner.endsWith(".ly") || URLUtil.isValidUrl(unUrlCleaner)) {
+            if (!URLUtil.isValidUrl(unUrlCleaner)) unUrlCleaner = URLUtil.guessUrl(unUrlCleaner);
+            mWebView.loadUrl(unUrlCleaner);
+        } else if (unUrlCleaner.endsWith(".de") || URLUtil.isValidUrl(unUrlCleaner)) {
+            if (!URLUtil.isValidUrl(unUrlCleaner)) unUrlCleaner = URLUtil.guessUrl(unUrlCleaner);
+            mWebView.loadUrl(unUrlCleaner);
+        } else if (unUrlCleaner.endsWith(".uk") || URLUtil.isValidUrl(unUrlCleaner)) {
+            if (!URLUtil.isValidUrl(unUrlCleaner)) unUrlCleaner = URLUtil.guessUrl(unUrlCleaner);
+            mWebView.loadUrl(unUrlCleaner);
+        } else if (unUrlCleaner.endsWith(".it") || URLUtil.isValidUrl(unUrlCleaner)) {
+            if (!URLUtil.isValidUrl(unUrlCleaner)) unUrlCleaner = URLUtil.guessUrl(unUrlCleaner);
+            mWebView.loadUrl(unUrlCleaner);
+        } else if (unUrlCleaner.endsWith(".jp") || URLUtil.isValidUrl(unUrlCleaner)) {
+            if (!URLUtil.isValidUrl(unUrlCleaner)) unUrlCleaner = URLUtil.guessUrl(unUrlCleaner);
+            mWebView.loadUrl(unUrlCleaner);
+        } else if (unUrlCleaner.endsWith(".ru") || URLUtil.isValidUrl(unUrlCleaner)) {
+            if (!URLUtil.isValidUrl(unUrlCleaner)) unUrlCleaner = URLUtil.guessUrl(unUrlCleaner);
+            mWebView.loadUrl(unUrlCleaner);
+        } else if (unUrlCleaner.endsWith(".gl") || URLUtil.isValidUrl(unUrlCleaner)) {
+            if (!URLUtil.isValidUrl(unUrlCleaner)) unUrlCleaner = URLUtil.guessUrl(unUrlCleaner);
+            mWebView.loadUrl(unUrlCleaner);
+        } else if (unUrlCleaner.endsWith(".me") || URLUtil.isValidUrl(unUrlCleaner)) {
+            if (!URLUtil.isValidUrl(unUrlCleaner)) unUrlCleaner = URLUtil.guessUrl(unUrlCleaner);
+            mWebView.loadUrl(unUrlCleaner);
+        } else if (unUrlCleaner.contains(".") && !unUrlCleaner.contains(" ") || URLUtil.isValidUrl(unUrlCleaner)) {
+            if (!URLUtil.isValidUrl(unUrlCleaner)) unUrlCleaner = URLUtil.guessUrl(unUrlCleaner);
+            mWebView.loadUrl(unUrlCleaner);
         } else {
-
-            final String encodedUrlString = URLEncoder.encode(unUrlCleaner, "UTF-8");
-
-
-            UrlCleaner = defaultSearch + encodedUrlString;
+            mWebView.loadUrl(defaultSearch + unUrlCleaner);
         }
-        if(mPreferences.getBoolean("no_track", false)) {
-            mWebView.loadUrl(UrlCleaner, extraHeaders);
-        }else{
-            mWebView.loadUrl(UrlCleaner);
-        }
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        if (inputMethodManager != null) {
-            inputMethodManager.hideSoftInputFromWindow(mWebView.getWindowToken(), 0);
-        }
+
     }
 
 
@@ -1082,43 +1365,94 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), getWindow().getStatusBarColor(), StaticUtils.darkColor(color));
             colorAnimation.setDuration(90);
             colorAnimation.addUpdateListener(animator -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    getWindow().setStatusBarColor((int) animator.getAnimatedValue());
-                    if (mPreferences.getBoolean("nav_color", false)) {
-                        getWindow().setNavigationBarColor((int) animator.getAnimatedValue());
-                    }else{
-                        getWindow().setNavigationBarColor(ContextCompat.getColor(MainActivity.this, R.color.black));
+                getWindow().setStatusBarColor((int) animator.getAnimatedValue());
+                if (mPreferences.getBoolean("nav_color", false)) {
+                    getWindow().setNavigationBarColor((int) animator.getAnimatedValue());
+                }else{
+                    getWindow().setNavigationBarColor(ContextCompat.getColor(MainActivity.this, R.color.black));
 
-                    }
                 }
 
             });
             colorAnimation.start();
         }
         int colorFrom = ContextCompat.getColor(this, !isIncognito ? R.color.md_grey_900 : R.color.no_fav);
-        Drawable backgroundFrom = mToolbar.getBackground();
-        if (backgroundFrom instanceof ColorDrawable)
-            colorFrom = ((ColorDrawable) backgroundFrom).getColor();
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, color);
-        colorAnimation.setDuration(100);
-        colorAnimation.addUpdateListener(animator -> {
-            mToolbar.setBackgroundColor((int) animator.getAnimatedValue());
-            if (TopTabs) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Drawable backgroundFrom = mToolbar.getBackground();
+            if (backgroundFrom instanceof ColorDrawable)
+                colorFrom = ((ColorDrawable) backgroundFrom).getColor();
+            ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, color);
+            colorAnimation.setDuration(100);
+            colorAnimation.addUpdateListener(animator -> {
+                mToolbar.setBackgroundColor((int) animator.getAnimatedValue());
                 mProgress.setBackgroundColor((int) animator.getAnimatedValue());
-            }
+                jump.setBackgroundTintList(ColorStateList.valueOf((int) animator.getAnimatedValue()));
+                jump.setRippleColor(ContextCompat.getColor(getBaseContext(), R.color.colorSemiWhite));
+                swipeRefreshLayout.setColorSchemeColors((int) animator.getAnimatedValue());
 
-        });
-        colorAnimation.start();
+            });
+            colorAnimation.start();
+        }
 
     }
 
     protected void getBookmarkIcon() {
+        try {
             if (bookmarkicon != null && UserPreferences.isStarred(mWebView.getUrl())) {
                 bookmarkicon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_star_full));
             } else if (bookmarkicon != null) {
                 bookmarkicon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_star_border));
+            }
+        }catch(Exception i){
+            i.printStackTrace();
         }
     }
+
+    public void isKeyboardOpen(){
+        try {
+            getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+
+                Rect r = new Rect();
+                getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
+                int screenHeight = getWindow().getDecorView().getRootView().getHeight();
+
+                int keypadHeight = screenHeight - r.bottom;
+                //Log.d(TAG, "keypadHeight = " + keypadHeight);
+                if (keypadHeight > screenHeight * 0.15) {
+                    //Keyboard is opened
+                    if (!TopTabs && !mSearchView.hasFocus()) {
+                        mAppbar.setVisibility(View.GONE);
+                    }
+                    if (TopTabs && mPreferences.getBoolean("full_screen", false)) {
+                        hideNavBar();
+                    }
+                } else {
+                    if (!TopTabs) {
+                        mAppbar.setVisibility(View.VISIBLE);
+                    }
+                    if (TopTabs && mPreferences.getBoolean("full_screen", false)) {
+                        hideNavBar();
+                    }
+
+                }
+
+            });
+        }catch(Exception ignored){
+
+        }
+    }
+
+    private void hideNavBar() {
+        View v = getWindow().getDecorView();
+        v.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
+
+
 
     public String getUrlDomainName(String url) {
         String domainName = url;
@@ -1193,20 +1527,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
     private void forClicks() {
 
         mCardView = findViewById(R.id.sim_menu);
-        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 245, getResources().getDisplayMetrics());
-        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 450, getResources().getDisplayMetrics());
-        int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics());
-        if(TopTabs){
-            CardView.LayoutParams params = new CardView.LayoutParams(width, CardView.LayoutParams.MATCH_PARENT);
-            params.gravity = Gravity.TOP | Gravity.END;
-            params.setMargins(0, 4, 8, 8);
-            mCardView.setLayoutParams(params);
-        }else{
-            CardView.LayoutParams params = new CardView.LayoutParams(width, height);
-            params.gravity = Gravity.BOTTOM | Gravity.END;
-            params.setMargins(0, 4, 8, margin);
-            mCardView.setLayoutParams(params);
-        }
+
         mScroll = findViewById(R.id.scroller);
         mHolder = findViewById(R.id.main_menu_holder);
         pri = findViewById(R.id.sim_private_check);
@@ -1215,7 +1536,6 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         mHolder.setClickable(false);
         mHolder.setFocusable(false);
         findViewById(R.id.sim_go_forward).setOnClickListener(onClickListener);
-        findViewById(R.id.secure_site).setOnClickListener(onClickListener);
         findViewById(R.id.sim_bookmark).setOnClickListener(onClickListener);
         findViewById(R.id.sim_history).setOnClickListener(onClickListener);
         findViewById(R.id.sim_refresh).setOnClickListener(onClickListener);
@@ -1235,14 +1555,16 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         findViewById(R.id.sim_reader).setOnClickListener(onClickListener);
         findViewById(R.id.voice_button).setOnClickListener(onClickListener);
         findViewById(R.id.sim_close).setOnClickListener(onClickListener);
+        findViewById(R.id.sim_downloads).setOnClickListener(onClickListener);
+        findViewById(R.id.jumpTop).setOnClickListener(onClickListener);
     }
 
 
     private void showMenu() {
-        getBookmarkIcon();
         mScroll.setScrollY(0);
-        Animation grow = AnimationUtils.loadAnimation(this, R.anim.grow_menu);
-        grow.setAnimationListener(new Animation.AnimationListener() {
+        getBookmarkIcon();
+        Animation fade = AnimationUtils.loadAnimation(this, R.anim.grow_menu);
+        fade.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
                 mCardView.setVisibility(View.VISIBLE);
             }
@@ -1251,11 +1573,22 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             public void onAnimationRepeat(Animation animation) {
             }
         });
-        mCardView.startAnimation(grow);
+        mCardView.startAnimation(fade);
         mHolder.setClickable(true);
         mHolder.setFocusable(true);
         mCardView.setSoundEffectsEnabled(false);
         mHolder.setSoundEffectsEnabled(false);
+        LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(MainActivity.this, R.anim.translate_from_top), 0.3f);
+        items.setLayoutAnimation(lac);
+        items.post(() -> {
+
+        });
+        LayoutAnimationController lac2 = new LayoutAnimationController(AnimationUtils.loadAnimation(MainActivity.this, R.anim.first_row_animation), 0.3f);
+        top.setLayoutAnimation(lac2);
+        top.post(() -> {
+
+        });
+
     }
 
 
@@ -1304,6 +1637,16 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             //noinspection deprecation
             mWebView.setGestureDetector(new GestureDetector(new CustomGestureDetector(mWebView, this)));
         }
+
+        if(TopTabs && mPreferences.getBoolean("full_screen", false)){
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                            }
     }
 
     private void applyHomeButton() {
@@ -1330,7 +1673,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         }
         if(mPreferences.getBoolean("gestures_ok", false)){
             //noinspection deprecation
-            mWebView.setGestureDetector(new GestureDetector(new CustomGestureDetector(mWebView, this)));
+            //mWebView.setGestureDetector(new GestureDetector(new CustomGestureDetector(mWebView, this)));
         }
 
     }
@@ -1573,19 +1916,149 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         }
     }
 
+    public void viewSslCertificate(View view) {
+        // Show the `ViewSslCertificateDialog` `AlertDialog` and name this instance `@string/view_ssl_certificate`.
+        DialogFragment viewSslCertificateDialogFragment = new ViewSslCertificate();
+        viewSslCertificateDialogFragment.show(getFragmentManager(), getString(R.string.view_ssl_certificate));
+    }
+
+
+
+    @Override
+    public void onRefresh() {
+        if(mWebView != null){
+            mWebView.reload();
+            swipeRefreshLayout.setRefreshing(true);
+            new Handler().postDelayed(() -> swipeRefreshLayout.setRefreshing(false), 200);
+        }
+    }
+
     private class MyWebChromeClient extends WebChromeClient {
+
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        @Override
+        public void onPermissionRequest(final PermissionRequest request) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                request.grant(request.getResources());
+            }
+        }
+
+        @Override
+        public boolean onJsAlert(WebView view, final String url, final String message, final JsResult result) {
+            try {
+                if (alertDialog != null && alertDialog.isShowing()) alertDialog.dismiss();
+                alertDialog = new BottomSheetDialog(MainActivity.this);
+                @SuppressLint("InflateParams") View v = getLayoutInflater().inflate(R.layout.activity_bottomsheet, null, false);
+                ((TextView) v.findViewById(R.id.title)).setText(R.string.app_name);
+                ((TextView) v.findViewById(R.id.content)).setText(message);
+
+                v.findViewById(R.id.cancel).setVisibility(View.GONE);
+                v.findViewById(R.id.confirm).setOnClickListener(v1 -> {
+                    result.confirm();
+                    alertDialog.dismiss();
+                });
+
+                alertDialog.setOnDismissListener(dialog -> {
+                    result.cancel();
+                    dialog.dismiss();
+                });
+
+                alertDialog.setContentView(v);
+                alertDialog.show();
+            }catch(Exception i){
+                i.printStackTrace();
+            }
+            return true;
+
+        }
+
+
+
+
+        @Override
+        public boolean onJsConfirm(WebView view, final String url, final String message, final JsResult result) {
+            if (alertDialog != null && alertDialog.isShowing()) alertDialog.dismiss();
+            alertDialog = new BottomSheetDialog(MainActivity.this);
+            @SuppressLint("InflateParams") View v = getLayoutInflater().inflate(R.layout.activity_bottomsheet, null, false);
+
+            ((TextView) v.findViewById(R.id.title)).setText(R.string.app_name);
+            ((TextView) v.findViewById(R.id.content)).setText(message);
+
+            v.findViewById(R.id.cancel).setOnClickListener(v1 -> {
+                result.cancel();
+                alertDialog.dismiss();
+            });
+
+            v.findViewById(R.id.confirm).setOnClickListener(v12 -> {
+                result.confirm();
+                alertDialog.dismiss();
+            });
+
+            alertDialog.setOnDismissListener(dialog -> {
+                result.cancel();
+                dialog.dismiss();
+            });
+
+            alertDialog.setContentView(v);
+            alertDialog.show();
+            return true;
+
+        }
+
+        @Override
+        public boolean onJsPrompt(WebView view, String url, final String message, final String defaultValue, final JsPromptResult result) {
+            if (alertDialog != null && alertDialog.isShowing()) alertDialog.dismiss();
+            alertDialog = new BottomSheetDialog(MainActivity.this);
+            @SuppressLint("InflateParams") View v = getLayoutInflater().inflate(R.layout.activity_bottomsheet, null, false);
+
+            ((TextView) v.findViewById(R.id.title)).setText(message);
+            v.findViewById(R.id.content).setVisibility(View.GONE);
+            v.findViewById(R.id.inputLayout).setVisibility(View.VISIBLE);
+
+            EditText input = v.findViewById(R.id.input);
+            input.setHint(defaultValue);
+
+            v.findViewById(R.id.cancel).setOnClickListener(v1 -> {
+                result.cancel();
+                alertDialog.dismiss();
+            });
+
+            v.findViewById(R.id.confirm).setOnClickListener(v12 -> {
+                result.confirm();
+                alertDialog.dismiss();
+            });
+
+            alertDialog.setOnDismissListener(dialog -> {
+                result.cancel();
+                dialog.dismiss();
+            });
+
+            alertDialog.setContentView(v);
+            alertDialog.show();
+            return true;
+
+        }
 
         @Override
         public void onProgressChanged(WebView view, int progress) {
-            if (progress < 100 && mProgress.getVisibility() == ProgressBar.GONE)
-                mProgress.setVisibility(ProgressBar.VISIBLE);
-                mProgress.setProgress(progress);
-            if (progress == 100)
-                mProgress.setVisibility(ProgressBar.GONE);
+            mProgress.setProgress(progress);
+            if (progress < 100) {
+                mProgress.setVisibility(View.VISIBLE);
+            } else {
+                mProgress.setVisibility(View.GONE);
+            }
         }
+
+
         @Override
         public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
             callback.invoke(origin, true, false);
+        }
+
+        @Override
+        public void onReceivedTouchIconUrl(WebView view, String url, boolean precomposed) {
+            super.onReceivedTouchIconUrl(view, url, precomposed);
+
         }
 
         @Override
@@ -1616,6 +2089,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     setTaskDescription(new ActivityManager.TaskDescription("Simplicity - " + mWebView.getTitle(), null, StaticUtils.fetchColorPrimary(MainActivity.this)));
                 }
+
                 if(!isIncognito && !mSearchView.getText().toString().equals(homepage)) {
                     ArrayList<History> listBookmarks = UserPreferences.getHistory();
                     History bookmark = new History();
@@ -1624,6 +2098,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                     listBookmarks.add(bookmark);
                     UserPreferences.saveHistory(listBookmarks);
                 }
+
             } catch (NullPointerException ignored) {
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1647,14 +2122,9 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 
                 // create the file where the photo should go
-                File photoFile = null;
-                try {
-                    photoFile = createImageFile();
-                    takePictureIntent.putExtra("PhotoPath", mCameraPhotoPath);
-                } catch (IOException ex) {
-                    // Error occurred while creating the File
-                    Log.e(TAG, "Unable to create Image File", ex);
-                }
+                File photoFile;
+                photoFile = createImageFile();
+                takePictureIntent.putExtra("PhotoPath", mCameraPhotoPath);
 
                 // continue only if the file was successfully created
                 if (photoFile != null) {
@@ -1688,7 +2158,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         }
 
         // creating image files (Lollipop only)
-        private File createImageFile() throws IOException {
+        private File createImageFile() {
             File imageStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), getResources().getString(R.string.app_name));
 
             if (!imageStorageDir.exists()) {
@@ -1720,6 +2190,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             mWebView.setVisibility(View.GONE);
             mToolbar.setVisibility(View.GONE);
             mAppbar.setVisibility(View.GONE);
+            jump.setVisibility(View.GONE);
 
             // show customViewContainer
             customViewContainer.setVisibility(View.VISIBLE);
@@ -1790,4 +2261,6 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             startActivity(intent);
         }
     }
+
+
 }

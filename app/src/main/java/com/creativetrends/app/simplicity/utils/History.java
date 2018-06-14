@@ -1,7 +1,5 @@
 package com.creativetrends.app.simplicity.utils;
 
-import android.graphics.Bitmap;
-
 /**
  * Created by Creative Trends Apps.
  */
@@ -9,25 +7,29 @@ import android.graphics.Bitmap;
 public class History {
     private String title;
     private String url;
-    private Bitmap image;
+    private String image;
 
+    public String getTitle() {
+        return title;
+    }
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public void setImage(Bitmap image) {
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
         this.image = image;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public String getUrl() {
         return this.url;
     }
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+
 }

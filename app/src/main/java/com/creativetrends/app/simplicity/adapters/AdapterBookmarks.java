@@ -1,26 +1,36 @@
 package com.creativetrends.app.simplicity.adapters;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListPopupWindow;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.creativetrends.app.simplicity.ui.CustomShadow;
+import com.creativetrends.app.simplicity.activities.MainActivity;
+import com.creativetrends.app.simplicity.popup.Item;
+import com.creativetrends.app.simplicity.popup.ListPopupWindowAdapter;
+import com.creativetrends.app.simplicity.ui.RoundTextView;
 import com.creativetrends.app.simplicity.utils.OnStartDragListener;
+import com.creativetrends.app.simplicity.utils.StaticUtils;
 import com.creativetrends.app.simplicity.utils.TouchHelperAdapter;
 import com.creativetrends.simplicity.app.R;
 
@@ -61,7 +71,6 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
             letter = itemView.findViewById(R.id.bookmark_letter);
             bookmarkHolder = itemView.findViewById(R.id.bookmark_holder);
             card = itemView.findViewById(R.id.bookmark_card);
-            card.setOutlineProvider(new CustomShadow(2));
             card.setClipToOutline(true);
 
         }
@@ -70,20 +79,12 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
             this.bookmark = bookmark;
             title.setText(bookmark.getTitle());
             url.setText(bookmark.getUrl());
-            if(bookmark.getLetter()!=null && !bookmark.getLetter().isEmpty()) {
-                letter.setText(bookmark.getLetter());
-                letter.setBackgroundColor(bookmark.getImage());
-            }else{
-                String part1 = bookmark.getTitle();
-                String bt = part1.substring(0,1);
-                letter.setText(bt);
-                letter.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent));
-            }
+            letter.setText(bookmark.getLetter());
+            letter.setBackgroundColor(bookmark.getImage());
             bookmarkHolder.setOnClickListener(this);
             delete.setOnClickListener(this);
             et = new EditText(context);
         }
-
 
         private void deleteAlert() {
             AlertDialog.Builder removeFavorite = new AlertDialog.Builder(context);
@@ -112,9 +113,9 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
                 et.setHint(bookmark.getTitle());
                 createFile.setPositiveButton(R.string.ok, (arg0, arg1) -> {
                     bookmark.setTitle(et.getText().toString());
-                    String part1 = et.getText().toString();
-                    String bt = part1.substring(0,1);
-                    bookmark.setLetter(bt);
+                    String getText = et.getText().toString();
+                    String getLetter = getText.substring(0,1);
+                    bookmark.setLetter(getLetter);
                     adapter.notifyDataSetChanged();
                 });
                 createFile.setNegativeButton(R.string.cancel, null);
@@ -126,33 +127,52 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
         }
         // Display anchored popup menu based on view selected
         private void showFilterPopup(View v) {
-            PopupMenu popup = new PopupMenu(context, v);
-            popup.getMenuInflater().inflate(R.menu.menu_popup, popup.getMenu());
-            popup.setOnMenuItemClickListener(item -> {
-                switch (item.getItemId()) {
-                    case R.id.menu_delete:
-                        deleteAlert();
-                        return true;
-                    case R.id.menu_rename:
-                        editAlert();
-                        return true;
-                    case R.id.menu_share:
-                        try {
-                            Intent share = new Intent(Intent.ACTION_SEND);
-                            share.setType("text/plain");
-                            share.putExtra(Intent.EXTRA_TEXT, bookmark.getUrl());
-                            context.startActivity(Intent.createChooser(share, context.getResources().getString(R.string.share_bookmark)));
-                        }catch (ActivityNotFoundException ignored){                            
-                        }catch (Exception i){
-                            i.printStackTrace();
-                        }
-                        return true;
-                    default:
-                        return false;
-                }
-            });
-            popup.show();
+            try {
+                final ListPopupWindow popupWindow = new ListPopupWindow(context);
+                List<Item> itemList = new ArrayList<>();
+                itemList.add(new Item(context.getResources().getString(R.string.delete_bookmark), R.drawable.ic_delete));
+                itemList.add(new Item(context.getResources().getString(R.string.rename_bookmark), R.drawable.ic_rename));
+                itemList.add(new Item(context.getResources().getString(R.string.share_bookmark), R.drawable.ic_share));
+                ListAdapter adapter = new ListPopupWindowAdapter(context, itemList);
+                popupWindow.setAnchorView(delete);
+                popupWindow.setAdapter(adapter);
+                popupWindow.setOnDismissListener(popupWindow::dismiss);
+                popupWindow.setOnItemClickListener((adapterView, view, i, l) -> {
+                    switch (i) {
+                        case 0:
+                            popupWindow.dismiss();
+                            deleteAlert();
+                            break;
+                        case 1:
+                            popupWindow.dismiss();
+                            editAlert();
+                            break;
+                        case 2:
+                            popupWindow.dismiss();
+                            try {
+                                Intent share = new Intent(Intent.ACTION_SEND);
+                                share.setType("text/plain");
+                                share.putExtra(Intent.EXTRA_TEXT, bookmark.getUrl());
+                                context.startActivity(Intent.createChooser(share, context.getResources().getString(R.string.share_bookmark)));
+                            }catch (ActivityNotFoundException ignored){
+                            }catch (Exception p){
+                                p.printStackTrace();
+                            }
+                            break;
+                        default:
+                            popupWindow.dismiss();
+                            break;
+                    }
+
+                });
+                popupWindow.show();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
+
 
         public void onClick(View v) {
             switch (v.getId()) {
@@ -167,6 +187,8 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
             }
         }
     }
+
+
 
     public interface onBookmarkSelected {
         void loadBookmark(String str, String str2);
@@ -212,6 +234,7 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
         notifyItemMoved(fromPosition, toPosition);
         return true;
     }
+
 
 
     public void clear() {
