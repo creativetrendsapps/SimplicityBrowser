@@ -32,8 +32,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    //customized libraries
-    implementation project(':bottomsheetbuilder')
 
     //google
     implementation 'com.android.support:appcompat-v7:27.1.1'
@@ -47,6 +45,7 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.10.3'
 
     //other libraries
+    implementation 'com.github.rubensousa:bottomsheetbuilder:1.6.1'
     implementation 'com.github.hugocastelani:waterfall-toolbar:0.4.0'
     implementation 'com.anthonycr.progress:animated-progress:1.0'
     implementation 'com.github.codekidX:storage-chooser:2.0.3'
