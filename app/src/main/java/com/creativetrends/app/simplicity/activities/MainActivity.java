@@ -61,7 +61,6 @@ import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
@@ -120,14 +119,11 @@ import com.creativetrends.simplicity.app.R;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
 
-import org.jsoup.nodes.Document;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -189,14 +185,8 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
     private BottomSheetDialog alertDialog;
     public static final String EXTRA_URL = "extra_url";
     public static final String ACTION_URL_RESOLVED = "com.creativetrends.simplicity.app.URL_RESOLVED";
-    public static String faviconUrl;
     public static SslCertificate sslCertificate;
-    private ShareActionProvider mShareActionProvider;
-    public static Palette.Swatch swatch;
     public int scrollPosition = 0;
-    public static int titleColor;
-    String getFaviconUrl;
-    Document doc;
     private final BroadcastReceiver mUrlResolvedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -688,12 +678,13 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                         .createDialog();
                 dialog.show();
                 return true;
-            } else if (mWebView.getHitTestResult().getType() == WebView.HitTestResult.PHONE_TYPE) { // Phone number click
+            } else if (mWebView.getHitTestResult().getType() == WebView.HitTestResult.PHONE_TYPE) {
                 Intent intent14 = new Intent(Intent.ACTION_DIAL);
                 intent14.setData(Uri.parse(mWebView.getHitTestResult().getExtra()));
                 startActivity(intent14);
                 return true;
             } else if (mWebView.getHitTestResult().getType() == WebView.HitTestResult.UNKNOWN_TYPE) {
+                Log.i("MainActivity", "Show webview long press");
                 return false;
             }
             return true;
@@ -894,30 +885,32 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
             @Override
             public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                String message = "SSL Certificate error.";
-                switch (error.getPrimaryError()) {
-                    case SslError.SSL_UNTRUSTED:
-                        message = "The certificate authority is not trusted.";
-                        break;
-                    case SslError.SSL_EXPIRED:
-                        message = "The certificate has expired.";
-                        break;
-                    case SslError.SSL_IDMISMATCH:
-                        message = "The certificate Hostname mismatch.";
-                        break;
-                    case SslError.SSL_NOTYETVALID:
-                        message = "The certificate is not yet valid.";
-                        break;
-                }
-                message += " Do you want to continue anyway?";
+                if(!MainActivity.this.isDestroyed()) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    String message = "SSL Certificate error.";
+                    switch (error.getPrimaryError()) {
+                        case SslError.SSL_UNTRUSTED:
+                            message = "The certificate authority is not trusted.";
+                            break;
+                        case SslError.SSL_EXPIRED:
+                            message = "The certificate has expired.";
+                            break;
+                        case SslError.SSL_IDMISMATCH:
+                            message = "The certificate Hostname mismatch.";
+                            break;
+                        case SslError.SSL_NOTYETVALID:
+                            message = "The certificate is not yet valid.";
+                            break;
+                    }
+                    message += " Do you want to continue anyway?";
 
-                builder.setTitle("SSL Certificate Error");
-                builder.setMessage(message);
-                builder.setPositiveButton("continue", (dialog, which) -> handler.proceed());
-                builder.setNegativeButton("cancel", (dialog, which) -> handler.cancel());
-                final AlertDialog dialog = builder.create();
-                dialog.show();
+                    builder.setTitle("SSL Certificate Error");
+                    builder.setMessage(message);
+                    builder.setPositiveButton("continue", (dialog, which) -> handler.proceed());
+                    builder.setNegativeButton("cancel", (dialog, which) -> handler.cancel());
+                    final AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
             }
 
             @Override
@@ -1065,7 +1058,6 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         mSearchView.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 StaticUtils.hideKeyboard(mSearchView);
-                try {
                 if(mSearchView.getText().toString().contains("simplicity://flags")) {
                     mSearchView.setText(mWebView.getUrl());
                     Intent Intent = new Intent(MainActivity.this, ExperimentalActivity.class);
@@ -1082,9 +1074,6 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                 }else{
                     loadUrlFromTextBox();
                 }
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
                 mSearchView.clearFocus();
                 return true;
             }
@@ -1093,27 +1082,23 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         mSearchView.setOnKeyListener((v, keyCode, event) -> {
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 StaticUtils.hideKeyboard(mSearchView);
-                try {
-                    if(mSearchView.getText().toString().contains("simplicity://flags")) {
-                        mSearchView.setText(mWebView.getUrl());
-                        Intent Intent = new Intent(MainActivity.this, ExperimentalActivity.class);
-                        startActivity(Intent);
-                    }else if(mSearchView.getText().toString().contains("simplicity://history")) {
-                        mSearchView.setText(mWebView.getUrl());
-                        Intent history = new Intent(MainActivity.this, HistoryActivity.class);
-                        startActivity(history);
+                if(mSearchView.getText().toString().contains("simplicity://flags")) {
+                    mSearchView.setText(mWebView.getUrl());
+                    Intent Intent = new Intent(MainActivity.this, ExperimentalActivity.class);
+                    startActivity(Intent);
+                }else if(mSearchView.getText().toString().contains("simplicity://history")) {
+                    mSearchView.setText(mWebView.getUrl());
+                    Intent history = new Intent(MainActivity.this, HistoryActivity.class);
+                    startActivity(history);
 
-                    }else if(mSearchView.getText().toString().contains("simplicity://bookmarks")){
-                        mSearchView.setText(mWebView.getUrl());
-                        Intent settingsIntent = new Intent(MainActivity.this, BookmarksActivity.class);
-                        startActivity(settingsIntent);
-                    }else{
-                        loadUrlFromTextBox();
-                    }
-                    mSearchView.clearFocus();
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+                }else if(mSearchView.getText().toString().contains("simplicity://bookmarks")){
+                    mSearchView.setText(mWebView.getUrl());
+                    Intent settingsIntent = new Intent(MainActivity.this, BookmarksActivity.class);
+                    startActivity(settingsIntent);
+                }else{
+                    loadUrlFromTextBox();
                 }
+                mSearchView.clearFocus();
                 return true;
             } else {
                 return false;
@@ -1129,13 +1114,9 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         });
 
         mSearchView.setOnItemClickListener((parent, view, position, rowId) -> {
-            try {
-                StaticUtils.hideKeyboard(mSearchView);
-                mSearchView.clearFocus();
-                loadUrlFromTextBox();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            StaticUtils.hideKeyboard(mSearchView);
+            mSearchView.clearFocus();
+            loadUrlFromTextBox();
         });
 
 
@@ -1298,7 +1279,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
     }
 
-    private void loadUrlFromTextBox() throws UnsupportedEncodingException {
+    private void loadUrlFromTextBox() {
         String unUrlCleaner = mSearchView.getText().toString();
         if (unUrlCleaner.startsWith("www") || URLUtil.isValidUrl(unUrlCleaner)) {
             if (!URLUtil.isValidUrl(unUrlCleaner)) unUrlCleaner = URLUtil.guessUrl(unUrlCleaner);
@@ -1454,7 +1435,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
 
 
-    public String getUrlDomainName(String url) {
+   /* public String getUrlDomainName(String url) {
         String domainName = url;
         int index = domainName.indexOf("://");
         if (index != -1) {
@@ -1465,7 +1446,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             domainName = domainName.substring(0, index);
         }
         return domainName;
-    }
+    }*/
 
 
    /* public void setBottomTabs(){
@@ -1673,7 +1654,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         }
         if(mPreferences.getBoolean("gestures_ok", false)){
             //noinspection deprecation
-            //mWebView.setGestureDetector(new GestureDetector(new CustomGestureDetector(mWebView, this)));
+            mWebView.setGestureDetector(new GestureDetector(new CustomGestureDetector(mWebView, this)));
         }
 
     }
@@ -1723,11 +1704,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                     List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     String spokenText = results.get(0);
                     mSearchView.setText(spokenText);
-                    try {
-                        loadUrlFromTextBox();
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
+                    loadUrlFromTextBox();
                 }
             }
         }

@@ -1,11 +1,15 @@
 package com.creativetrends.app.simplicity.activities;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -18,8 +22,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.creativetrends.app.simplicity.utils.PrefManager;
+import com.creativetrends.app.simplicity.utils.StaticUtils;
 import com.creativetrends.simplicity.app.R;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -31,7 +37,9 @@ public class WelcomeActivity extends AppCompatActivity {
     private int[] layouts;
     private PrefManager prefManager;
     private FloatingActionButton button;
-
+    private static final int REQUEST_STORAGE = 1;
+    int[] colorsActive;
+    int[] colorsInactive;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTranslucentStatus();
@@ -49,11 +57,22 @@ public class WelcomeActivity extends AppCompatActivity {
         dotsLayout = findViewById(R.id.layoutDots);
         button = findViewById(R.id.img_next);
 
-        layouts = new int[]{
-                R.layout.welcome_slide1,
-                R.layout.welcome_slide2,
-                R.layout.welcome_slide3,
-                R.layout.welcome_slide4};
+        if(StaticUtils.isMarshmallow()) {
+            layouts = new int[]{
+                    R.layout.welcome_slide1,
+                    R.layout.welcome_slide2,
+                    R.layout.welcome_slide3,
+                    R.layout.welcome_slide4,
+                    R.layout.welcome_slide5,
+            };
+        }else{
+            layouts = new int[]{
+                    R.layout.welcome_slide1,
+                    R.layout.welcome_slide2,
+                    R.layout.welcome_slide3,
+                    R.layout.welcome_slide4,
+            };
+        }
 
 
         addBottomDots(0);
@@ -70,24 +89,34 @@ public class WelcomeActivity extends AppCompatActivity {
             if (current < layouts.length) {
                 viewPager.setCurrentItem(current);
             } else {
-               launchHomeScreen();
+                if(StaticUtils.isMarshmallow()){
+                    requestStoragePermission();
+                }else {
+                    launchHomeScreen();
+                }
             }
         });
-
-
     }
 
     private void addBottomDots(int currentPage) {
         dots = new TextView[layouts.length];
 
-        int[] colorsActive = getResources().getIntArray(R.array.array_dot_active);
-        int[] colorsInactive = getResources().getIntArray(R.array.array_dot_inactive);
+        if(StaticUtils.isMarshmallow()) {
+            colorsActive = getResources().getIntArray(R.array.array_dot_active_m);
+            colorsInactive = getResources().getIntArray(R.array.array_dot_inactive_m);
+        }else{
+            colorsActive = getResources().getIntArray(R.array.array_dot_active);
+            colorsInactive = getResources().getIntArray(R.array.array_dot_inactive);
+        }
 
         dotsLayout.removeAllViews();
         for (int i = 0; i < dots.length; i++) {
             dots[i] = new TextView(this);
-            //noinspection deprecation
-            dots[i].setText(Html.fromHtml("&#8226;"));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                dots[i].setText(Html.fromHtml("&#8226;", Html.FROM_HTML_MODE_LEGACY));
+            } else {
+                dots[i].setText(Html.fromHtml("&#8226;"));
+            }
             dots[i].setTextSize(35);
             dots[i].setTextColor(colorsInactive[currentPage]);
             dotsLayout.addView(dots[i]);
@@ -176,5 +205,32 @@ public class WelcomeActivity extends AppCompatActivity {
         win.setAttributes(winParams);
     }
 
+
+    private void requestStoragePermission() {
+        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (!hasStoragePermission()) {
+            ActivityCompat.requestPermissions(this, permissions, REQUEST_STORAGE);
+        }
+    }
+
+    private boolean hasStoragePermission() {
+        String storagePermission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        int hasPermission = ContextCompat.checkSelfPermission(this, storagePermission);
+        return (hasPermission == PackageManager.PERMISSION_GRANTED);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_STORAGE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                   launchHomeScreen();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Permission denied.", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 
 }
