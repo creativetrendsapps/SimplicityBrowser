@@ -12,8 +12,8 @@ android {
         applicationId "com.creativetrends.simplicity.app"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 452
-        versionName "4.5.2"
+        versionCode 453
+        versionName "4.5.3"
     }
 
     buildTypes {
@@ -32,6 +32,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //other libraries
+    implementation 'com.github.rubensousa:bottomsheetbuilder:1.6.1'
 
     //google
     implementation 'com.android.support:appcompat-v7:27.1.1'
@@ -39,13 +41,8 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:palette-v7:27.1.1'
     implementation 'com.android.support:cardview-v7:27.1.1'
-    //noinspection GradleDependency
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
-    //noinspection GradleDependency
-    implementation 'org.jsoup:jsoup:1.10.3'
 
     //other libraries
-    implementation 'com.github.rubensousa:bottomsheetbuilder:1.6.1'
     implementation 'com.github.hugocastelani:waterfall-toolbar:0.4.0'
     implementation 'com.anthonycr.progress:animated-progress:1.0'
     implementation 'com.github.codekidX:storage-chooser:2.0.3'
