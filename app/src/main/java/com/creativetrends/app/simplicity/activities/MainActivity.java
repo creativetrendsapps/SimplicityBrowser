@@ -44,24 +44,24 @@ import android.print.PrintJob;
 import android.print.PrintManager;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.pm.ShortcutInfoCompat;
-import android.support.v4.content.pm.ShortcutManagerCompat;
-import android.support.v4.graphics.drawable.IconCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDialogFragment;
-import android.support.v7.graphics.Palette;
-import android.support.v7.widget.AppCompatCheckBox;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.pm.ShortcutInfoCompat;
+import androidx.core.content.pm.ShortcutManagerCompat;
+import androidx.core.graphics.drawable.IconCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.palette.graphics.Palette;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.cardview.widget.CardView;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
@@ -492,7 +492,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
     };
 
 
-    @SuppressLint("SetJavaScriptEnabled")
+    @SuppressLint({"SetJavaScriptEnabled", "RestrictedApi"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -586,7 +586,6 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
                         .setMenu(R.menu.menu_image)
                         .addTitleItem(R.string.image_actions)
-                        .delayDismissOnItemClick(false)
                         .setItemClickListener(item -> {
                             switch (item.getItemId()) {
                                 case R.id.image_save:
@@ -635,7 +634,6 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                 BottomSheetMenuDialog dialog = new BottomSheetBuilder(MainActivity.this, null)
                         .setMode(BottomSheetBuilder.MODE_LIST)
                         .setMenu(R.menu.menu_link)
-                        .delayDismissOnItemClick(false)
                         .setItemClickListener(item -> {
 
                             switch (item.getItemId()) {
@@ -2154,6 +2152,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             onShowCustomView(view, callback);
         }
 
+        @SuppressLint("RestrictedApi")
         @Override
         public void onShowCustomView(View view,CustomViewCallback callback) {
             // if a view already exists then immediately terminate the new one
