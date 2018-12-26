@@ -7,12 +7,13 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -23,7 +24,6 @@ import android.widget.ListView;
 import com.codekidlabs.storagechooser.StorageChooser;
 import com.creativetrends.app.simplicity.SimplicityApplication;
 import com.creativetrends.app.simplicity.activities.AboutActivity;
-import com.creativetrends.app.simplicity.preferences.MaterialEditText;
 import com.creativetrends.app.simplicity.utils.ExportUtils;
 import com.creativetrends.simplicity.app.R;
 
@@ -48,7 +48,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         addPreferencesFromResource(R.xml.settings);
         Preference colored_nav = findPreference("nav_color");
-        MaterialEditText pref = (MaterialEditText) findPreference("homepage");
+        EditTextPreference pref = (EditTextPreference) findPreference("homepage");
         if (pref.getText().contains("http://") || pref.getText().contains("https://")) {
             pref.setSummary(pref.getText());
         } else if (!pref.getText().contains("http://") || !pref.getText().contains("https://")) {
@@ -74,7 +74,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             switch (key) {
 
                 case "homepage":
-                    MaterialEditText pref1 = (MaterialEditText) findPreference("homepage");
+                    EditTextPreference pref1 = (EditTextPreference) findPreference("homepage");
 
                     if (pref1.getText().contains("http://") || pref1.getText().contains("https://")) {
                         pref1.setSummary(pref1.getText());
@@ -150,11 +150,11 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
 
             case "terms_set":
-                buildTerms(R.style.DialogAnimation);
+                buildTerms();
                 break;
 
             case "privacy_policy_set":
-                buildPrivacy(R.style.DialogAnimation);
+                buildPrivacy();
                 break;
 
 
@@ -231,7 +231,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     }
 
 
-    private void buildPrivacy(int animationSource) {
+    private void buildPrivacy() {
 
         AlertDialog.Builder policy = new AlertDialog.Builder(getActivity());
         policy.setTitle(getResources().getString(R.string.privacy_policy));
@@ -243,7 +243,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         try {
             AlertDialog dialog = policy.create();
             //noinspection ConstantConditions
-            dialog.getWindow().getAttributes().windowAnimations = animationSource;
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
             dialog.show();
         } catch (NullPointerException ignored) {
         } catch (Exception i) {
@@ -251,22 +251,14 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         }
     }
 
-    private void buildTerms(int animationSource) {
+    private void buildTerms() {
         AlertDialog.Builder terms = new AlertDialog.Builder(getActivity());
         terms.setTitle(getResources().getString(R.string.terms));
         terms.setMessage(getResources().getString(R.string.eula_string));
         terms.setPositiveButton(R.string.ok, (arg0, arg1) -> {
 
         });
-        try {
-            AlertDialog dialog = terms.create();
-            //noinspection ConstantConditions
-            dialog.getWindow().getAttributes().windowAnimations = animationSource;
-            dialog.show();
-        } catch (NullPointerException ignored) {
-        } catch (Exception i) {
-            i.printStackTrace();
-        }
+        terms.show();
     }
 
     private void requestStoragePermission() {
@@ -328,13 +320,13 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         StorageChooser.Theme theme = new StorageChooser.Theme(context);
         int[] myScheme;
         myScheme = theme.getDefaultScheme();
-        myScheme[StorageChooser.Theme.OVERVIEW_HEADER_INDEX] = ContextCompat.getColor(context, R.color.colorAccent);
-        myScheme[StorageChooser.Theme.OVERVIEW_MEMORYBAR_INDEX] = ContextCompat.getColor(context, R.color.colorAccent);
-        myScheme[StorageChooser.Theme.OVERVIEW_INDICATOR_INDEX] = ContextCompat.getColor(context, R.color.colorAccent);
-        myScheme[StorageChooser.Theme.SEC_FOLDER_CREATION_BG_INDEX] = ContextCompat.getColor(context, R.color.colorAccent);
-        myScheme[StorageChooser.Theme.SEC_ADDRESS_BAR_BG] = ContextCompat.getColor(context, R.color.colorAccent);
+        myScheme[StorageChooser.Theme.OVERVIEW_HEADER_INDEX] = ContextCompat.getColor(context, R.color.md_blue_600);
+        myScheme[StorageChooser.Theme.OVERVIEW_MEMORYBAR_INDEX] = ContextCompat.getColor(context, R.color.md_blue_600);
+        myScheme[StorageChooser.Theme.OVERVIEW_INDICATOR_INDEX] = ContextCompat.getColor(context, R.color.md_blue_600);
+        myScheme[StorageChooser.Theme.SEC_FOLDER_CREATION_BG_INDEX] = ContextCompat.getColor(context, R.color.md_blue_600);
+        myScheme[StorageChooser.Theme.SEC_ADDRESS_BAR_BG] = ContextCompat.getColor(context, R.color.md_blue_600);
         myScheme[StorageChooser.Theme.SEC_SELECT_LABEL_INDEX] = ContextCompat.getColor(context, R.color.black);
-        myScheme[StorageChooser.Theme.SEC_FOLDER_TINT_INDEX] = ContextCompat.getColor(context, R.color.colorAccent);
+        myScheme[StorageChooser.Theme.SEC_FOLDER_TINT_INDEX] = ContextCompat.getColor(context, R.color.md_blue_600);
         myScheme[StorageChooser.Theme.SEC_TEXT_INDEX] = ContextCompat.getColor(context, R.color.black);
         theme.setScheme(myScheme);
         return theme;
