@@ -3,25 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <com.creativetrends.app.simplicity.preferences.PreferenceCategory
+    <PreferenceCategory
         android:title="@string/general_settings" >
 
 
-        <com.creativetrends.app.simplicity.preferences.SwitchPreference
+        <SwitchPreference
             android:key="show_home"
             android:title="@string/show_home_icon"
             android:summary="@string/show_home_sum"
             android:icon="@drawable/ic_home_about"
             android:defaultValue="true" />
 
-        <com.creativetrends.app.simplicity.preferences.SwitchPreference
+        <SwitchPreference
             android:key="remember_page"
             android:title="@string/remember"
             android:summary="@string/remember_sum"
             android:icon="@drawable/ic_restore"
             android:defaultValue="false" />
 
-        <com.creativetrends.app.simplicity.preferences.MaterialEditText
+        <EditTextPreference
             android:key="homepage"
             android:title="@string/home_page"
             android:icon="@drawable/ic_home_about"
@@ -29,7 +29,12 @@
             android:inputType="textUri"
             android:singleLine="true" />
 
-        <com.creativetrends.app.simplicity.preferences.MaterialList
+        <Preference
+            android:title="divider"
+            android:selectable="false"
+            android:layout="@layout/divider_preference"/>
+
+        <ListPreference
             android:key="search_engine"
             android:icon="@drawable/ic_search_engine"
             android:title="@string/search_engine_choice"
@@ -39,14 +44,14 @@
             android:defaultValue="https://www.google.com/search?q=" />
 
 
-        <com.creativetrends.app.simplicity.preferences.SwitchPreference
+        <SwitchPreference
             android:key="confirm_close"
             android:title="@string/confirm"
             android:icon="@drawable/ic_confirm_close"
             android:summary="@string/confirm_sum"
             android:defaultValue="true" />
 
-        <com.creativetrends.app.simplicity.preferences.SwitchPreference
+        <SwitchPreference
             android:key="merge_windows"
             android:title="@string/merge_tabs"
             android:summary="@string/merge_tabs_sum"
@@ -60,14 +65,14 @@
 
 
 
-    </com.creativetrends.app.simplicity.preferences.PreferenceCategory>
+    </PreferenceCategory>
 
 
-    <com.creativetrends.app.simplicity.preferences.PreferenceCategory
+    <PreferenceCategory
         android:title="@string/privacy_settings" >
 
 
-        <com.creativetrends.app.simplicity.preferences.SwitchPreference
+        <SwitchPreference
             android:key="v_search"
             android:title="@string/voice_search_button"
             android:summary="@string/voice_search_button_sum"
@@ -75,21 +80,21 @@
             android:defaultValue="false"/>
 
 
-        <com.creativetrends.app.simplicity.preferences.SwitchPreference
+        <SwitchPreference
             android:key="enable_location"
             android:title="@string/location"
             android:summary="@string/location_sum"
             android:icon="@drawable/ic_location_about"
             android:defaultValue="false"/>
 
-        <com.creativetrends.app.simplicity.preferences.SwitchPreference
+        <SwitchPreference
             android:key="clear_data"
             android:title="@string/clear_data"
             android:summary="@string/clear_data_sum"
             android:icon="@drawable/ic_clear_data"
             android:defaultValue="false"/>
 
-        <com.creativetrends.app.simplicity.preferences.SwitchPreference
+        <SwitchPreference
             android:key="no_track"
             android:title="@string/do_not_track"
             android:summary="@string/do_not_track_sum"
@@ -104,14 +109,14 @@
 
 
 
-    </com.creativetrends.app.simplicity.preferences.PreferenceCategory>
+    </PreferenceCategory>
 
 
-    <com.creativetrends.app.simplicity.preferences.PreferenceCategory
+    <PreferenceCategory
         android:title="Appearance" >
 
 
-        <com.creativetrends.app.simplicity.preferences.MaterialList
+        <ListPreference
             android:key="address_bar"
             android:icon="@drawable/ic_address"
             android:title="@string/omnibar_location"
@@ -121,7 +126,7 @@
             android:defaultValue="bottom"/>
 
 
-        <com.creativetrends.app.simplicity.preferences.SwitchPreference
+        <SwitchPreference
             android:key="no_ads"
             android:title="@string/ad_block"
             android:summary="@string/ad_block_sum"
@@ -130,7 +135,7 @@
 
 
 
-        <com.creativetrends.app.simplicity.preferences.SwitchPreference
+        <SwitchPreference
             android:key="nav_color"
             android:title="@string/color_nav"
             android:icon="@drawable/ic_colorize"
@@ -138,7 +143,7 @@
 
 
 
-        <com.creativetrends.app.simplicity.preferences.MaterialList
+        <ListPreference
             android:key="font_pref"
             android:title="@string/default_font_zoom"
             android:summary="%s"
@@ -154,45 +159,45 @@
             android:layout="@layout/divider_preference"/>
 
 
-    </com.creativetrends.app.simplicity.preferences.PreferenceCategory>
+    </PreferenceCategory>
 
 
 
 
-    <com.creativetrends.app.simplicity.preferences.PreferenceCategory
+    <PreferenceCategory
         android:title="@string/settings_more">
 
-       <!-- <com.creativetrends.app.simplicity.preferences.Preference
+       <!-- <Preference
             android:key="sim_cloud"
             android:title="@string/simplicity_cloud_title"
             android:summary="@string/simplicity_cloud_sum"/>-->
 
-        <com.creativetrends.app.simplicity.preferences.Preference
+        <Preference
             android:key="back_restore"
             android:title="@string/backup_restore_title"
             android:summary="@string/backup_restore_sum"/>
 
-        <!--<com.creativetrends.app.simplicity.preferences.Preference
+        <!--<Preference
             android:key="sim_cloud"
             android:title="@string/simplicity_cloud_title"
             android:summary="@string/simplicity_cloud_sum"/>-->
 
-        <com.creativetrends.app.simplicity.preferences.Preference
+        <Preference
             android:key="about_app"
             android:title="@string/about"/>
 
-        <com.creativetrends.app.simplicity.preferences.Preference
+        <Preference
             android:key="get_source"
             android:title="Simplicity Source Code">
             <intent android:action="android.intent.action.VIEW"
                 android:data="https://github.com/creativetrendsapps/simplicitybrowser" />
-        </com.creativetrends.app.simplicity.preferences.Preference>
+        </Preference>
 
-        <com.creativetrends.app.simplicity.preferences.Preference
+        <Preference
             android:key="terms_set"
             android:title="@string/terms"/>
 
-        <com.creativetrends.app.simplicity.preferences.Preference
+        <Preference
             android:key="privacy_policy_set"
             android:title="@string/privacy_policy"/>
 
@@ -202,7 +207,7 @@
             android:layout="@layout/divider_preference"/>
 
 
-    </com.creativetrends.app.simplicity.preferences.PreferenceCategory>
+    </PreferenceCategory>
 
 
 
