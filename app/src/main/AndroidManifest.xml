@@ -81,6 +81,11 @@
             android:theme="@style/SettingsTheme"/>
 
         <activity
+            android:name="com.creativetrends.app.simplicity.activities.ExperimentalActivity"
+            android:label="Simplicity Flags"
+            android:theme="@style/SettingsTheme"/>
+
+        <activity
             android:name="com.creativetrends.app.simplicity.activities.AboutActivity"
             android:label="@string/about_app"
             android:theme="@style/SettingsTheme"/>
@@ -90,7 +95,7 @@
             android:theme="@style/BookMarksTheme"/>
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
