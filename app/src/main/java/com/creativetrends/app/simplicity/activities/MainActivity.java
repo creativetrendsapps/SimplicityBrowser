@@ -8,13 +8,13 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,6 +23,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -44,24 +45,6 @@ import android.print.PrintJob;
 import android.print.PrintManager;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.pm.ShortcutInfoCompat;
-import androidx.core.content.pm.ShortcutManagerCompat;
-import androidx.core.graphics.drawable.IconCompat;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDialogFragment;
-import androidx.palette.graphics.Palette;
-import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.cardview.widget.CardView;
-import androidx.appcompat.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
@@ -98,11 +81,11 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.anthonycr.progress.AnimatedProgressBar;
 import com.creativetrends.app.simplicity.SimplicityApplication;
 import com.creativetrends.app.simplicity.adapters.Bookmark;
 import com.creativetrends.app.simplicity.suggestions.SuggestionsAdapter;
@@ -118,6 +101,10 @@ import com.creativetrends.app.simplicity.webview.NestedWebView;
 import com.creativetrends.simplicity.app.R;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -129,7 +116,26 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.core.content.pm.ShortcutInfoCompat;
+import androidx.core.content.pm.ShortcutManagerCompat;
+import androidx.core.graphics.drawable.IconCompat;
+import androidx.palette.graphics.Palette;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import static android.os.Build.VERSION_CODES.M;
 
@@ -161,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
     CoordinatorLayout background_color;
     private static final int STORAGE_PERMISSION_CODE = 2284, REQUEST_STORAGE = 1;
     private String urlToGrab;
-    AnimatedProgressBar mProgress;
+    ProgressBar mProgress;
     private long back_pressed;
     public static String webViewTitle;
     SwipeRefreshLayout swipeRefreshLayout;
@@ -236,7 +242,8 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                 case R.id.sim_bookmark:
                     hideMenu();
                     if (UserPreferences.isStarred(mWebView.getUrl())) {
-                        Toast.makeText(MainActivity.this, mWebView.getTitle().replace("", "") + " " + getResources().getString(R.string.already_to_bookmarks), Toast.LENGTH_SHORT).show();
+                        Snackbar.make(mToolbar, mWebView.getTitle() + " " + getResources().getString(R.string.already_to_bookmarks), Snackbar.LENGTH_SHORT).show();
+
                     } else {
                         String getWebTitle = webViewTitle;
                         String setLetter = getWebTitle.substring(0,1);
@@ -245,10 +252,10 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                         bookmark.setTitle(mWebView.getTitle());
                         bookmark.setUrl(mWebView.getUrl());
                         bookmark.setLetter(setLetter);
-                        bookmark.setImage(Palette.from(favoriteIcon).generate().getVibrantColor(Palette.from(favoriteIcon).generate().getMutedColor(ContextCompat.getColor(MainActivity.this, R.color.colorAccent))));
+                        bookmark.setImage(Palette.from(favoriteIcon).generate().getVibrantColor(Palette.from(favoriteIcon).generate().getMutedColor(ContextCompat.getColor(MainActivity.this, R.color.md_blue_600))));
                         listBookmarks.add(bookmark);
                         UserPreferences.saveBookmarks(listBookmarks);
-                        Toast.makeText(MainActivity.this, mWebView.getTitle().replace("", "") + " " + getResources().getString(R.string.added_to_bookmarks), Toast.LENGTH_SHORT).show();
+                        Snackbar.make(mToolbar, mWebView.getTitle()+ " " + getResources().getString(R.string.added_to_bookmarks), Snackbar.LENGTH_SHORT).show();
                     }
                     return;
 
@@ -392,7 +399,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                         isDesktop = false;
                     } else {
                         mWebSettings.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36");
-                        mWebSettings.setLoadWithOverviewMode(true);
+                        mWebSettings.setLoadWithOverviewMode(false);
                         mWebSettings.setUseWideViewPort(true);
                         mWebView.reload();
                         isDesktop = true;
@@ -504,6 +511,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         } else {
             setContentView(R.layout.activity_main_bottom);
         }
+        registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
         jump = findViewById(R.id.jumpTop);
         mHomebutton = findViewById(R.id.toolbar_home);
         customViewContainer = findViewById(R.id.customViewContainer);
@@ -542,11 +550,6 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         mWebSettings.setUseWideViewPort(true);
         mWebSettings.setAppCacheEnabled(true);
         mWebSettings.setDatabaseEnabled(true);
-        cookieManager = CookieManager.getInstance();
-        cookieManager.setAcceptCookie(true);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            cookieManager.setAcceptThirdPartyCookies(mWebView, true);
-        }
         if (mPreferences.getBoolean("enable_location", false)) {
             mWebSettings.setGeolocationEnabled(true);
             //noinspection deprecation
@@ -554,15 +557,24 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         } else {
             mWebSettings.setGeolocationEnabled(false);
         }
-        mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        mWebView.getSettings().setAllowFileAccessFromFileURLs(true);
-        mWebView.getSettings().setAllowUniversalAccessFromFileURLs(true);
-        mWebView.getSettings().setDomStorageEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mWebSettings.setSafeBrowsingEnabled(true);
+        }
+        mWebSettings.setAllowFileAccessFromFileURLs(true);
+        mWebSettings.setAllowUniversalAccessFromFileURLs(true);
+        mWebSettings.setDomStorageEnabled(true);
+        mWebSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         //noinspection deprecation
-        mWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
-        mWebView.addJavascriptInterface(new ReaderHandler(MainActivity.this), "simplicity_reader");
-        mWebSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        mWebSettings.setPluginState(WebSettings.PluginState.ON);
         mWebSettings.setAppCachePath(getApplicationContext().getCacheDir().getAbsolutePath());
+        //mWebSettings.setSupportMultipleWindows(true);
+
+        mWebView.addJavascriptInterface(new ReaderHandler(MainActivity.this), "simplicity_reader");
+        cookieManager = CookieManager.getInstance();
+        cookieManager.setAcceptCookie(true);
+        cookieManager.setAcceptThirdPartyCookies(mWebView, true);
+
+
         extraHeaders.put("DNT", "1");
         homepage = mPreferences.getString("homepage", "");
         defaultSearch = mPreferences.getString("search_engine", "");
@@ -844,7 +856,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
                     callback.backToSafety(true);
                 }
-                Toast.makeText(view.getContext(), "Unsafe web page blocked.", Toast.LENGTH_LONG).show();
+                Snackbar.make(mToolbar, "Unsafe web page blocked.", Snackbar.LENGTH_SHORT).show();
             }
 
 
@@ -1002,7 +1014,8 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
 
                             } catch (Exception exc) {
-                                Toast.makeText(MainActivity.this, exc.toString(), Toast.LENGTH_SHORT).show();
+                                Snackbar.make(mToolbar, exc.toString(), Snackbar.LENGTH_SHORT).show();
+
                             }
                         }
                         alertDialog.dismiss();
@@ -1022,7 +1035,9 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
                     } else {
                         try {
-                            Toast.makeText(MainActivity.this, getString(R.string.downloading), Toast.LENGTH_SHORT).show();
+                            Snackbar.make(mToolbar, getString(R.string.downloading), Snackbar.LENGTH_SHORT).show();
+
+
                             DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
                             String filename = URLUtil.guessFileName(url, contentDisposition, mimeType);
                             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
@@ -1039,7 +1054,8 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
 
                         } catch (Exception exc) {
-                            Toast.makeText(MainActivity.this, exc.toString(), Toast.LENGTH_SHORT).show();
+                            Snackbar.make(mToolbar, exc.toString(), Snackbar.LENGTH_SHORT).show();
+
                         }
                     }
                 }
@@ -1054,6 +1070,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             }
         }
         mSearchView.setOnEditorActionListener((v, actionId, event) -> {
+
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 StaticUtils.hideKeyboard(mSearchView);
                 if(mSearchView.getText().toString().contains("simplicity://flags")) {
@@ -1242,7 +1259,8 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                     finish();
                 }
             else
-                Toast.makeText(getBaseContext(), R.string.simplicity_close, Toast.LENGTH_SHORT).show();
+                Snackbar.make(mToolbar, R.string.simplicity_close, Snackbar.LENGTH_SHORT).show();
+
             back_pressed = System.currentTimeMillis();
         } else {
             finish();
@@ -1273,6 +1291,8 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         if (mWebChromeClient != null)
             mWebChromeClient = null;
         //clearPrivate();
+        unregisterReceiver(onComplete);
+
         super.onDestroy();
 
     }
@@ -1685,7 +1705,8 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                     if (urlToGrab != null)
                         saveImageToDisk(urlToGrab);
                 } else {
-                    Toast.makeText(getApplicationContext(), "Permission denied.", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(mToolbar,"Permission denied.", Snackbar.LENGTH_SHORT).show();
+
                 }
                 break;
         }
@@ -1745,7 +1766,8 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             try {
                 request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES + File.separator + getResources().getString(R.string.app_name), filename);
             } catch (Exception exc) {
-                Toast.makeText(MainActivity.this, exc.toString(), Toast.LENGTH_LONG).show();
+                Snackbar.make(mToolbar,exc.toString(), Snackbar.LENGTH_SHORT).show();
+
             }
             request.setVisibleInDownloadsUi(true);
             DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
@@ -1757,7 +1779,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("*/*");
         } catch (Exception exc) {
-            Toast.makeText(MainActivity.this, exc.toString(), Toast.LENGTH_LONG).show();
+            Snackbar.make(mToolbar,exc.toString(), Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -1800,8 +1822,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         try {
             startActivityForResult(intent, 22);
         } catch (ActivityNotFoundException a) {
-            Toast.makeText(getApplicationContext(), getString(R.string.error),
-                    Toast.LENGTH_SHORT).show();
+            Snackbar.make(mToolbar, getString(R.string.error), Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -1848,7 +1869,8 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         PrintJob printJob = printManager.print(jobName, printAdapter,  new PrintAttributes.Builder().build());
         //see if print failed
         if(printJob.isFailed()){
-            Toast.makeText(getApplicationContext(), "Failed to print", Toast.LENGTH_LONG).show();
+            Snackbar.make(mToolbar, "Failed to print", Snackbar.LENGTH_SHORT).show();
+
         }
 
     }
@@ -1910,6 +1932,17 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
     private class MyWebChromeClient extends WebChromeClient {
 
+        /*@Override
+        public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
+            return super.onCreateWindow(view, isDialog, isUserGesture, resultMsg);
+        }
+
+        @Override
+        public void onCloseWindow(WebView window) {
+
+            super.onCloseWindow(window);
+        }*/
+
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void onPermissionRequest(final PermissionRequest request) {
@@ -1920,28 +1953,21 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
         @Override
         public boolean onJsAlert(WebView view, final String url, final String message, final JsResult result) {
-            try {
-                if (alertDialog != null && alertDialog.isShowing()) alertDialog.dismiss();
-                alertDialog = new BottomSheetDialog(MainActivity.this);
-                @SuppressLint("InflateParams") View v = getLayoutInflater().inflate(R.layout.activity_bottomsheet, null, false);
-                ((TextView) v.findViewById(R.id.title)).setText(R.string.app_name);
-                ((TextView) v.findViewById(R.id.content)).setText(message);
-
-                v.findViewById(R.id.cancel).setVisibility(View.GONE);
-                v.findViewById(R.id.confirm).setOnClickListener(v1 -> {
+            if(!isDestroyed()) {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
+                builder1.setTitle(R.string.app_name);
+                builder1.setMessage(message);
+                builder1.setCancelable(true);
+                builder1.setPositiveButton(R.string.ok, (dialog, id) -> {
                     result.confirm();
-                    alertDialog.dismiss();
+                    dialog.dismiss();
                 });
-
-                alertDialog.setOnDismissListener(dialog -> {
+                builder1.setNegativeButton(R.string.cancel, (dialog, id) -> {
                     result.cancel();
                     dialog.dismiss();
                 });
-
-                alertDialog.setContentView(v);
-                alertDialog.show();
-            }catch(Exception i){
-                i.printStackTrace();
+                androidx.appcompat.app.AlertDialog alert11 = builder1.create();
+                alert11.show();
             }
             return true;
 
@@ -1952,64 +1978,43 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
         @Override
         public boolean onJsConfirm(WebView view, final String url, final String message, final JsResult result) {
-            if (alertDialog != null && alertDialog.isShowing()) alertDialog.dismiss();
-            alertDialog = new BottomSheetDialog(MainActivity.this);
-            @SuppressLint("InflateParams") View v = getLayoutInflater().inflate(R.layout.activity_bottomsheet, null, false);
-
-            ((TextView) v.findViewById(R.id.title)).setText(R.string.app_name);
-            ((TextView) v.findViewById(R.id.content)).setText(message);
-
-            v.findViewById(R.id.cancel).setOnClickListener(v1 -> {
-                result.cancel();
-                alertDialog.dismiss();
-            });
-
-            v.findViewById(R.id.confirm).setOnClickListener(v12 -> {
-                result.confirm();
-                alertDialog.dismiss();
-            });
-
-            alertDialog.setOnDismissListener(dialog -> {
-                result.cancel();
-                dialog.dismiss();
-            });
-
-            alertDialog.setContentView(v);
-            alertDialog.show();
+            if (!isDestroyed()) {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
+                builder1.setTitle(R.string.app_name);
+                builder1.setMessage(message);
+                builder1.setCancelable(true);
+                builder1.setPositiveButton(R.string.ok, (dialog, id) -> {
+                    result.confirm();
+                    dialog.dismiss();
+                });
+                builder1.setNegativeButton(R.string.cancel, (dialog, id) -> {
+                    result.cancel();
+                    dialog.dismiss();
+                });
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+            }
             return true;
 
         }
 
         @Override
         public boolean onJsPrompt(WebView view, String url, final String message, final String defaultValue, final JsPromptResult result) {
-            if (alertDialog != null && alertDialog.isShowing()) alertDialog.dismiss();
-            alertDialog = new BottomSheetDialog(MainActivity.this);
-            @SuppressLint("InflateParams") View v = getLayoutInflater().inflate(R.layout.activity_bottomsheet, null, false);
-
-            ((TextView) v.findViewById(R.id.title)).setText(message);
-            v.findViewById(R.id.content).setVisibility(View.GONE);
-            v.findViewById(R.id.inputLayout).setVisibility(View.VISIBLE);
-
-            EditText input = v.findViewById(R.id.input);
-            input.setHint(defaultValue);
-
-            v.findViewById(R.id.cancel).setOnClickListener(v1 -> {
-                result.cancel();
-                alertDialog.dismiss();
-            });
-
-            v.findViewById(R.id.confirm).setOnClickListener(v12 -> {
-                result.confirm();
-                alertDialog.dismiss();
-            });
-
-            alertDialog.setOnDismissListener(dialog -> {
-                result.cancel();
-                dialog.dismiss();
-            });
-
-            alertDialog.setContentView(v);
-            alertDialog.show();
+            if (!isDestroyed()) {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
+                builder1.setTitle(message);
+                builder1.setCancelable(true);
+                builder1.setPositiveButton(R.string.ok, (dialog, id) -> {
+                    result.confirm();
+                    dialog.dismiss();
+                });
+                builder1.setNegativeButton(R.string.cancel, (dialog, id) -> {
+                    result.cancel();
+                    dialog.dismiss();
+                });
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+            }
             return true;
 
         }
@@ -2022,12 +2027,14 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             } else {
                 mProgress.setVisibility(View.GONE);
             }
+            super.onProgressChanged(view, progress);
         }
 
 
         @Override
         public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
             callback.invoke(origin, true, false);
+            super.onGeolocationPermissionsShowPrompt(origin, callback);
         }
 
         @Override
@@ -2038,25 +2045,18 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
         @Override
         public void onReceivedIcon(WebView view, Bitmap icon) {
-            super.onReceivedIcon(view, icon);
-            try {
-                favoriteIcon = icon;
-                if (icon != null && StaticUtils.isLollipop()) {
-                    setColor(Palette.from(icon).generate().getVibrantColor(Palette.from(icon).generate().getMutedColor(ContextCompat.getColor(MainActivity.this, R.color.no_fav))));
-                }else{
-                    setColor(ContextCompat.getColor(MainActivity.this, R.color.no_fav));
-
-                }
-
-            } catch (Exception ignored) {
+            favoriteIcon = icon;
+            if (icon != null && StaticUtils.isLollipop()) {
+                setColor(Palette.from(icon).generate().getVibrantColor(Palette.from(icon).generate().getMutedColor(ContextCompat.getColor(MainActivity.this, R.color.no_fav))));
+            }else{
+                setColor(ContextCompat.getColor(MainActivity.this, R.color.no_fav));
 
             }
-
+            super.onReceivedIcon(view, icon);
         }
 
         @Override
         public void onReceivedTitle(WebView view, String title) {
-            super.onReceivedTitle(view, title);
             try {
                 webViewTitle = title;
                 mSearchView.setText(mWebView.getUrl());
@@ -2065,7 +2065,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                     setTaskDescription(new ActivityManager.TaskDescription("Simplicity - " + mWebView.getTitle(), null, StaticUtils.fetchColorPrimary(MainActivity.this)));
                 }
 
-                if(!isIncognito && !mSearchView.getText().toString().equals(homepage)) {
+                if(!isIncognito && !UserPreferences.isHistory(homepage)) {
                     ArrayList<History> listBookmarks = UserPreferences.getHistory();
                     History bookmark = new History();
                     bookmark.setTitle(mWebView.getTitle());
@@ -2078,6 +2078,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            super.onReceivedTitle(view, title);
 
         }
 
@@ -2113,7 +2114,8 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
             Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
             contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
-            contentSelectionIntent.setType("image/*");
+            contentSelectionIntent.setType("*/*");
+            contentSelectionIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/*", "video/*", "*/*"});
 
             Intent[] intentArray;
             if (takePictureIntent != null) {
@@ -2124,9 +2126,8 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
             Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
             chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
-            chooserIntent.putExtra(Intent.EXTRA_TITLE, getString(R.string.image_chooser));
+            chooserIntent.putExtra(Intent.EXTRA_TITLE, "Choose file");
             chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
-
             startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE);
 
             return true;
@@ -2235,6 +2236,66 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             intent.putExtra("text", text);
             intent.putExtra("title",title);
             startActivity(intent);
+        }
+    }
+
+    BroadcastReceiver onComplete = new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent intent) {
+            Snackbar download = Snackbar.make(mToolbar, "Download complete", Snackbar.LENGTH_INDEFINITE);
+            download.setAction("open?", v -> {
+                String action = intent.getAction();
+                if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+                    long downloadId = intent.getLongExtra(
+                            DownloadManager.EXTRA_DOWNLOAD_ID, 0);
+                    openDownloadedAttachment(MainActivity.this, downloadId);
+                }
+            });
+            download.show();
+        }
+
+    };
+
+
+
+    void openDownloadedAttachment(final Context context, final long downloadId) {
+        DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager.Query query = new DownloadManager.Query();
+        query.setFilterById(downloadId);
+        Cursor cursor = null;
+        if (downloadManager != null) {
+            cursor = downloadManager.query(query);
+        }
+        if (cursor != null && cursor.moveToFirst()) {
+            int downloadStatus = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
+            String downloadLocalUri = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+            String downloadMimeType = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_MEDIA_TYPE));
+            if ((downloadStatus == DownloadManager.STATUS_SUCCESSFUL) && downloadLocalUri != null) {
+                openDownloadedAttachment(context, Uri.parse(downloadLocalUri), downloadMimeType);
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+    }
+    //https://stackoverflow.com/a/40925445/4143671
+    void openDownloadedAttachment(final Context context, Uri attachmentUri, final String attachmentMimeType) {
+        if(attachmentUri!=null) {
+            // Get Content Uri.
+            if (ContentResolver.SCHEME_FILE.equals(attachmentUri.getScheme())) {
+                // FileUri - Convert it to contentUri.
+                File file = new File(Objects.requireNonNull(attachmentUri.getPath()));
+                attachmentUri = FileProvider.getUriForFile(this, getResources().getString(R.string.auth), file);
+            }
+
+            Intent openAttachmentIntent = new Intent(Intent.ACTION_VIEW);
+            openAttachmentIntent.setDataAndType(attachmentUri, attachmentMimeType);
+            openAttachmentIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            try {
+                context.startActivity(openAttachmentIntent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, context.getString(R.string.unable_to_open_file), Toast.LENGTH_LONG).show();
+            }
         }
     }
 

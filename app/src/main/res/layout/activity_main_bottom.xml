@@ -60,14 +60,19 @@
                         android:layout_height="match_parent"
                         app:layout_scrollFlags="scroll|enterAlways|snap">
 
-                        <com.anthonycr.progress.AnimatedProgressBar
+                        <ProgressBar
+                            style="?android:attr/progressBarStyleHorizontal"
                             android:id="@+id/progressBar"
                             android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:max="100"
-                            android:background="@color/black_semi_transparent"
-                            custom:bidirectionalAnimate="true"
-                            custom:progressColor="@color/white"/>
+                            android:layout_height="wrap_content"
+                            android:maxHeight="4dp"
+                            android:minHeight="4dp"
+                            android:progress="100"
+                            android:indeterminate="true"
+                            android:layout_alignParentTop="true"
+                            android:indeterminateTint="@color/white"
+                            android:progressTint="@color/white"
+                            android:scaleY="4"/>
 
                         <include
                             android:id="@+id/toolbar_search_bar"

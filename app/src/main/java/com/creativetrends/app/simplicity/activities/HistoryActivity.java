@@ -1,28 +1,36 @@
 package com.creativetrends.app.simplicity.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.SearchView;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.creativetrends.app.simplicity.adapters.AdapterHistory;
 import com.creativetrends.app.simplicity.utils.History;
 import com.creativetrends.app.simplicity.utils.UserPreferences;
 import com.creativetrends.simplicity.app.R;
-import com.hugocastelani.waterfalltoolbar.Dp;
-import com.hugocastelani.waterfalltoolbar.WaterfallToolbar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Creative Trends Apps.
@@ -33,37 +41,50 @@ public class HistoryActivity extends AppCompatActivity implements AdapterHistory
     ArrayList<History> listHistory = new ArrayList<>();
     RecyclerView recyclerBookmarks;
     private SearchView searchView;
-    WaterfallToolbar mToolbar;
+    SharedPreferences preferences;
+    Toolbar mToolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-        setSupportActionBar(findViewById(R.id.toolbar));
-        mToolbar = findViewById(R.id.waterfall_toolbar);
-        mToolbar.setInitialElevation(new Dp(0).toPx());
-        mToolbar.setFinalElevation(new Dp(8).toPx());
-        mToolbar.setScrollFinalPosition(8);
-        setSupportActionBar(findViewById(R.id.toolbar));
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            Drawable drawable = mToolbar.getNavigationIcon();
+            if (drawable != null) {
+                drawable.setColorFilter(ContextCompat.getColor(this, R.color.grey_color), PorterDuff.Mode.SRC_ATOP);
+            }
         }
         listHistory = UserPreferences.getHistory();
         recyclerBookmarks = findViewById(R.id.recycler_history);
-        mToolbar.setRecyclerView(recyclerBookmarks);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setReverseLayout(true);
         mLayoutManager.setStackFromEnd(true);
         recyclerBookmarks.setLayoutManager(mLayoutManager);
         adapterBookmarks = new AdapterHistory(this, listHistory, this);
         recyclerBookmarks.setAdapter(adapterBookmarks);
+        //show long click hint
+        if (preferences.getBoolean("first_history", true) && !listHistory.isEmpty()) {
+            Snackbar.make(recyclerBookmarks, "Long click to copy link", Snackbar.LENGTH_SHORT).show();
+            preferences.edit().putBoolean("first_history", false).apply();
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
+        }
 
     }
 
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
 
@@ -98,6 +119,7 @@ public class HistoryActivity extends AppCompatActivity implements AdapterHistory
         searchView.setIconified(true);
         searchView.setOnQueryTextListener(this);
         searchView.setQueryHint(getResources().getString(R.string.search_history));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
         return true;
     }
 

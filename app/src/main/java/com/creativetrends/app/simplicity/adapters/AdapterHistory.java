@@ -1,9 +1,10 @@
 package com.creativetrends.app.simplicity.adapters;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,13 @@ import android.widget.TextView;
 import com.creativetrends.app.simplicity.ui.CustomShadow;
 import com.creativetrends.app.simplicity.utils.History;
 import com.creativetrends.simplicity.app.R;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Creative Trends Apps.
@@ -26,16 +31,16 @@ import java.util.List;
 public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViewHolderBookmark> {
     @SuppressLint("StaticFieldLeak")
     private static AdapterHistory adapter;
-    Context context;
+    private Context context;
     private LayoutInflater layoutInflater;
     private ArrayList<History> listBookmarks;
     private ArrayList <History> filteredBookmarks;
     private AdapterHistory.onBookmarkSelected onBookmarkSelected;
 
-    class ViewHolderBookmark extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolderBookmark extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private History bookmark;
         private RelativeLayout bookmarkHolder;
-        private ImageView delete, icon;
+        private ImageView delete;
         private TextView title, url;
         private LinearLayout card;
 
@@ -44,7 +49,6 @@ public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViewHold
             title = itemView.findViewById(R.id.history_title);
             url = itemView.findViewById(R.id.history_url);
             delete = itemView.findViewById(R.id.history_delete);
-            icon = itemView.findViewById(R.id.imageHistory);
             bookmarkHolder = itemView.findViewById(R.id.history_holder);
             card = itemView.findViewById(R.id.bookmark_card);
             card.setOutlineProvider(new CustomShadow(2));
@@ -56,7 +60,9 @@ public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViewHold
             title.setText(bookmark.getTitle());
             url.setText(bookmark.getUrl());
             bookmarkHolder.setOnClickListener(this);
+            bookmarkHolder.setOnLongClickListener(this);
             delete.setOnClickListener(this);
+
         }
 
         public void onClick(View v) {
@@ -72,6 +78,24 @@ public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViewHold
                 default:
                     break;
             }
+        }
+
+        public boolean onLongClick(View v) {
+            bookmarkHolder.setOnClickListener(null);
+            if (bookmark.getUrl() != null) {
+                ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("History Item", bookmark.getUrl());
+                clipboard.setPrimaryClip(clip);
+                Snackbar.make(delete, "URL copied to clipboard", Snackbar.LENGTH_SHORT).show();
+                new Handler().postDelayed(() -> {
+                    try {
+                        bookmarkHolder.setOnClickListener(this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }, 1500);
+            }
+            return false;
         }
     }
 
@@ -115,6 +139,7 @@ public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViewHold
         filteredBookmarks.add(position, bookmark);
         notifyItemInserted(position);
     }
+
 
     private void moveItem(int fromPosition, int toPosition) {
         filteredBookmarks.add(toPosition, filteredBookmarks.remove(fromPosition));

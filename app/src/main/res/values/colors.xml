@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorAccent">#8E24AA</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#FF000000</color>
     <color name="grey_color">#959595</color>
     <!--grey-->
     <color name="md_grey_400">#bdbdbd</color>
-    <color name="md_blue_600">#8E24AA</color>
-    <color name="background">#F5F5F5</color>
+    <color name="md_blue_600">#1882a5</color>
     <color name="md_grey_900">#212121</color>
-    <color name="gradient_start">#40000000</color>
     <color name="black_semi_transparent">#10000000</color>
     <color name="bcP">#C2185B</color>
     <color name="md_amber_500">#ffc107</color>
@@ -17,6 +14,7 @@
     <color name="no_fav">#CDCDCD</color>
     <color name="colorSemiWhite">#4dffffff</color>
     <color name="md_green_500">#065f55</color>
+    <color name="other">#F5F5F1</color>
 
 
     <!-- dots inactive colors -->

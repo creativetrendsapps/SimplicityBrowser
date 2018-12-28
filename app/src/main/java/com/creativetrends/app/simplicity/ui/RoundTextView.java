@@ -1,14 +1,9 @@
 package com.creativetrends.app.simplicity.ui;
 
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.support.v7.widget.AppCompatTextView;
-import android.util.AttributeSet;
-import android.widget.TextView;
 
-import com.creativetrends.simplicity.app.R;
+import androidx.appcompat.widget.AppCompatTextView;
+import android.util.AttributeSet;
 
 /**
  * Created by Creative Trends Apps (Jorell Rutledge) 5/18/2018.

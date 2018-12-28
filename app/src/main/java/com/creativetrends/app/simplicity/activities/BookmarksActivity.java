@@ -3,19 +3,16 @@ package com.creativetrends.app.simplicity.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.SearchView;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
 
 import com.creativetrends.app.simplicity.adapters.AdapterBookmarks;
 import com.creativetrends.app.simplicity.adapters.Bookmark;
@@ -23,11 +20,20 @@ import com.creativetrends.app.simplicity.utils.OnStartDragListener;
 import com.creativetrends.app.simplicity.utils.TouchHelperCallback;
 import com.creativetrends.app.simplicity.utils.UserPreferences;
 import com.creativetrends.simplicity.app.R;
-import com.hugocastelani.waterfalltoolbar.Dp;
-import com.hugocastelani.waterfalltoolbar.WaterfallToolbar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Creative Trends Apps.
@@ -40,7 +46,7 @@ public class BookmarksActivity extends AppCompatActivity implements AdapterBookm
     private ItemTouchHelper mItemTouchHelper;
     private SearchView searchView;
     SharedPreferences preferences;
-    WaterfallToolbar mToolbar;
+    Toolbar mToolbar;
     // While the file names are the same, the references point to different files
 
     @Override
@@ -48,36 +54,42 @@ public class BookmarksActivity extends AppCompatActivity implements AdapterBookm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bookmarks);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mToolbar = findViewById(R.id.waterfall_toolbar);
-        mToolbar.setInitialElevation(new Dp(0).toPx());
-        mToolbar.setFinalElevation(new Dp(8).toPx());
-        mToolbar.setScrollFinalPosition(8);
-        setSupportActionBar(findViewById(R.id.toolbar));
+        mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            Drawable drawable = mToolbar.getNavigationIcon();
+            if (drawable != null) {
+                drawable.setColorFilter(ContextCompat.getColor(this, R.color.grey_color), PorterDuff.Mode.SRC_ATOP);
+            }
         }
         listBookmarks = UserPreferences.getBookmarks();
         recyclerBookmarks = findViewById(R.id.recycler_bookmarks);
         recyclerBookmarks.setLayoutManager(new LinearLayoutManager(this));
         adapterBookmarks = new AdapterBookmarks(this, listBookmarks, this, this);
         recyclerBookmarks.setAdapter(adapterBookmarks);
-        mToolbar.setRecyclerView(recyclerBookmarks);
         ItemTouchHelper.Callback callback = new TouchHelperCallback(adapterBookmarks);
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(recyclerBookmarks);
 
         //show sort hint
         if (preferences.getBoolean("first_bookmarks", true) && !listBookmarks.isEmpty()) {
-            Toast.makeText(this, getResources().getString(R.string.bookmarks_hint), Toast.LENGTH_LONG).show();
+            Snackbar.make(recyclerBookmarks, R.string.bookmarks_hint, Snackbar.LENGTH_SHORT).show();
             preferences.edit().putBoolean("first_bookmarks", false).apply();
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
         }
 
     }
 
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
 

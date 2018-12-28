@@ -1,6 +1,6 @@
 package com.creativetrends.app.simplicity.suggestions;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Created by Creative Trends Apps.

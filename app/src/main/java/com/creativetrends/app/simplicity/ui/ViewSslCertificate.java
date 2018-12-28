@@ -1,14 +1,12 @@
 package com.creativetrends.app.simplicity.ui;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.http.SslCertificate;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -20,6 +18,9 @@ import com.creativetrends.simplicity.app.R;
 
 import java.text.DateFormat;
 import java.util.Date;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 
 /**Created by Creative Trends Apps on 2/17/2017.*/
 
@@ -110,7 +111,7 @@ public class ViewSslCertificate extends DialogFragment {
             SpannableStringBuilder endDateStringBuilder = new SpannableStringBuilder(endDateLabel + DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.LONG).format(endDate));
 
             // Create a blue `ForegroundColorSpan`.  We have to use the deprecated `getColor` until API >= 23.
-            @SuppressWarnings("deprecation") ForegroundColorSpan blueColorSpan = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+            @SuppressWarnings("deprecation") ForegroundColorSpan blueColorSpan = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.md_blue_600));
 
             // Setup the spans to display the certificate information in blue.  `SPAN_INCLUSIVE_INCLUSIVE` allows the span to grow in either direction.
             issuedToCNameStringBuilder.setSpan(blueColorSpan, cNameLabel.length(), issuedToCNameStringBuilder.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
@@ -123,14 +124,30 @@ public class ViewSslCertificate extends DialogFragment {
             endDateStringBuilder.setSpan(blueColorSpan, endDateLabel.length(), endDateStringBuilder.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
             // Display the strings.
-            issuedToCNameTextView.setText(issuedToCNameStringBuilder);
-            issuedToONameTextView.setText(issuedToONameStringBuilder);
-            issuedToUNameTextView.setText(issuedToUNameStringBuilder);
-            issuedByCNameTextView.setText(issuedByCNameStringBuilder);
-            issuedByONameTextView.setText(issuedByONameStringBuilder);
-            issuedByUNameTextView.setText(issuedByUNameStringBuilder);
-            startDateTextView.setText(startDateStringBuilder);
-            endDateTextView.setText(endDateStringBuilder);
+            if (issuedToCNameTextView != null) {
+                issuedToCNameTextView.setText(issuedToCNameStringBuilder);
+            }
+            if (issuedToONameTextView != null) {
+                issuedToONameTextView.setText(issuedToONameStringBuilder);
+            }
+            if (issuedToUNameTextView != null) {
+                issuedToUNameTextView.setText(issuedToUNameStringBuilder);
+            }
+            if (issuedByCNameTextView != null) {
+                issuedByCNameTextView.setText(issuedByCNameStringBuilder);
+            }
+            if (issuedByONameTextView != null) {
+                issuedByONameTextView.setText(issuedByONameStringBuilder);
+            }
+            if (issuedByUNameTextView != null) {
+                issuedByUNameTextView.setText(issuedByUNameStringBuilder);
+            }
+            if (startDateTextView != null) {
+                startDateTextView.setText(startDateStringBuilder);
+            }
+            if (endDateTextView != null) {
+                endDateTextView.setText(endDateStringBuilder);
+            }
 
             // `onCreateDialog` requires the return of an `AlertDialog`.
             return alertDialog;

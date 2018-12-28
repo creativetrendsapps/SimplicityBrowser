@@ -17,14 +17,14 @@
         android:focusable="true"
         android:focusableInTouchMode="true" />
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/search_card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="4dp"
         app:cardPreventCornerOverlap="true"
         app:cardCornerRadius="20dp"
-        app:cardElevation="2dp">
+        app:cardElevation="1dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -74,7 +74,9 @@
                 android:layout_toStartOf="@+id/voice_button"
                 android:background="@null"
                 android:completionThreshold="1"
-                android:dropDownVerticalOffset="0.10dp"
+                android:dropDownVerticalOffset="0.1dp"
+                android:dropDownWidth="wrap_content"
+                android:dropDownAnchor="@id/search_card"
                 android:fadingEdge="vertical"
                 android:imeOptions="actionGo"
                 android:inputType="textUri"
@@ -82,7 +84,7 @@
                 android:nextFocusLeft="@id/search_box"
                 android:nextFocusUp="@id/search_box"
                 android:paddingStart="4dp"
-                android:popupElevation="2dp"
+                android:popupElevation="1dp"
                 android:popupBackground="@color/white"
                 android:selectAllOnFocus="true"
                 android:textColor="@color/md_grey_900"
@@ -123,5 +125,5 @@
                 android:layout_alignParentEnd="true"
                 android:background="?attr/selectableItemBackgroundBorderless"/>
         </RelativeLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

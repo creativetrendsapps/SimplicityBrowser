@@ -11,9 +11,6 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -24,10 +21,15 @@ import android.widget.ListView;
 import com.codekidlabs.storagechooser.StorageChooser;
 import com.creativetrends.app.simplicity.SimplicityApplication;
 import com.creativetrends.app.simplicity.activities.AboutActivity;
+import com.creativetrends.app.simplicity.activities.DonateActivity;
 import com.creativetrends.app.simplicity.utils.ExportUtils;
 import com.creativetrends.simplicity.app.R;
 
 import java.io.File;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 /**
  * Created by Creative Trends Apps.
@@ -104,10 +106,12 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         Preference overflow = findPreference("about_app");
         Preference terms = findPreference("terms_set");
+        Preference donate = findPreference("sim_donate");
         //Preference sync = findPreference("sim_cloud");
         Preference backup_restore = findPreference("back_restore");
         Preference policy = findPreference("privacy_policy_set");
         overflow.setOnPreferenceClickListener(this);
+        donate.setOnPreferenceClickListener(this);
         terms.setOnPreferenceClickListener(this);
         policy.setOnPreferenceClickListener(this);
         //sync.setOnPreferenceClickListener(this);
@@ -122,10 +126,10 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         String key = preference.getKey();
         switch (key) {
 
-           /* case "sim_cloud":
-                Intent intent = new Intent(getActivity(), SimplicitySignIn.class);
+           case "sim_donate":
+                Intent intent = new Intent(getActivity(), DonateActivity.class);
                 startActivity(intent);
-                break;*/
+                break;
 
             case "back_restore":
                 if (!hasStoragePermission()) {

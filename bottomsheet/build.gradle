@@ -1,0 +1,30 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+}
+
+repositories {
+    maven { url "https://oss.sonatype.org/content/repositories/releases" }
+
+}
+
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
+    implementation 'com.google.android.material:material:1.1.0-alpha02'
+    implementation 'com.github.captain-miao:optroundcardview:1.0.0'
+}

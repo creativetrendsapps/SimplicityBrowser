@@ -167,10 +167,10 @@
     <PreferenceCategory
         android:title="@string/settings_more">
 
-       <!-- <Preference
-            android:key="sim_cloud"
-            android:title="@string/simplicity_cloud_title"
-            android:summary="@string/simplicity_cloud_sum"/>-->
+       <Preference
+            android:key="sim_donate"
+            android:title="@string/support_dev"
+            android:summary="Help keep this app ad free by donating."/>
 
         <Preference
             android:key="back_restore"

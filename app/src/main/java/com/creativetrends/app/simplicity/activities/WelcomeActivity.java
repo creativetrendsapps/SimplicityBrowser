@@ -226,7 +226,9 @@ public class WelcomeActivity extends AppCompatActivity {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                    launchHomeScreen();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Permission denied.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Permission denied.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "You will be prompted for permission again, before downloading content.", Toast.LENGTH_LONG).show();
+                    launchHomeScreen();
                 }
                 break;
         }

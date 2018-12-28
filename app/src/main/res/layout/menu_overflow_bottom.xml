@@ -9,19 +9,18 @@
     android:clickable="false"
     android:focusable="false">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/sim_menu"
         android:layout_width="245dp"
         android:layout_height="wrap_content"
-        android:foreground="?attr/selectableItemBackground"
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="8dp"
         android:layout_marginRight="4dp"
         android:layout_marginTop="4dp"
         android:visibility="invisible"
         android:soundEffectsEnabled="false"
-        app:cardElevation="2dp"
-        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="4dp"
         tools:ignore="RtlHardcoded">
 
         <RelativeLayout
@@ -37,7 +36,6 @@
                 android:layout_height="wrap_content"
                 android:baselineAligned="false"
                 android:orientation="horizontal"
-                android:background="#F9F9F9"
                 android:weightSum="5">
 
 
@@ -51,7 +49,7 @@
                     android:orientation="horizontal"
                     android:padding="10.0dip"
                     android:focusable="true"
-                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_arrow_forward"
                     tools:ignore="ContentDescription" />
 
@@ -66,7 +64,7 @@
                     android:orientation="horizontal"
                     android:padding="10.0dip"
                     android:focusable="true"
-                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_star_border"
                     tools:ignore="ContentDescription" />
 
@@ -81,7 +79,7 @@
                     android:orientation="horizontal"
                     android:padding="10.0dip"
                     android:focusable="true"
-                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_downloads"
                     tools:ignore="ContentDescription" />
 
@@ -98,7 +96,7 @@
                     android:orientation="horizontal"
                     android:padding="10.0dip"
                     android:focusable="true"
-                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_info"
                     tools:ignore="ContentDescription" />
 
@@ -113,7 +111,7 @@
                     android:orientation="horizontal"
                     android:padding="10.0dip"
                     android:focusable="true"
-                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_refresh_page"
                     tools:ignore="ContentDescription" />
 
@@ -134,7 +132,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#FFF"
-                    android:foreground="?android:attr/selectableItemBackground"
                     android:orientation="vertical">
 
                     <TextView
@@ -169,7 +166,7 @@
                             android:layout_alignParentStart="true"
                             android:background="?android:attr/selectableItemBackground"/>
 
-                        <android.support.v7.widget.AppCompatCheckBox
+                        <androidx.appcompat.widget.AppCompatCheckBox
                             android:id="@+id/sim_private_check"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -295,7 +292,7 @@
                             tools:ignore="RtlHardcoded,RtlSymmetry"
                             android:background="?android:attr/selectableItemBackground"/>
 
-                        <android.support.v7.widget.AppCompatCheckBox
+                        <androidx.appcompat.widget.AppCompatCheckBox
                             android:id="@+id/sim_desktop_check"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -337,5 +334,5 @@
                 </LinearLayout>
             </ScrollView>
         </RelativeLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </FrameLayout>

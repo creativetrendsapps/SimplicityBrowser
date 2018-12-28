@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="SettingsTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/other</item>
+        <item name="colorAccent">@color/md_blue_600</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+        <item name="android:colorEdgeEffect">@color/md_white_1000_25</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/other</item>
+        <item name="dialogCornerRadius">8dp</item>
+    </style>
+
+    <style name="BookMarksTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/other</item>
+        <item name="colorAccent">@color/md_blue_600</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+        <item name="searchViewStyle">@style/MySearchViewStyle</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="android:listPopupWindowStyle">@style/Popup</item>
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/other</item>
+    </style>
+</resources>

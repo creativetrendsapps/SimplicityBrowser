@@ -10,9 +10,9 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.os.Build;
-import android.support.annotation.Nullable;
-import android.support.v4.graphics.ColorUtils;
-import android.support.v7.graphics.Palette;
+import androidx.annotation.Nullable;
+import androidx.core.graphics.ColorUtils;
+import androidx.palette.graphics.Palette;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -32,7 +32,7 @@ public class StaticUtils {
     public static int darkColor(int color) {
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
-        hsv[2] *= 0.7f;
+        hsv[2] *= 0.9f;
         return Color.HSVToColor(hsv);
     }
 

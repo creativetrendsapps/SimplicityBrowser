@@ -18,7 +18,7 @@
     </style>
 
 
-    <style name="MainTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="MainTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="colorPrimary">@color/white</item>
@@ -28,17 +28,16 @@
         <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
         <item name="android:colorEdgeEffect">@color/md_white_1000_25</item>
         <item name="dialogCornerRadius">8dp</item>
-
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
     </style>
 
     <style name="SettingsTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="colorPrimary">@color/white</item>
-        <item name="colorPrimaryDark">@color/md_grey_400</item>
+        <item name="colorPrimaryDark">@color/other</item>
         <item name="colorAccent">@color/md_blue_600</item>
         <item name="android:colorPrimary">@color/md_blue_600</item>
-
         <item name="android:windowBackground">@color/white</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
         <item name="android:colorEdgeEffect">@color/md_white_1000_25</item>
@@ -46,7 +45,7 @@
     </style>
 
 
-    <style name="WelcomeTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="WelcomeTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="colorPrimary">@color/white</item>
@@ -58,7 +57,20 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
         <item name="dialogCornerRadius">8dp</item>
+    </style>
 
+    <style name="ReaderTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/md_grey_400</item>
+        <item name="colorAccent">@color/md_blue_600</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+        <item name="searchViewStyle">@style/MySearchViewStyle</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="android:listPopupWindowStyle">@style/Popup</item>
+        <item name="dialogCornerRadius">8dp</item>
     </style>
 
     <style name="DialogAnimation">
@@ -86,5 +98,21 @@
         <item name="android:popupElevation">2dp</item>
     </style>
 
- 
+    <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+    </style>
+
+    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bottomsheet_background</item>
+    </style>
+
+    <style name="SeekBarWithoutSteps" parent="Widget.AppCompat.SeekBar.Discrete">
+        <item name="tickMark">@null</item>
+        <item name="android:minHeight">8dip</item>
+    </style>
 </resources>

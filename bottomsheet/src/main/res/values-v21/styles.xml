@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BottomSheetBuilder.BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="behavior_hideable">true</item>
+        <item name="behavior_skipCollapsed">true</item>
+    </style>
+
+    <style name="BottomSheetBuilder.DialogStyle" parent="Theme.Design.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetBuilder.BottomSheetStyle</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/white</item>
+    </style>
+</resources>

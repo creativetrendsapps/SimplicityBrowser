@@ -187,6 +187,20 @@ public final class UserPreferences {
     }
 
 
+
+    public static boolean isHistory(String history) {
+        if (history == null || history.isEmpty()) {
+            return false;
+        }
+        String removeStart = getHome(history);
+        for (History url : getHistory()) {
+            if (getHome(url.getUrl()).equals(removeStart)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static String getHome(String url) {
         return url.replaceFirst("^(http(?>s)://\\.|http(?>s)://)", "");
     }

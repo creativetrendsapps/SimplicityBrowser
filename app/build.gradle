@@ -10,8 +10,9 @@ android {
         applicationId "com.creativetrends.simplicity.app"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 456
-        versionName "4.5.6"
+        versionCode 457
+        versionName "4.5.7"
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -29,6 +30,8 @@ android {
 }
 
 dependencies {
+    //custom
+    implementation project(":bottomsheet")
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //google
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
@@ -37,8 +40,9 @@ dependencies {
     implementation 'androidx.palette:palette:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     //other libraries
-    implementation 'com.github.rubensousa:bottomsheetbuilder:1.6.1'
-    implementation 'com.github.hugocastelani:waterfall-toolbar:0.4.0'
     implementation 'com.anthonycr.progress:animated-progress:1.0'
     implementation 'com.github.codekidX:storage-chooser:2.0.3'
+    implementation "ch.acra:acra-mail:5.2.1"
+    implementation 'androidx.multidex:multidex:2.0.1'
+
 }

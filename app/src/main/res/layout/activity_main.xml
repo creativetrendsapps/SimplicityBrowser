@@ -1,5 +1,4 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -41,21 +40,26 @@
                             android:id="@+id/toolbar_search_bar"
                             layout="@layout/search_bar"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginBottom="-1dp" />
+                            android:layout_height="match_parent"/>
 
+
+                        <ProgressBar
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:id="@+id/progressBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxHeight="4dp"
+                            android:minHeight="4dp"
+                            android:progress="100"
+                            android:indeterminate="true"
+                            android:layout_alignParentBottom="true"
+                            android:indeterminateTint="@color/white"
+                            android:progressTint="@color/white"
+                            android:scaleY="4"/>
 
                     </RelativeLayout>
                 </androidx.appcompat.widget.Toolbar>
-                <com.anthonycr.progress.AnimatedProgressBar
-                    android:id="@+id/progressBar"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_below="@+id/toolbar_search_bar"
-                    android:max="100"
-                    android:background="@color/black_semi_transparent"
-                    custom:bidirectionalAnimate="true"
-                    custom:progressColor="@color/white"/>
+
             </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

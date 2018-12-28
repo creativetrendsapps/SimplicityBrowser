@@ -18,6 +18,8 @@
     <dimen name="dialog_content_padding_top">8dp</dimen>
     <dimen name="dialog_content_padding_bottom">8dp</dimen>
     <dimen name="dialog_content_textsize">14sp</dimen>
+    <dimen name="bottom_sheet_corner_radius">16dp</dimen>
+    <dimen name="bottom_sheet_top_padding">8dp</dimen>
 
 
 </resources>

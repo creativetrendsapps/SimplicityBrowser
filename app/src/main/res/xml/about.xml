@@ -81,6 +81,11 @@
                 android:data="https://play.google.com/store/apps/details?id=com.creativetrends.simplicity.app" />
         </Preference>
 
+        <Preference
+            android:title="divider"
+            android:selectable="false"
+            android:layout="@layout/divider_preference"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

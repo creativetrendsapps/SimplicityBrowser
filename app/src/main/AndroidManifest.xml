@@ -10,13 +10,12 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
-    <uses-permission android:name="com.android.vending.BILLING" />
-    <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
 
     <application
         android:name="com.creativetrends.app.simplicity.SimplicityApplication"
         android:allowBackup="true"
-        android:fullBackupContent="false"
+        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -92,7 +91,11 @@
         <activity
             android:name="com.creativetrends.app.simplicity.activities.ReadingActivity"
             android:label="@string/reader_mode"
-            android:theme="@style/BookMarksTheme"/>
+            android:theme="@style/ReaderTheme"/>
+        <activity
+            android:name="com.creativetrends.app.simplicity.activities.DonateActivity"
+            android:label="@string/support_dev"
+            android:theme="@style/SettingsTheme"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

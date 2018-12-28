@@ -9,7 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;

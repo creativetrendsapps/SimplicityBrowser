@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Build;
-import android.support.annotation.ColorInt;
+import androidx.annotation.ColorInt;
 import android.view.View;
 
 /**

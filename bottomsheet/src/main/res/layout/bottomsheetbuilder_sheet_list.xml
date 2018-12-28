@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:background="@android:color/transparent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.github.captain_miao.optroundcardview.OptRoundCardView
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:optRoundCardCornerRadius="16dp"
+        app:optRoundCardLeftBottomCorner="false"
+        app:optRoundCardRightBottomCorner="false">
+        <View
+            android:id="@id/fakeShadow"
+            android:background="@drawable/bottom_sheet_shadow"
+            android:layout_width="fill_parent"
+            android:layout_height="0.0dip" />
+        <include
+            android:visibility="gone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/bottomsheet_title_vertical_margin"
+            layout="@layout/bottomsheetbuilder_list_header" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@id/recyclerView"
+            android:background="@android:color/transparent"
+            android:paddingTop="@dimen/bottomsheet_vertical_margin"
+            android:paddingBottom="@dimen/bottomsheet_vertical_margin"
+            android:clipToPadding="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.github.captain_miao.optroundcardview.OptRoundCardView>
+</LinearLayout>

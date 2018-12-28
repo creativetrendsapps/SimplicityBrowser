@@ -25,7 +25,7 @@
         android:text="@string/download_warning"
         android:textColor="?android:attr/textColorPrimary" />
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,33 +47,34 @@
             tools:ignore="LabelFor"
             tools:targetApi="lollipop" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
+        android:background="@android:color/transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="end"
         android:orientation="horizontal">
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_margin="4dp"
             android:text="@string/cancel"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/md_blue_600"
             android:background="@android:color/transparent"
             android:stateListAnimator="@null" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/confirm"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_margin="4dp"
             android:text="@string/ok"
-            android:textColor="@color/white"
-            android:background="@color/colorAccent"
+            android:textColor="@color/md_blue_600"
+            android:background="@android:color/transparent"
             android:stateListAnimator="@null" />
 
     </LinearLayout>
