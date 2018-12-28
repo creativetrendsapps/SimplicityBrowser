@@ -86,36 +86,36 @@ public class DonateActivity extends AppCompatActivity implements View.OnClickLis
         seekBar.setProgress(progress);
         switch (progress){
             case 0:
-                amount.setText("$1.85");
-                description.setText("Buys me a small coffee.");
+                amount.setText("");
+                description.setText("");
                 break;
 
             case 1:
-                amount.setText("$2.37");
-                description.setText("Buys me a large coffee.");
+                amount.setText("");
+                description.setText("");
                 break;
 
             case 2:
-                amount.setText("$4.43");
-                description.setText("Buys me an extra large coffee.");
+                amount.setText(""");
+                description.setText("");
                 break;
 
             case 3:
-                amount.setText("$6.49");
-                description.setText("Buys me a small lunch.");
+                amount.setText("");
+                description.setText("");
                 break;
             case 4:
-                amount.setText("$15.76");
-                description.setText("Wow! Are you sure?");
+                amount.setText("");
+                description.setText("");
                 break;
             case 5:
-                amount.setText("$20.91");
-                description.setText("That's a lot!! Are you sure?");
+                amount.setText("");
+                description.setText("");
                 break;
 
             default:
-                amount.setText("$1.85");
-                description.setText("Buys me a small coffee.");
+                amount.setText("");
+                description.setText("");
                 break;
 
         }
@@ -138,7 +138,7 @@ public class DonateActivity extends AppCompatActivity implements View.OnClickLis
             case 0:
                 try{
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("https://www.paypal.me/creativetrends/1.85"));
+                    intent.setData(Uri.parse(""));
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
                     e.printStackTrace();
@@ -148,7 +148,7 @@ public class DonateActivity extends AppCompatActivity implements View.OnClickLis
             case 1:
                 try{
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("https://www.paypal.me/creativetrends/2.37"));
+                    intent.setData(Uri.parse(""));
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
                     e.printStackTrace();
@@ -158,7 +158,7 @@ public class DonateActivity extends AppCompatActivity implements View.OnClickLis
             case 2:
                 try{
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("https://www.paypal.me/creativetrends/4.43"));
+                    intent.setData(Uri.parse(""));
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
                     e.printStackTrace();
@@ -168,7 +168,7 @@ public class DonateActivity extends AppCompatActivity implements View.OnClickLis
             case 3:
                 try{
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("https://www.paypal.me/creativetrends/6.49"));
+                    intent.setData(Uri.parse(""));
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
                     e.printStackTrace();
@@ -177,7 +177,7 @@ public class DonateActivity extends AppCompatActivity implements View.OnClickLis
             case 4:
                 try{
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("https://www.paypal.me/creativetrends/15.76"));
+                    intent.setData(Uri.parse(""));
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
                     e.printStackTrace();
@@ -186,7 +186,7 @@ public class DonateActivity extends AppCompatActivity implements View.OnClickLis
             case 5:
                 try{
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("https://www.paypal.me/creativetrends/20.91"));
+                    intent.setData(Uri.parse(""));
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
                     e.printStackTrace();
@@ -196,7 +196,7 @@ public class DonateActivity extends AppCompatActivity implements View.OnClickLis
             default:
                 try{
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("https://www.paypal.me/creativetrends/1.85"));
+                    intent.setData(Uri.parse(""));
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
                     e.printStackTrace();
