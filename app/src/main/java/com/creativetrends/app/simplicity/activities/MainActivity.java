@@ -25,6 +25,7 @@ import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -50,6 +51,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -92,7 +94,6 @@ import com.creativetrends.app.simplicity.suggestions.SuggestionsAdapter;
 import com.creativetrends.app.simplicity.ui.CustomBehavior;
 import com.creativetrends.app.simplicity.ui.SimpleAutoComplete;
 import com.creativetrends.app.simplicity.ui.ViewSslCertificate;
-import com.creativetrends.app.simplicity.utils.CreateShortcut;
 import com.creativetrends.app.simplicity.utils.CustomGestureDetector;
 import com.creativetrends.app.simplicity.utils.History;
 import com.creativetrends.app.simplicity.utils.StaticUtils;
@@ -123,7 +124,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -140,7 +140,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import static android.os.Build.VERSION_CODES.M;
 
 
-public class MainActivity extends AppCompatActivity implements CreateShortcut.CreateHomeScreenSchortcutListener, SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends AppCompatActivity implements  SwipeRefreshLayout.OnRefreshListener {
     SharedPreferences mPreferences;
     public NestedWebView mWebView;
     WebSettings mWebSettings;
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
     Toolbar mToolbar;
     String UrlCleaner, defaultSearch, defaultProvider;
     FloatingActionButton jump;
-
+    EditText shortcutNameEditText;
     ImageView mHomebutton, mSecure, mOverflow, vSearch, bookmarkicon, mForward, mRefresh;
     public static Bitmap favoriteIcon;
     AppBarLayout mAppbar;
@@ -193,6 +193,8 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
     public static final String ACTION_URL_RESOLVED = "com.creativetrends.simplicity.app.URL_RESOLVED";
     public static SslCertificate sslCertificate;
     public int scrollPosition = 0;
+    public static Bitmap user;
+    public static String touchIcon;
     private final BroadcastReceiver mUrlResolvedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -375,12 +377,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
                 case R.id.sim_home_screen:
                     hideMenu();
                     try {
-                        if (!StaticUtils.isOreo()) {
-                            AppCompatDialogFragment createHomeScreenShortcutDialogFragment = new CreateShortcut();
-                            createHomeScreenShortcutDialogFragment.show(getSupportFragmentManager(), getString(R.string.create_shortcut));
-                        } else {
-                            createShortcut();
-                        }
+                        createFileName();
                     }catch(NullPointerException ignored) {
                     }catch(Exception p){
                         p.printStackTrace();
@@ -544,6 +541,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         mWebSettings = mWebView.getSettings();
         mWebSettings.setJavaScriptEnabled(true);
         mWebSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        mWebSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
         mWebSettings.setBuiltInZoomControls(true);
         mWebSettings.setDisplayZoomControls(false);
         mWebSettings.setLoadWithOverviewMode(true);
@@ -557,15 +555,9 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
         } else {
             mWebSettings.setGeolocationEnabled(false);
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mWebSettings.setSafeBrowsingEnabled(true);
-        }
         mWebSettings.setAllowFileAccessFromFileURLs(true);
         mWebSettings.setAllowUniversalAccessFromFileURLs(true);
         mWebSettings.setDomStorageEnabled(true);
-        mWebSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
-        //noinspection deprecation
-        mWebSettings.setPluginState(WebSettings.PluginState.ON);
         mWebSettings.setAppCachePath(getApplicationContext().getCacheDir().getAbsolutePath());
         //mWebSettings.setSupportMultipleWindows(true);
 
@@ -829,6 +821,11 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
             @Override
             public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
+                if(url != null  && url.contains("/amp/")) {
+                    swipeRefreshLayout.setEnabled(false);
+                }else{
+                    swipeRefreshLayout.setEnabled(false);
+                }
                 super.doUpdateVisitedHistory(view, url, isReload);
             }
 
@@ -1161,7 +1158,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (mCardView.getVisibility() == View.VISIBLE) {
             hideMenu();
@@ -1784,33 +1781,45 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
     }
 
 
-    private  void createShortcut(){
-        Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
-        intent1.setAction(Intent.ACTION_VIEW);
-        intent1.setData(Uri.parse(mSearchView.getText().toString()));
-        intent1.putExtra("duplicate", false);
-        ShortcutInfoCompat pinShortcutInfo = new ShortcutInfoCompat.Builder(MainActivity.this, webViewTitle)
-                .setShortLabel(webViewTitle)
-                .setIcon(IconCompat.createWithBitmap(favoriteIcon))
-                .setIntent(intent1)
-                .build();
-        ShortcutManagerCompat.requestPinShortcut(MainActivity.this, pinShortcutInfo, null);
-    }
-    @Override
-    public void onCreateHomeScreenShortcut(AppCompatDialogFragment dialogFragment) {
-        EditText shortcutNameEditText = dialogFragment.getDialog().findViewById(R.id.shortcut_name_edittext);
-        Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
-        intent1.setAction(Intent.ACTION_VIEW);
-        intent1.setData(Uri.parse(mSearchView.getText().toString()));
-        intent1.putExtra("duplicate", false);
-        ShortcutInfoCompat pinShortcutInfo = new ShortcutInfoCompat.Builder(MainActivity.this, webViewTitle)
-                .setShortLabel(shortcutNameEditText.getText().toString())
-                .setIcon(IconCompat.createWithBitmap(StaticUtils.getCircleBitmap(favoriteIcon)))
-                .setIntent(intent1)
-                .build();
-        ShortcutManagerCompat.requestPinShortcut(MainActivity.this, pinShortcutInfo, null);
+    private void createFileName() {
+        LayoutInflater inflater = getLayoutInflater();
+        Bitmap resizedBitmap = Bitmap.createBitmap(favoriteIcon);
+        @SuppressLint("InflateParams") View alertLayout = inflater.inflate(R.layout.activity_shortcut, null);
+        shortcutNameEditText = alertLayout.findViewById(R.id.shortcut_name_edittext);
+        AlertDialog alertDialog = createExitDialog();
+        alertDialog.setTitle(R.string.add_home);
+        alertDialog.setView(alertLayout);
+        alertDialog.show();
+        shortcutNameEditText.setHint(webViewTitle);
+        ImageView imageShortcut = alertDialog.findViewById(R.id.fav_imageView);
+        if (imageShortcut != null) {
+            imageShortcut.setImageBitmap(StaticUtils.getCircleBitmap(resizedBitmap));
+        }else{
+            Log.i("Null", "");
+        }
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.md_blue_600));
+        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.LTGRAY);
     }
 
+    private AlertDialog createExitDialog() {
+        return new AlertDialog.Builder(MainActivity.this)
+                .setPositiveButton(getString(R.string.ok), (dialog, which) -> {
+                    Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+                    intent1.setAction(Intent.ACTION_MAIN);
+                    intent1.setData(Uri.parse(mSearchView.getText().toString()));
+                    ShortcutInfoCompat pinShortcutInfo = new ShortcutInfoCompat.Builder(MainActivity.this, shortcutNameEditText.getText().toString())
+                            .setShortLabel(shortcutNameEditText.getText().toString())
+                            .setIcon(IconCompat.createWithBitmap(StaticUtils.createScaledBitmap(StaticUtils.getCroppedBitmap(favoriteIcon), 300, 300)))
+                            .setIntent(intent1)
+                            .build();
+                    ShortcutManagerCompat.requestPinShortcut(MainActivity.this, pinShortcutInfo, null);
+                })
+                .setNegativeButton(getString(R.string.cancel), (dialog, which) -> {
+                    // nothing to do here
+                })
+                .setCancelable(true)
+                .create();
+    }
 
     private void promptSpeechInput() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -2037,11 +2046,7 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
             super.onGeolocationPermissionsShowPrompt(origin, callback);
         }
 
-        @Override
-        public void onReceivedTouchIconUrl(WebView view, String url, boolean precomposed) {
-            super.onReceivedTouchIconUrl(view, url, precomposed);
 
-        }
 
         @Override
         public void onReceivedIcon(WebView view, Bitmap icon) {
@@ -2053,6 +2058,13 @@ public class MainActivity extends AppCompatActivity implements CreateShortcut.Cr
 
             }
             super.onReceivedIcon(view, icon);
+        }
+
+        @Override
+        public void onReceivedTouchIconUrl(WebView view, String url, boolean precomposed) {
+            super.onReceivedTouchIconUrl(view, url, precomposed);
+            touchIcon = url;
+            Log.e("Touch icon", url);
         }
 
         @Override
