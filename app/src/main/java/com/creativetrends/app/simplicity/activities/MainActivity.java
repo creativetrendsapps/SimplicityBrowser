@@ -680,16 +680,15 @@ public class MainActivity extends AppCompatActivity implements  SwipeRefreshLayo
                         .createDialog();
                 dialog.show();
                 return true;
-            } else if (mWebView.getHitTestResult().getType() == WebView.HitTestResult.PHONE_TYPE) {
+           } else if (mWebView.getHitTestResult().getType() == WebView.HitTestResult.PHONE_TYPE) {
                 Intent intent14 = new Intent(Intent.ACTION_DIAL);
                 intent14.setData(Uri.parse(mWebView.getHitTestResult().getExtra()));
                 startActivity(intent14);
                 return true;
-            } else if (mWebView.getHitTestResult().getType() == WebView.HitTestResult.UNKNOWN_TYPE) {
-                Log.i("MainActivity", "Show webview long press");
+            } else {
+                Log.d("MainActivity", "Show webview context");
                 return false;
             }
-            return true;
         });
 
         final Intent intent = getIntent();
