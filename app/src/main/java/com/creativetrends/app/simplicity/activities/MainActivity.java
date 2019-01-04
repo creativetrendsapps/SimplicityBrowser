@@ -735,35 +735,36 @@ public class MainActivity extends AppCompatActivity implements  SwipeRefreshLayo
                 return shouldOverrideUrlLoading(view, request.getUrl().toString());
             }
 
-            @SuppressWarnings("deprecation")
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                try {
-                    if ((url.contains("market://"))
-                            || url.contains("mailto:")
-                            || url.contains("play.google")
-                            || url.contains("tel:")
-                            || url.contains("intent:")
-                            || url.contains("geo:")
-                            || url.contains("streetview:")
-                            || url.contains("ebay:")) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                        try {
-                            view.getContext().startActivity(intent);
-                        } catch (ActivityNotFoundException e) {
+                if (url.contains("market://")
+                        || url.contains("mailto:")
+                        || url.contains("play.google")
+                        || url.contains("tel:")
+                        || url.contains("intent:")
+                        || url.contains("geo:")
+                        || url.contains("streetview:")){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    try {
+                        view.getContext().startActivity(intent);
+                    } catch (ActivityNotFoundException e) {
 
-                            e.printStackTrace();
-                        }
+                        e.printStackTrace();
+                    }
+                    return true;
+                } else if (url.startsWith("http://") || url.startsWith("https://")){
+                    return false;
+                } else {
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        view.getContext().startActivity(intent);
+                        return true;
+                    } catch (Exception e) {
+                        Log.i("", "shouldOverrideUrlLoading Exception:" + e);
                         return true;
                     }
-                    return false;
-                } catch (NullPointerException npe) {
-                    npe.printStackTrace();
-                    return true;
                 }
-
             }
-
             @SuppressWarnings("deprecation")
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, String url){
