@@ -5,7 +5,7 @@ This is the source for Simplicity.
  
 ## Screenshots:
 
-<img src="https://lh3.googleusercontent.com/HoVDJV8wMQePn0rX12RyETY7xDeU4qqL9ppkTJQ7C6Ixr7nyHK4yxFr_7VLgATqnbQ=w1264-h738" width="22%" height=""> <img src="https://lh3.googleusercontent.com/qCAyLaMRxnfi4_7XxNUpgcqj_2OuSC4VMDfKO4iViL03DKLQjwGVkQCduQHuo2dDevg=w1264-h738" width="22%" height=""> <img src="https://raw.githubusercontent.com/creativetrendsapps/SimplicityBrowser/master/Screenshots/screener_1547813815541.png" width="22%" height="">
+<img src="https://raw.githubusercontent.com/creativetrendsapps/SimplicityBrowser/master/Screenshots/screener_1547813670154.png" width="22%" height=""> <img src="https://raw.githubusercontent.com/creativetrendsapps/SimplicityBrowser/master/Screenshots/screener_1547813783447.png" width="22%" height=""> <img src="https://raw.githubusercontent.com/creativetrendsapps/SimplicityBrowser/master/Screenshots/screener_1547813815541.png" width="22%" height="">
 <img src="https://raw.githubusercontent.com/creativetrendsapps/SimplicityBrowser/master/Screenshots/screener_1547813843820.png" width="22%" height="">
 
 
