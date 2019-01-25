@@ -7,13 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +20,14 @@ import android.widget.Toast;
 import com.creativetrends.app.simplicity.utils.PrefManager;
 import com.creativetrends.app.simplicity.utils.StaticUtils;
 import com.creativetrends.simplicity.app.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -85,11 +86,11 @@ public class WelcomeActivity extends AppCompatActivity {
 
         button.setOnClickListener(v -> {
 
-            int current = getItem(+1);
+            int current = getItem();
             if (current < layouts.length) {
                 viewPager.setCurrentItem(current);
             } else {
-                if(StaticUtils.isMarshmallow()){
+                if(StaticUtils.isMarshmallow() && !hasStoragePermission()){
                     requestStoragePermission();
                 }else {
                     launchHomeScreen();
@@ -126,8 +127,8 @@ public class WelcomeActivity extends AppCompatActivity {
             dots[currentPage].setTextColor(colorsActive[currentPage]);
     }
 
-    private int getItem(int i) {
-        return viewPager.getCurrentItem() + i;
+    private int getItem() {
+        return viewPager.getCurrentItem() + 1;
     }
 
     private void launchHomeScreen() {
