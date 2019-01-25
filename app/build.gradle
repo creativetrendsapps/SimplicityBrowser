@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 28
@@ -10,8 +12,8 @@ android {
         applicationId "com.creativetrends.simplicity.app"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 457
-        versionName "4.5.7"
+        versionCode 500
+        versionName "5.0.0"
         multiDexEnabled true
     }
 
@@ -34,15 +36,19 @@ dependencies {
     implementation project(":bottomsheet")
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //google
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha01'
     implementation 'com.google.android.material:material:1.1.0-alpha02'
     implementation 'androidx.palette:palette:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
+    
     //other libraries
     implementation 'com.anthonycr.progress:animated-progress:1.0'
-    implementation 'com.github.codekidX:storage-chooser:2.0.3'
-    implementation "ch.acra:acra-mail:5.2.1"
-    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'com.github.codekidX:storage-chooser:2.0.3'    
+    implementation 'com.github.marcoscgdev:MaterialToast:1.0.1'
+    implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
 
 }
