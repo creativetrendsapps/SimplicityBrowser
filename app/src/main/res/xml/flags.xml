@@ -15,13 +15,13 @@
     <PreferenceCategory
         android:title="General">
 
-        <SwitchPreference
+        <CheckBoxPreference
             android:title="Gesture Swipes"
             android:summary="Swipe to go back and forth while browsing"
             android:key="gestures_ok"
             android:defaultValue="false"/>
 
-        <SwitchPreference
+        <CheckBoxPreference
             android:key="full_screen"
             android:title="@string/full_screen_title"
             android:summary="@string/full_screen_sum"
