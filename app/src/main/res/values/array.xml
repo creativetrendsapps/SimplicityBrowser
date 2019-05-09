@@ -27,10 +27,5 @@
         <item>175</item>
     </string-array>
 
-    <string-array name="default_address_bar_entries">
-        <item>top</item>
-        <item>bottom</item>
-    </string-array>
-
 
 </resources>
