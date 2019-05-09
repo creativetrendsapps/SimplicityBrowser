@@ -11,10 +11,26 @@
         <item name="colorAccent">@color/md_blue_600</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
-        <item name="searchViewStyle">@style/MySearchViewStyle</item>
+        <item name="searchViewStyle">@style/SearchViewMy</item>
         <item name="android:popupMenuStyle">@style/PopupMenu</item>
-        <item name="android:listPopupWindowStyle">@style/Popup</item>
         <item name="dialogCornerRadius">8dp</item>
+        <item name="iconPrefColor">@color/dark</item>
+    </style>
+
+    <style name="BookMarksThemeDark" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/darcula</item>
+        <item name="colorPrimaryDark">@color/dark</item>
+        <item name="colorAccent">@color/md_grey_500</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+        <item name="android:colorEdgeEffect">@color/md_grey_900</item>
+        <item name="searchViewStyle">@style/SearchViewMy</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="iconPrefColor">@color/white</item>
+        <item name="android:windowBackground">@color/dark</item>
     </style>
 
 
@@ -24,24 +40,55 @@
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/md_grey_400</item>
         <item name="colorAccent">@color/md_blue_600</item>
+        <item name="colorButtonNormal">@color/md_grey_400</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
         <item name="android:colorEdgeEffect">@color/md_white_1000_25</item>
         <item name="dialogCornerRadius">8dp</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
+        <item name="iconPrefColor">@color/dark</item>
+    </style>
+
+
+    <style name="MainThemeDark" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/darcula</item>
+        <item name="colorPrimaryDark">@color/dark</item>
+        <item name="colorAccent">@color/md_grey_500</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+        <item name="android:colorEdgeEffect">@color/md_grey_900</item>
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="android:windowBackground">@color/dark</item>
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
+        <item name="iconPrefColor">@color/white</item>
     </style>
 
     <style name="SettingsTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="colorPrimary">@color/white</item>
-        <item name="colorPrimaryDark">@color/other</item>
+        <item name="colorPrimaryDark">@color/md_grey_400</item>
         <item name="colorAccent">@color/md_blue_600</item>
-        <item name="android:colorPrimary">@color/md_blue_600</item>
-        <item name="android:windowBackground">@color/white</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
         <item name="android:colorEdgeEffect">@color/md_white_1000_25</item>
         <item name="dialogCornerRadius">8dp</item>
+        <item name="iconPrefColor">@color/dark</item>
+    </style>
+
+    <style name="SettingsThemeDark" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/darcula</item>
+        <item name="colorPrimaryDark">@color/dark</item>
+        <item name="colorAccent">@color/md_grey_500</item>
+        <item name="android:windowBackground">@color/dark</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+        <item name="android:colorEdgeEffect">@color/md_grey_900</item>
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="iconPrefColor">@color/white</item>
     </style>
 
 
@@ -57,7 +104,9 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
         <item name="dialogCornerRadius">8dp</item>
+        <item name="iconPrefColor">@color/white</item>
     </style>
+
 
     <style name="ReaderTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
@@ -67,21 +116,85 @@
         <item name="colorAccent">@color/md_blue_600</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
-        <item name="searchViewStyle">@style/MySearchViewStyle</item>
+        <item name="searchViewStyle">@style/SearchViewMy</item>
         <item name="android:popupMenuStyle">@style/PopupMenu</item>
-        <item name="android:listPopupWindowStyle">@style/Popup</item>
         <item name="dialogCornerRadius">8dp</item>
+        <item name="iconPrefColor">@color/dark</item>
     </style>
 
-    <style name="DialogAnimation">
-        <item name="android:windowEnterAnimation">@null</item>
-        <item name="android:windowExitAnimation">@null</item>
+    <style name="ReaderThemeDark" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/darcula</item>
+        <item name="colorPrimaryDark">@color/dark</item>
+        <item name="colorAccent">@color/md_grey_500</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+        <item name="searchViewStyle">@style/SearchViewMy</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="iconPrefColor">@color/white</item>
     </style>
 
-    <style name="MySearchViewStyle" parent="Widget.AppCompat.SearchView">
+
+    <style name="SimplicityAccountTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/md_blue_600</item>
+        <item name="colorPrimaryDark">@color/md_grey_400</item>
+        <item name="colorAccent">@color/md_blue_600</item>
+        <item name="colorButtonNormal">@color/md_blue_600</item>
+        <item name="colorControlActivated">@color/md_blue_600</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="android:colorEdgeEffect">@color/md_white_1000_25</item>
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name="iconPrefColor">@color/md_blue_600</item>
+    </style>
+
+    <style name="SimplicityAccountThemeDark" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/darcula</item>
+        <item name="colorPrimaryDark">@color/dark</item>
+        <item name="colorAccent">@color/md_grey_500</item>
+        <item name="colorButtonNormal">@color/md_grey_900</item>
+        <item name="colorControlActivated">@color/md_grey_900</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:colorEdgeEffect">@color/md_grey_900</item>
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name="iconPrefColor">@color/white</item>
+        <item name="android:windowBackground">@color/dark</item>
+    </style>
+
+    <style name="AppThemePhoto" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/md_grey_500</item>
+        <item name="colorButtonNormal">@color/dcP</item>
+        <item name="android:windowBackground">@color/black</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:colorEdgeEffect">@color/md_white_1000_25</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="dialogCornerRadius">10dp</item>
+        <item name="iconPrefColor">@color/white</item>
+    </style>
+
+    <style name="SearchViewMy" parent="Widget.AppCompat.Light.SearchView">
         <item name="queryBackground">@android:color/transparent</item>
-        <item name="searchIcon">@null</item>
+        <item name="searchHintIcon">@null</item>
+        <item name="android:layout_marginStart">0dp</item>
     </style>
+
 
     <style name="AppTheme.ToolbarTheme" parent="Widget.AppCompat.Toolbar">
         <item name="contentInsetStart">0dp</item>
@@ -89,10 +202,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents" />
 
-    <style name="Popup" parent="android:Widget.Material.Light.ListPopupWindow">
-        <item name="android:popupElevation">2dp</item>
-        <item name="android:popupBackground">@color/white</item>
-    </style>
+
 
     <style name="PopupMenu" parent="Widget.MaterialComponents.PopupMenu">
         <item name="android:popupElevation">2dp</item>
@@ -115,4 +225,5 @@
         <item name="tickMark">@null</item>
         <item name="android:minHeight">8dip</item>
     </style>
+
 </resources>
