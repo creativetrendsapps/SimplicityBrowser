@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="iconPreferenceColor" format="reference|color" />
-    <attr name="progressBackgroundColor" format="color" />
-    <attr name="mp_colorAccent" format="reference|color" />
-
     <declare-styleable name="TextViewCorner">
         <attr name="bgColor" format="color"/>
         <attr name="topLeftCorner" format="dimension"/>
@@ -13,8 +9,5 @@
         <attr name="allCorner" format="dimension"/>
     </declare-styleable>
 
-    <declare-styleable name="AmazingTextView">
-        <attr name="radius" format="dimension" />
-        <attr name="backgroundColor" format="color" />
-    </declare-styleable>
+    <attr name="iconPrefColor" format="reference|color" />
 </resources>
