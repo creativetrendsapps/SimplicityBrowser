@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shortcuts xmlns:tools="http://schemas.android.com/tools"
+<shortcuts 
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
@@ -16,10 +17,9 @@
             android:action="android.intent.action.VIEW"
             android:data="new_incognito_tab"
             android:targetPackage="com.creativetrends.simplicity.app"
-            android:targetClass="com.creativetrends.app.simplicity.activities.MainActivity" />
+            android:targetClass="com.creativetrends.app.simplicity.activities.PrivateActivity" />
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
 
 
-    <!-- Specify more shortcuts here. -->
 </shortcuts>
