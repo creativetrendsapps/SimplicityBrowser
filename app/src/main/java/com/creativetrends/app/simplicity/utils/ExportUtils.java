@@ -15,7 +15,6 @@ import java.util.HashMap;
  */
 
 public class ExportUtils {
-    //Pins Settings
     private static String BOOKMARK_KEY = "simplicity_bookmarks";
     private static String HISTORY_KEY = "simplicity_history";
 

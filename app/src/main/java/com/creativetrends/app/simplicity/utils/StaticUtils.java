@@ -1,6 +1,13 @@
 package com.creativetrends.app.simplicity.utils;
 
+import android.app.Activity;
+import android.app.DownloadManager;
+import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -9,74 +16,64 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.net.ConnectivityManager;
 import android.os.Build;
-import androidx.annotation.Nullable;
-import androidx.core.graphics.ColorUtils;
-import androidx.palette.graphics.Palette;
+import android.os.Environment;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.WorkerThread;
+import androidx.palette.graphics.Palette;
+
+import com.creativetrends.app.simplicity.SimplicityApplication;
+import com.creativetrends.app.simplicity.ui.Cardbar;
+import com.creativetrends.simplicity.app.R;
+import com.google.common.net.InternetDomainName;
+
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.DecimalFormat;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * Created by Creative Trends Apps.
  */
 
 public class StaticUtils {
-    private static final int TITLE_COLOR_FALLBACK = Color.parseColor("#212121");
-    private static final int TITLE_COLOR_DARK = Color.parseColor("#212121");
-    private static final int TITLE_COLOR_LIGHT = Color.parseColor("#ffffff");
+    private static final String ALLOWED_CHARACTERS = UUID.randomUUID().toString().replace("-", "_").replace("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "").replace("abcdefghijklmnopqrztuvwxyz", "") + "JANAETYKESHIAJORELLSHARELL"+ SimplicityApplication.getContextOfApplication().getResources().getString(R.string.app_name);
 
 
     public static int darkColor(int color) {
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
-        hsv[2] *= 0.9f;
+        hsv[2] *= 1.0f;
         return Color.HSVToColor(hsv);
     }
 
-    private static boolean isColorDark(int color){
-        double darkness = 1-(0.299*Color.red(color) + 0.587*Color.green(color) + 0.114*Color.blue(color))/255;
-        if(darkness < 0.2) {
-            return false; // It's a light color
-        } else {
-            return true; // It's a dark color
-        }
+    public static int colorNav(int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] *= 1.0f;
+        return Color.HSVToColor(hsv);
     }
 
-    public static int getTitleColor(Palette.Swatch swatch) {
-        if (swatch == null) {
-            return TITLE_COLOR_FALLBACK;
-        }
-        if (isColorDark(swatch.getRgb())) {
-            return TITLE_COLOR_LIGHT;
-        } else {
-            return TITLE_COLOR_DARK;
-        }
+    public static int lightColor(int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[1] *= 0.6f;
+        return Color.HSVToColor(hsv);
     }
 
-    public static Palette.Swatch getColorSwatch(@Nullable Palette palette) {
-        if (palette != null) {
-            if (palette.getMutedSwatch() != null) {
-                return palette.getMutedSwatch();
-            } else if (palette.getLightMutedSwatch() != null) {
-                return palette.getLightMutedSwatch();
-            } else if (palette.getDarkMutedSwatch() != null) {
-                return palette.getDarkMutedSwatch();
-            }
-        }
-        return null;
-    }
 
-    public static boolean isColorLight(int color) {
-        int red = Color.red(color);
-        int green = Color.green(color);
-        int blue = Color.blue(color);
-
-        float hsl[] = new float[3];
-        ColorUtils.RGBToHSL(red, green, blue, hsl);
-        return hsl[2] > 0.5f;
+    public static boolean isColorDark(int color) {
+        double darkness = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255;
+        return darkness >= 0.5;
     }
 
     public static int getColor(Bitmap bitmap, boolean incognito) {
@@ -86,31 +83,30 @@ public class StaticUtils {
     }
 
 
-    public static int getPositionInTime(long timeMilliSec) {
-        long diff = System.currentTimeMillis() - timeMilliSec;
-
-        long hour = 1000 * 60 * 60;
-        long day = hour * 24;
-        long week = day * 7;
-        long month = day * 30;
-
-        return hour > diff ? 0 : day > diff ? 1 : week > diff ? 2 : month > diff ? 3 : 4;
+    public static int adjustAlpha(int color, @SuppressWarnings("SameParameterValue") float factor) {
+        int alpha = Math.round(Color.alpha(color) * factor);
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+        return Color.argb(alpha, red, green, blue);
+    }
+    public static int parseColor (String color, @SuppressWarnings("SameParameterValue") float factor){
+        int alpha = Math.round(Color.alpha(Color.parseColor(color)) * factor);
+        int red = Color.red(Color.parseColor(color));
+        int green = Color.green(Color.parseColor(color));
+        int blue = Color.blue(Color.parseColor(color));
+        return Color.argb(alpha, red, green, blue);
     }
 
-    public static float dpToPx(Resources res, float dp) {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, res.getDisplayMetrics());
+
+    public static int getColor(Context context){
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(R.attr.iconPrefColor, typedValue, true);
+        @ColorInt int color = typedValue.data;
+        return color;
     }
 
-
-    public static void showKeyboard(View view) {
-        InputMethodManager imm = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            imm = view.getContext().getSystemService(InputMethodManager.class);
-        }
-        if (imm != null) {
-            imm.toggleSoftInputFromWindow(view.getWindowToken(), 0, 0);
-        }
-    }
 
 
     public static void hideKeyboard(View view) {
@@ -127,13 +123,12 @@ public class StaticUtils {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
 
-    public static boolean isMarshmallow() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+    public static boolean isOreo() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1;
     }
 
-
-    public static boolean isOreo() {
-        return Build.VERSION.SDK_INT == Build.VERSION_CODES.O;
+    public static boolean isMarshmallow() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
 
 
@@ -210,6 +205,7 @@ public class StaticUtils {
         Canvas canvas = new Canvas(out);
         Paint paint = new Paint();
         Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getWidth());
+        @SuppressWarnings("IntegerDivisionInFloatingPointContext")
         float radius = bitmap.getWidth() / 2;
         paint.setAntiAlias(true);
         paint.setColor(Color.WHITE);
@@ -220,5 +216,185 @@ public class StaticUtils {
         return Bitmap.createScaledBitmap(out, 192, 192, true);
     }
 
+
+    @WorkerThread
+    public static Bitmap createScaledBitmap(Bitmap bitmap, int maxWidth, int maxHeight) {
+        if (bitmap.getWidth() <= maxWidth && bitmap.getHeight() <= maxHeight) {
+            return bitmap;
+        }
+
+        if (maxWidth <= 0 || maxHeight <= 0) {
+            return bitmap;
+        }
+
+        int newWidth  = maxWidth;
+        int newHeight = maxHeight;
+
+        float widthRatio  = bitmap.getWidth()  / (float) maxWidth;
+        float heightRatio = bitmap.getHeight() / (float) maxHeight;
+
+        if (widthRatio > heightRatio) {
+            newHeight = (int) (bitmap.getHeight() / widthRatio);
+        } else {
+            newWidth = (int) (bitmap.getWidth() / heightRatio);
+        }
+
+        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
+    }
+
+    public static Bitmap getCroppedBitmap(Bitmap circle) {
+        final Bitmap bitmap = Bitmap.createBitmap(circle.getWidth(), circle.getHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bitmap);
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, circle.getWidth(), circle.getHeight());
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        canvas.drawCircle(circle.getWidth() >> 1, circle.getHeight() >> 1, circle.getWidth() >> 1, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(circle, rect, rect, paint);
+        return bitmap;
+    }
+
+
+    @SuppressWarnings (value="unused")
+    public static boolean appInstalledOrNot(Context content, String uri) {
+        PackageManager pm = content.getPackageManager();
+        try {
+            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+
+
+    public static void setLightStatusBar(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int flags = activity.getWindow().getDecorView().getSystemUiVisibility(); // get current flag
+            flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;   // add LIGHT_STATUS_BAR to flag
+            activity.getWindow().getDecorView().setSystemUiVisibility(flags);
+        }
+    }
+
+    public static void clearLightStatusBar(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int flags = activity.getWindow().getDecorView().getSystemUiVisibility(); // get current flag
+            flags &= ~ View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR; // use XOR here for remove LIGHT_STATUS_BAR from flags_settings
+            activity.getWindow().getDecorView().setSystemUiVisibility(flags);
+        }
+    }
+
+    public static void setLightNavigationBar(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int flags = activity.getWindow().getDecorView().getSystemUiVisibility(); // get current flag
+            flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;   // add LIGHT_STATUS_BAR to flag
+            activity.getWindow().getDecorView().setSystemUiVisibility(flags);
+        }
+    }
+
+    public static void clearNavigationBar(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int flags = activity.getWindow().getDecorView().getSystemUiVisibility(); // get current flag
+            flags &= ~ View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR; // use XOR here for remove LIGHT_STATUS_BAR from flags_settings
+            activity.getWindow().getDecorView().setSystemUiVisibility(flags);
+        }
+    }
+
+    public static void copyTextToClipboard(Context context, View view, String label, String text) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(label, text);
+        clipboard.setPrimaryClip(clip);
+        Cardbar.snackBar(context, "Copied to clipboard", true).show();
+
+    }
+
+    public static String getRandomString(final int sizeOfRandomString) {
+        final Random random = new Random();
+        final StringBuilder sb = new StringBuilder(sizeOfRandomString);
+        for(int i=0;i <sizeOfRandomString;++i)
+            sb.append(ALLOWED_CHARACTERS.charAt(random.nextInt(ALLOWED_CHARACTERS.length())));
+        return sb.toString();
+    }
+
+    public static String getDomainName(@NonNull String url) throws URISyntaxException {
+        URI uri = new URI(url);
+        String domain = uri.getHost();
+        domain = domain.startsWith("www.") ? domain.substring(4) : domain;
+        try {
+            //Try to get the domain without subdomain. Ex: mobile.twitter.com would returns twitter.com
+            //Note: InternetDomainName is from Guava library
+            return InternetDomainName.from(domain).topPrivateDomain().toString();
+        } catch (IllegalStateException e) {
+            Log.e("getDomainName()", "Illegal url");
+        }
+        return domain;
+    }
+
+
+    public static String fixURL(String q){
+        while (q.endsWith(" "))
+            q= q.substring(0, q.length()-1);
+        if (q.contains(".") && !q.contains(" ")){
+            if (q.startsWith("http://")||q.startsWith("https://"))
+                return q;
+            else if (q.startsWith("www."))
+                return "http://"+q;
+            else if (q.startsWith("file:"))
+                return q;
+            else
+                return "http://"+q;
+        }
+        else if (q.startsWith("about:")||q.startsWith("file:"))
+            return q;
+        else
+            return UserPreferences.getString("search_engine", "")+q.replace(" ", "%20").replace("+", "%2B").replace("&","%26");
+    }
+
+
+    public static String getFileSize(long size){
+        if (size <= 0)
+            return "0";
+        final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
+        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+    }
+
+
+    public static void openDownloads(@NonNull Activity activity) {
+        try {
+            if (isSamsung()) {
+                Intent intent = activity.getPackageManager().getLaunchIntentForPackage("com.sec.android.app.myfiles");
+                assert intent != null;
+                intent.setAction("samsung.myfiles.intent.action.LAUNCH_MY_FILES");
+                intent.putExtra("samsung.myfiles.intent.extra.START_PATH", getDownloadsFile().getPath());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity.startActivity(intent);
+            } else {
+                Intent downloadManagerIntent = new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS);
+                downloadManagerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity.startActivity(downloadManagerIntent);
+            }
+        }catch (ActivityNotFoundException | NullPointerException z){
+            z.printStackTrace();
+        }
+    }
+
+    private static boolean isSamsung() {
+        String manufacturer = Build.MANUFACTURER;
+        if (manufacturer != null) return manufacturer.toLowerCase().equals("samsung");
+        return false;
+    }
+
+    private static File getDownloadsFile() {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+    }
+
+    public static boolean isNetworkConnected(Context context){
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return connectivityManager.getActiveNetworkInfo() != null;
+    }
 
 }

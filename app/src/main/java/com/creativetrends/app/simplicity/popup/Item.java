@@ -20,10 +20,11 @@ public class Item {
         this.title = title;
     }
 
-    public int getImageRes() {
+    int getImageRes() {
         return imageRes;
     }
 
+    @SuppressWarnings (value="unused")
     public void setImageRes(int imageRes) {
         this.imageRes = imageRes;
     }

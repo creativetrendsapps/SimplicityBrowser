@@ -2,38 +2,65 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.creativetrends.simplicity.app"
-    android:installLocation="auto">
+    package="com.creativetrends.simplicity.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         android:name="com.creativetrends.app.simplicity.SimplicityApplication"
-        android:allowBackup="true"
-        android:fullBackupContent="true"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/MainTheme"
-        android:launchMode="singleTask">
+        android:usesCleartextTraffic="true"
+        tools:replace="android:theme, android:allowBackup"
+        tools:targetApi="n">
+
+        <!-- Widgets -->
+        <receiver
+            android:name="com.creativetrends.app.simplicity.widgets.SearchBarDarkProvider"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_dark" />
+        </receiver>
+
+
+        <receiver
+            android:name="com.creativetrends.app.simplicity.widgets.SearchBarLightProvider"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_light" />
+        </receiver>
 
         <activity
             android:name="com.creativetrends.app.simplicity.activities.WelcomeActivity"
             android:label="@string/app_name"
-            android:theme="@style/WelcomeTheme"
-            android:parentActivityName="com.creativetrends.app.simplicity.activities.MainActivity"
-            tools:ignore="UnusedAttribute">
+            android:hardwareAccelerated="true"
+            android:theme="@style/SimplicityAccountTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
@@ -41,9 +68,10 @@
 
         <activity
             android:name="com.creativetrends.app.simplicity.activities.MainActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:configChanges="locale|screenSize|smallestScreenSize|screenLayout|orientation"
+            android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize"
-            android:resizeableActivity="true"
+            android:launchMode="singleTask"
             android:theme="@style/MainTheme"
             tools:ignore="UnusedAttribute">
             <intent-filter>
@@ -52,22 +80,28 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="http" />
                 <data android:scheme="https" />
+                <data android:scheme="widget_simplicity"/>
             </intent-filter>
 
 
 
         </activity>
 
+
+        <activity
+            android:name="com.creativetrends.app.simplicity.activities.PrivateActivity"
+            android:configChanges="locale|screenSize|smallestScreenSize|screenLayout|orientation"
+            android:windowSoftInputMode="adjustResize"
+            android:hardwareAccelerated="true"
+            android:label="@string/private_mode"
+            android:icon="@mipmap/ic_shortcut_incognito"
+            android:roundIcon="@mipmap/ic_shortcut_incognito_round"
+            android:theme="@style/MainThemeDark"/>
+
         <activity
             android:name="com.creativetrends.app.simplicity.activities.BookmarksActivity"
             android:label="@string/bookmarks"
-            android:theme="@style/BookMarksTheme">
-
-
-        <intent-filter>
-            <action android:name="android.intent.action.SEARCH" />
-        </intent-filter>
-        </activity>
+            android:theme="@style/BookMarksTheme"/>
 
         <activity
             android:name="com.creativetrends.app.simplicity.activities.HistoryActivity"
@@ -78,6 +112,31 @@
             android:name="com.creativetrends.app.simplicity.activities.SettingsActivity"
             android:label="@string/settings"
             android:theme="@style/SettingsTheme"/>
+
+        <activity
+            android:name="com.creativetrends.app.simplicity.activities.FilePickerActivity"
+            android:label="@string/downloads"
+            android:theme="@style/SettingsTheme"/>
+
+        <activity
+            android:name="com.creativetrends.app.simplicity.activities.WelcomeActivitySign"
+            android:label="@string/simplicity_account"
+            android:theme="@style/SimplicityAccountTheme"/>
+
+        <activity
+            android:name="com.creativetrends.app.simplicity.activities.SimplicityAccount"
+            android:label="@string/simplicity_account"
+            android:theme="@style/SimplicityAccountTheme"/>
+
+        <activity
+            android:name="com.creativetrends.app.simplicity.activities.NewSimplicityAccount"
+            android:label="@string/simplicity_account"
+            android:theme="@style/SimplicityAccountTheme"/>
+
+        <activity
+            android:name="com.creativetrends.app.simplicity.activities.SimplicityProfile"
+            android:label="@string/simplicity_account"
+            android:theme="@style/SimplicityAccountTheme"/>
 
         <activity
             android:name="com.creativetrends.app.simplicity.activities.ExperimentalActivity"
@@ -96,6 +155,13 @@
             android:name="com.creativetrends.app.simplicity.activities.DonateActivity"
             android:label="@string/support_dev"
             android:theme="@style/SettingsTheme"/>
+        <activity
+            android:name="com.creativetrends.app.simplicity.activities.PhotoActivity"
+            android:configChanges="locale|screenSize|smallestScreenSize|screenLayout|orientation"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:label="@string/photos"
+            android:theme="@style/AppThemePhoto" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

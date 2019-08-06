@@ -1,0 +1,36 @@
+{
+    "logs": [
+        {
+            "outputFile": "/home/jorell/Documents/SimplicityBrowser-master/app/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-sw720dp-land-v13/values-sw720dp-land-v13.xml",
+            "map": [
+                {
+                    "source": "/home/jorell/Documents/SimplicityBrowser-master/bottomsheet/build/intermediates/packaged_res/release/values-sw720dp-land-v13/values-sw720dp-land-v13.xml",
+                    "from": {
+                        "startLines": "2,3,4",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,101,151",
+                        "endColumns": "45,49,56",
+                        "endOffsets": "96,146,203"
+                    },
+                    "to": {
+                        "startLines": "3,4,5",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "93,139,189",
+                        "endColumns": "45,49,56",
+                        "endOffsets": "134,184,241"
+                    }
+                },
+                {
+                    "source": "/home/jorell/Documents/SimplicityBrowser-master/app/src/main/res/values-sw720dp-land/dimens.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "37",
+                        "endOffsets": "88"
+                    }
+                }
+            ]
+        }
+    ]
+}

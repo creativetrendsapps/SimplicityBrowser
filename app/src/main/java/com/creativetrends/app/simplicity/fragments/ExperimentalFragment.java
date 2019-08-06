@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.view.View;
-import android.widget.ListView;
 
 import com.creativetrends.app.simplicity.SimplicityApplication;
 import com.creativetrends.simplicity.app.R;
@@ -14,6 +12,7 @@ import com.creativetrends.simplicity.app.R;
 /**
  * Created by Creative Trends Apps (Jorell Rutledge) 5/23/2018.
  */
+@SuppressWarnings("deprecation")
 public class ExperimentalFragment extends PreferenceFragment {
     public boolean mListStyled;
     Context context;
@@ -25,11 +24,10 @@ public class ExperimentalFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         context = SimplicityApplication.getContextOfApplication();
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        addPreferencesFromResource(R.xml.flags);
+        addPreferencesFromResource(R.xml.flags_settings);
         myPrefListner = (prefs, key) -> {
             switch (key) {
                 default:
-                    break;
             }
 
         };
@@ -39,13 +37,6 @@ public class ExperimentalFragment extends PreferenceFragment {
     @Override
     public void onStart() {
         super.onStart();
-        View rootView = getView();
-        if (rootView != null) {
-            ListView list = rootView.findViewById(android.R.id.list);
-            list.setPadding(0, 0, 0, 0);
-            list.setDivider(null);
-            mListStyled = true;
-        }
 
     }
 

@@ -3,61 +3,57 @@ package com.creativetrends.app.simplicity.activities;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+
+import androidx.appcompat.widget.Toolbar;
 
 import com.creativetrends.app.simplicity.fragments.ExperimentalFragment;
-import com.creativetrends.app.simplicity.utils.StaticUtils;
+import com.creativetrends.app.simplicity.utils.UserPreferences;
 import com.creativetrends.simplicity.app.R;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 
 /**
  * Created by Creative Trends Apps (Jorell Rutledge) 5/23/2018.
  */
-public class ExperimentalActivity extends AppCompatActivity {
+@SuppressWarnings(value="deprecation")
+public class ExperimentalActivity extends BaseActivity {
     SharedPreferences preferences;
     Toolbar toolbar;
     //AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(UserPreferences.getBoolean("dark_mode", false)){
+            setTheme(R.style.SettingsThemeDark);
+        }
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_settings);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            Drawable drawable = toolbar.getNavigationIcon();
-            if (drawable != null) {
-                drawable.setColorFilter(ContextCompat.getColor(this, R.color.grey_color), PorterDuff.Mode.SRC_ATOP);
-            }
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), null, StaticUtils.fetchColorPrimary(this)));
+        try {
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round);
+            ActivityManager.TaskDescription description;
+            description = new ActivityManager.TaskDescription("Simplicity", bm, 0);
+            setTaskDescription(description);
+        }catch (Exception i){
+            i.printStackTrace();
         }
         getFragmentManager().beginTransaction().replace(R.id.settings_frame, new ExperimentalFragment()).commit();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
-        }
     }
 
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         preferences.edit().putString("needs_change", "false").apply();
     }
@@ -116,9 +112,9 @@ public class ExperimentalActivity extends AppCompatActivity {
 
 
     private void changes() {
-        if (preferences.getString("needs_change", "").equals("false")) {
+        if (UserPreferences.getString("needs_change", "").equals("false")) {
             finish();
-        } else if (preferences.getString("needs_change", "").equals("true")) {
+        } else if (UserPreferences.getString("needs_change", "").equals("true")) {
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

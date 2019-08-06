@@ -4,12 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.MotionEventCompat;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.recyclerview.widget.RecyclerView;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,10 +17,16 @@ import android.widget.ListPopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.view.MotionEventCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.creativetrends.app.simplicity.popup.Item;
 import com.creativetrends.app.simplicity.popup.ListPopupWindowAdapter;
 import com.creativetrends.app.simplicity.utils.OnStartDragListener;
 import com.creativetrends.app.simplicity.utils.TouchHelperAdapter;
+import com.creativetrends.app.simplicity.utils.UserPreferences;
 import com.creativetrends.simplicity.app.R;
 
 import java.util.ArrayList;
@@ -41,8 +42,8 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
     private static AdapterBookmarks adapter;
     private Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<Bookmark> listBookmarks;
-    private ArrayList <Bookmark> filteredBookmarks;
+    private ArrayList<BookmarkItems> listBookmarks;
+    private ArrayList <BookmarkItems> filteredBookmarks;
     private onBookmarkSelected onBookmarkSelected;
 
     private final OnStartDragListener mDragStartListener;
@@ -51,7 +52,7 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
 
     class ViewHolderBookmark extends RecyclerView.ViewHolder implements View.OnClickListener {
         EditText et;
-        private Bookmark bookmark;
+        private BookmarkItems bookmark;
         private RelativeLayout bookmarkHolder;
         private ImageView delete;
         private TextView title, url, letter;
@@ -69,12 +70,15 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
 
         }
 
-        void bind(Bookmark bookmark) {
+        void bind(BookmarkItems bookmark) {
             this.bookmark = bookmark;
             title.setText(bookmark.getTitle());
             url.setText(bookmark.getUrl());
             letter.setText(bookmark.getLetter());
-            letter.setBackgroundColor(bookmark.getImage());
+            if(UserPreferences.getBoolean("dark_mode", false)) {
+                letter.setAlpha(0.8f);
+            }
+            letter.setBackgroundTintList(ColorStateList.valueOf(bookmark.getImage()));
             bookmarkHolder.setOnClickListener(this);
             delete.setOnClickListener(this);
             et = new EditText(context);
@@ -88,6 +92,7 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
                 listBookmarks.remove(bookmark);
                 filteredBookmarks.remove(bookmark);
                 adapter.notifyDataSetChanged();
+
             });
             removeFavorite.setNegativeButton(R.string.cancel, null);
             removeFavorite.show();
@@ -110,7 +115,7 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
                     String getText = et.getText().toString();
                     String getLetter = getText.substring(0,1);
                     bookmark.setLetter(getLetter);
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyItemRemoved(getAdapterPosition());
                 });
                 createFile.setNegativeButton(R.string.cancel, null);
                 createFile.show();
@@ -120,7 +125,7 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
 
         }
         // Display anchored popup menu based on view selected
-        private void showFilterPopup(View v) {
+        private void showFilterPopup() {
             try {
                 final ListPopupWindow popupWindow = new ListPopupWindow(context);
                 List<Item> itemList = new ArrayList<>();
@@ -147,7 +152,7 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
                                 Intent share = new Intent(Intent.ACTION_SEND);
                                 share.setType("text/plain");
                                 share.putExtra(Intent.EXTRA_TEXT, bookmark.getUrl());
-                                context.startActivity(Intent.createChooser(share, context.getResources().getString(R.string.share_bookmark)));
+                                context.startActivity(Intent.createChooser(share, bookmark.getTitle()));
                             }catch (ActivityNotFoundException ignored){
                             }catch (Exception p){
                                 p.printStackTrace();
@@ -174,7 +179,7 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
                     onBookmarkSelected.loadBookmark(bookmark.getTitle(), bookmark.getUrl());
                     break;
                 case R.id.bookmark_delete:
-                    showFilterPopup(v);
+                    showFilterPopup();
                     break;
                 default:
                     break;
@@ -188,7 +193,7 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
         void loadBookmark(String str, String str2);
     }
 
-    public AdapterBookmarks(Context context, ArrayList<Bookmark> listBookmarks, onBookmarkSelected onBookmarkSelected, OnStartDragListener dragStartListener) {
+    public AdapterBookmarks(Context context, ArrayList<BookmarkItems> listBookmarks, onBookmarkSelected onBookmarkSelected, OnStartDragListener dragStartListener) {
         this.context = context;
         this.listBookmarks = listBookmarks;
         this.onBookmarkSelected = onBookmarkSelected;
@@ -199,14 +204,14 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
     }
 
 
-    public ArrayList<Bookmark> getListBookmarks() {
+    public ArrayList<BookmarkItems> getListBookmarks() {
         return listBookmarks;
 
     }
 
     @NonNull
     public ViewHolderBookmark onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolderBookmark(layoutInflater.inflate(R.layout.bookmark_items, parent, false));
+        return new ViewHolderBookmark(layoutInflater.inflate(R.layout.layout_bookmark_items, parent, false));
     }
 
 
@@ -223,10 +228,9 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
     }
 
     @Override
-    public boolean onItemMove(int fromPosition, int toPosition) {
+    public void onItemMove(int fromPosition, int toPosition) {
         Collections.swap(listBookmarks, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
-        return true;
     }
 
 
@@ -239,7 +243,7 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
         notifyDataSetChanged();
     }
 
-    private void addItem(int position, Bookmark bookmark) {
+    private void addItem(int position, BookmarkItems bookmark) {
         filteredBookmarks.add(position, bookmark);
         notifyItemInserted(position);
     }
@@ -249,9 +253,8 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
         notifyItemMoved(fromPosition, toPosition);
     }
 
-
-    private Bookmark removeItem(int position) {
-        Bookmark bookmark = filteredBookmarks.remove(position);
+    private BookmarkItems removeItem(int position) {
+        BookmarkItems bookmark = filteredBookmarks.remove(position);
         notifyItemRemoved(position);
         return bookmark;
     }
@@ -260,13 +263,13 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
         return filteredBookmarks.size();
     }
 
-    public void animateTo(List<Bookmark> bookmarks) {
+    public void animateTo(List<BookmarkItems> bookmarks) {
         applyAndAnimateRemovals(bookmarks);
         applyAndAnimateAdditions(bookmarks);
         applyAndAnimateMovedItems(bookmarks);
     }
 
-    private void applyAndAnimateRemovals(List<Bookmark> newBookmarks) {
+    private void applyAndAnimateRemovals(List<BookmarkItems> newBookmarks) {
         for (int i = filteredBookmarks.size() - 1; i >= 0; i--) {
             if (!newBookmarks.contains(filteredBookmarks.get(i))) {
                 removeItem(i);
@@ -274,17 +277,17 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
         }
     }
 
-    private void applyAndAnimateAdditions(List<Bookmark> newBookmarks) {
+    private void applyAndAnimateAdditions(List<BookmarkItems> newBookmarks) {
         int count = newBookmarks.size();
         for (int i = 0; i < count; i++) {
-            Bookmark bookmark = newBookmarks.get(i);
+            BookmarkItems bookmark = newBookmarks.get(i);
             if (!filteredBookmarks.contains(bookmark)) {
                 addItem(i, bookmark);
             }
         }
     }
 
-    private void applyAndAnimateMovedItems(List<Bookmark> newBookmarks) {
+    private void applyAndAnimateMovedItems(List<BookmarkItems> newBookmarks) {
         int toPosition = newBookmarks.size() - 1;
         while (toPosition >= 0) {
             int fromPosition = filteredBookmarks.indexOf(newBookmarks.get(toPosition));

@@ -3,6 +3,9 @@ package com.creativetrends.app.simplicity.suggestions;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.creativetrends.app.simplicity.utils.FileUtils;
 
 import org.json.JSONArray;
@@ -18,9 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 /**
  * Created by Creative Trends Apps.
@@ -49,23 +49,11 @@ abstract class SuggestionProvider {
         return language;
     }
 
-    /**
-     * Create a URL for the given query in the given language.
-     *
-     * @param query    the query that was made.
-     * @param language the locale of the user.
-     * @return should return a URL that can be fetched using a GET.
-     */
+
     @NonNull
     protected abstract String createQueryUrl(@NonNull String query, @NonNull String language);
 
-    /**
-     * Parse the results of an input stream into a list of {@link String}.
-     *
-     * @param content     the raw input to parse.
-     * @param callback    the callback to invoke for each received suggestion
-     * @throws Exception throw an exception if anything goes wrong.
-     */
+
     private void parseResults(@NonNull String content,
                               @NonNull ResultCallback callback) throws Exception {
         JSONArray respArray = new JSONArray(content);
@@ -78,15 +66,10 @@ abstract class SuggestionProvider {
         }
     }
 
-    /**
-     * Retrieves the results for a query.
-     *
-     * @param rawQuery the raw query to retrieve the results for.
-     * @return a list of history items for the query.
-     */
+
     @NonNull
     final List<String> fetchResults(@NonNull final String rawQuery) {
-        List<String> filter = new ArrayList<>(5);
+        List<String> filter = new ArrayList<>(10);
 
         String query;
         try {
@@ -105,7 +88,7 @@ abstract class SuggestionProvider {
         try {
             parseResults(content, suggestion -> {
                 filter.add(suggestion);
-                return filter.size() < 5;
+                return filter.size() < 10;
             });
         } catch (Exception e) {
             Log.e(TAG, "Unable to parse results", e);
@@ -114,36 +97,22 @@ abstract class SuggestionProvider {
         return filter;
     }
 
-    /**
-     * This method downloads the search suggestions for the specific query.
-     * NOTE: This is a blocking operation, do not fetchResults on the UI thread.
-     *
-     * @param query the query to get suggestions for
-     * @return the cache file containing the suggestions
-     */
+
     @Nullable
     private String downloadSuggestionsForQuery(@NonNull String query,
                                                @NonNull String language) {
         try {
             URL url = new URL(createQueryUrl(query, language));
-            InputStream in = null;
 
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.addRequestProperty("Cache-Control",
                     "max-age=" + INTERVAL_DAY + ", max-stale=" + INTERVAL_DAY);
             urlConnection.addRequestProperty("Accept-Charset", mEncoding);
-            try {
-                in = new BufferedInputStream(urlConnection.getInputStream());
+            try (InputStream in = new BufferedInputStream(urlConnection.getInputStream())) {
                 return FileUtils.readStringFromStream(in, getEncoding(urlConnection));
             } finally {
                 urlConnection.disconnect();
-                if (in != null) {
-                    try {
-                        in.close();
-                    } catch (IOException e) {
-                        // ignored
-                    }
-                }
+                // ignored
             }
         } catch (IOException ignored) {
 

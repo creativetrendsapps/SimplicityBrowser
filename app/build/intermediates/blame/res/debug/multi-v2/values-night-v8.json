@@ -1,0 +1,53 @@
+{
+    "logs": [
+        {
+            "outputFile": "/home/jorell/Documents/SimplicityBrowser-master/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-night-v8/values-night-v8.xml",
+            "map": [
+                {
+                    "source": "/home/jorell/.gradle/caches/transforms-2/files-2.1/b25f67e62ca80224f31ec4b7d5e3f4b4/res/values-night-v8/values-night-v8.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "55,143,245,347,461,581,701",
+                        "endColumns": "87,101,101,113,119,119,111",
+                        "endOffsets": "138,240,342,456,576,696,808"
+                    },
+                    "to": {
+                        "startLines": "17,18,19,20,21,22,23",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "1081,1169,1271,1373,1487,1607,1727",
+                        "endColumns": "87,101,101,113,119,119,111",
+                        "endOffsets": "1164,1266,1368,1482,1602,1722,1834"
+                    }
+                },
+                {
+                    "source": "/home/jorell/.gradle/caches/transforms-2/files-2.1/9dd72d2b3f481f5301c635797cc4dc5a/res/values-night-v8/values-night-v8.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "55,125,209,293,389,491,593",
+                        "endColumns": "69,83,83,95,101,101,93",
+                        "endOffsets": "120,204,288,384,486,588,682"
+                    },
+                    "to": {
+                        "startLines": "10,11,12,13,14,15,16",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "449,519,603,687,783,885,987",
+                        "endColumns": "69,83,83,95,101,101,93",
+                        "endOffsets": "514,598,682,778,880,982,1076"
+                    }
+                },
+                {
+                    "source": "/home/jorell/.gradle/caches/transforms-2/files-2.1/63657095cd5da42f2db63af619c9dbb0/res/values-night-v8/values-night-v8.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,102,148,195,246,297,351,402",
+                        "endColumns": "46,45,46,50,50,53,50,46",
+                        "endOffsets": "97,143,190,241,292,346,397,444"
+                    }
+                }
+            ]
+        }
+    ]
+}

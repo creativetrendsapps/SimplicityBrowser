@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <TextView
+        android:textSize="20sp"
+        android:id="@+id/down_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/download_file"
+        android:layout_marginStart="6dp"
+        android:layout_marginBottom="16dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:ignore="HardcodedText"/>
+
+    <TextView
+        android:textSize="14sp"
+        android:id="@+id/down_text_warn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/download_warning"
+        android:layout_below="@+id/down_text"
+        android:layout_marginStart="6dp"
+        android:layout_marginBottom="26dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:ignore="HardcodedText"
+        android:visibility="gone"/>
+
+
+    <LinearLayout
+        android:layout_below="@+id/down_text_warn"
+        android:id="@+id/widget32"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="UselessParent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="6dp"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_file"
+            tools:ignore="ContentDescription"/>
+    <EditText
+        android:id="@+id/file_name_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="16dp"
+        android:inputType="textCapSentences"
+        android:selectAllOnFocus="true"
+        android:focusable="true"
+        tools:ignore="Autofill,LabelFor,TextFields" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/widget32"
+        android:id="@+id/widget34"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="UselessParent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="6dp"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_folder"
+            tools:ignore="ContentDescription"/>
+        <EditText
+            android:id="@+id/file_path_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="16dp"
+            android:editable="false"
+            android:maxLines="1"
+            android:inputType="text"
+            android:focusable="false"
+            android:clickable="false"
+            tools:ignore="Autofill,Deprecated,LabelFor,TextFields"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_below="@+id/widget34"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:ignore="UselessParent">
+
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/check_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Don't show again"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+</RelativeLayout>

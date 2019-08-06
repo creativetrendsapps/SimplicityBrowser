@@ -1,0 +1,35 @@
+#Internal package file, do not edit.
+#Mon Aug 05 21:14:57 EDT 2019
+7.path=ad_block.txt
+2.base=/home/jorell/Documents/SimplicityBrowser-master/app/build/intermediates/transforms/dexMerger/debug/0
+5.set=DEX
+0.path=classes.dex
+2.baseType=DIRECTORY
+3.base=/home/jorell/Documents/SimplicityBrowser-master/app/build/intermediates/merged_assets/debug/out
+7.baseType=DIRECTORY
+2.set=DEX
+1.path=darkmode.css
+4.base=/home/jorell/Documents/SimplicityBrowser-master/app/build/intermediates/merged_assets/debug/out
+7.set=ASSET
+count=8
+5.baseType=DIRECTORY
+2.path=classes.dex
+5.base=/home/jorell/Documents/SimplicityBrowser-master/app/build/intermediates/transforms/dexMerger/debug/3
+4.set=ASSET
+3.path=error.html
+6.base=/home/jorell/Documents/SimplicityBrowser-master/app/build/intermediates/transforms/dexMerger/debug/1
+3.baseType=DIRECTORY
+1.set=ASSET
+4.path=instagram.css
+7.base=/home/jorell/Documents/SimplicityBrowser-master/app/build/intermediates/merged_assets/debug/out
+6.set=DEX
+1.baseType=DIRECTORY
+6.baseType=DIRECTORY
+5.path=classes.dex
+0.base=/home/jorell/Documents/SimplicityBrowser-master/app/build/intermediates/transforms/dexMerger/debug/2
+0.baseType=DIRECTORY
+3.set=ASSET
+6.path=classes.dex
+1.base=/home/jorell/Documents/SimplicityBrowser-master/app/build/intermediates/merged_assets/debug/out
+4.baseType=DIRECTORY
+0.set=DEX

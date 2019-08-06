@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.creativetrends.app.simplicity.ui.CustomShadow;
-import com.creativetrends.app.simplicity.utils.History;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.creativetrends.app.simplicity.ui.Cardbar;
 import com.creativetrends.simplicity.app.R;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Creative Trends Apps.
@@ -33,32 +32,37 @@ public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViewHold
     private static AdapterHistory adapter;
     private Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<History> listBookmarks;
-    private ArrayList <History> filteredBookmarks;
+    private ArrayList<HistoryItems> listBookmarks;
+    private ArrayList <HistoryItems> filteredBookmarks;
     private AdapterHistory.onBookmarkSelected onBookmarkSelected;
 
     class ViewHolderBookmark extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
-        private History bookmark;
+        private HistoryItems bookmark;
         private RelativeLayout bookmarkHolder;
         private ImageView delete;
-        private TextView title, url;
+        private TextView title, url, date;
         private LinearLayout card;
 
         ViewHolderBookmark(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.history_title);
             url = itemView.findViewById(R.id.history_url);
+            date = itemView.findViewById(R.id.history_date_time);
             delete = itemView.findViewById(R.id.history_delete);
             bookmarkHolder = itemView.findViewById(R.id.history_holder);
             card = itemView.findViewById(R.id.bookmark_card);
-            card.setOutlineProvider(new CustomShadow(2));
             card.setClipToOutline(true);
         }
 
-        void bind(History bookmark) {
+        void bind(HistoryItems bookmark) {
             this.bookmark = bookmark;
             title.setText(bookmark.getTitle());
             url.setText(bookmark.getUrl());
+            if(!TextUtils.isEmpty(bookmark.getDate())){
+                date.setText(bookmark.getDate());
+            }else{
+                date.setVisibility(View.GONE);
+            }
             bookmarkHolder.setOnClickListener(this);
             bookmarkHolder.setOnLongClickListener(this);
             delete.setOnClickListener(this);
@@ -86,7 +90,8 @@ public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViewHold
                 ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("History Item", bookmark.getUrl());
                 clipboard.setPrimaryClip(clip);
-                Snackbar.make(delete, "URL copied to clipboard", Snackbar.LENGTH_SHORT).show();
+                Cardbar.snackBar(context, "URL copied to clipboard", true).show();
+
                 new Handler().postDelayed(() -> {
                     try {
                         bookmarkHolder.setOnClickListener(this);
@@ -103,7 +108,7 @@ public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViewHold
         void loadBookmark(String str, String str2);
     }
 
-    public AdapterHistory(Context context, ArrayList<History> listBookmarks, AdapterHistory.onBookmarkSelected onBookmarkSelected) {
+    public AdapterHistory(Context context, ArrayList<HistoryItems> listBookmarks, AdapterHistory.onBookmarkSelected onBookmarkSelected) {
         this.context = context;
         this.listBookmarks = listBookmarks;
         this.onBookmarkSelected = onBookmarkSelected;
@@ -120,14 +125,14 @@ public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViewHold
         notifyDataSetChanged();
     }
 
-    public ArrayList<History> getListBookmarks() {
+    public ArrayList<HistoryItems> getListBookmarks() {
         return listBookmarks;
 
     }
 
     @NonNull
     public AdapterHistory.ViewHolderBookmark onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new AdapterHistory.ViewHolderBookmark(layoutInflater.inflate(R.layout.history_items, parent, false));
+        return new AdapterHistory.ViewHolderBookmark(layoutInflater.inflate(R.layout.layout_history_items, parent, false));
     }
 
     public void onBindViewHolder(@NonNull AdapterHistory.ViewHolderBookmark holder, int position) {
@@ -135,7 +140,7 @@ public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViewHold
     }
 
 
-    private void addItem(int position, History bookmark) {
+    private void addItem(int position, HistoryItems bookmark) {
         filteredBookmarks.add(position, bookmark);
         notifyItemInserted(position);
     }
@@ -147,8 +152,8 @@ public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViewHold
     }
 
 
-    private History removeItem(int position) {
-        History bookmark = filteredBookmarks.remove(position);
+    private HistoryItems removeItem(int position) {
+        HistoryItems bookmark = filteredBookmarks.remove(position);
         notifyItemRemoved(position);
         return bookmark;
     }
@@ -157,13 +162,13 @@ public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViewHold
         return filteredBookmarks.size();
     }
 
-    public void animateTo(List<History> bookmarks) {
+    public void animateTo(List<HistoryItems> bookmarks) {
         applyAndAnimateRemovals(bookmarks);
         applyAndAnimateAdditions(bookmarks);
         applyAndAnimateMovedItems(bookmarks);
     }
 
-    private void applyAndAnimateRemovals(List<History> newBookmarks) {
+    private void applyAndAnimateRemovals(List<HistoryItems> newBookmarks) {
         for (int i = filteredBookmarks.size() - 1; i >= 0; i--) {
             if (!newBookmarks.contains(filteredBookmarks.get(i))) {
                 removeItem(i);
@@ -171,17 +176,17 @@ public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViewHold
         }
     }
 
-    private void applyAndAnimateAdditions(List<History> newBookmarks) {
+    private void applyAndAnimateAdditions(List<HistoryItems> newBookmarks) {
         int count = newBookmarks.size();
         for (int i = 0; i < count; i++) {
-            History bookmark = newBookmarks.get(i);
+            HistoryItems bookmark = newBookmarks.get(i);
             if (!filteredBookmarks.contains(bookmark)) {
                 addItem(i, bookmark);
             }
         }
     }
 
-    private void applyAndAnimateMovedItems(List<History> newBookmarks) {
+    private void applyAndAnimateMovedItems(List<HistoryItems> newBookmarks) {
         int toPosition = newBookmarks.size() - 1;
         while (toPosition >= 0) {
             int fromPosition = filteredBookmarks.indexOf(newBookmarks.get(toPosition));

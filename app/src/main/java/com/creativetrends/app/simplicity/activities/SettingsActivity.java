@@ -1,80 +1,79 @@
 package com.creativetrends.app.simplicity.activities;
 
 import android.app.ActivityManager;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 
 import com.creativetrends.app.simplicity.fragments.SettingsFragment;
-import com.creativetrends.app.simplicity.utils.StaticUtils;
+import com.creativetrends.app.simplicity.utils.UserPreferences;
 import com.creativetrends.simplicity.app.R;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
+import com.google.android.material.appbar.AppBarLayout;
 
 /**
  * Created by Creative Trends Apps.
  */
-
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends BaseActivity {
     SharedPreferences preferences;
     Toolbar toolbar;
-    //AdView adView;
+    AppBarLayout appBarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(UserPreferences.getBoolean("dark_mode", false)){
+            setTheme(R.style.SettingsThemeDark);
+        }
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_settings);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        appBarLayout = findViewById(R.id.appbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            Drawable drawable = toolbar.getNavigationIcon();
-            if (drawable != null) {
-                drawable.setColorFilter(ContextCompat.getColor(this, R.color.grey_color), PorterDuff.Mode.SRC_ATOP);
-            }
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), null, StaticUtils.fetchColorPrimary(this)));
         }
         getFragmentManager().beginTransaction().replace(R.id.settings_frame, new SettingsFragment()).commit();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+    }
 
+    @Override
+    public void onPostCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        super.onPostCreate(savedInstanceState, persistentState);
+        try {
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round);
+            ActivityManager.TaskDescription description;
+            description = new ActivityManager.TaskDescription("Simplicity", bm, 0);
+            setTaskDescription(description);
+        }catch (Exception i){
+            i.printStackTrace();
         }
     }
 
-
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
-        preferences.edit().putString("needs_change", "false").apply();
+        preferences.edit().putString("should_sync", "false").apply();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //BannerAd.resumeAd(adView);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //BannerAd.pauseAd(adView);
-
     }
 
     @Override
@@ -97,6 +96,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -118,13 +119,10 @@ public class SettingsActivity extends AppCompatActivity {
 
 
     private void changes() {
-        if (preferences.getString("needs_change", "").equals("false")) {
+        if (UserPreferences.getString("should_sync", "").equals("false")) {
             finish();
-        } else if (preferences.getString("needs_change", "").equals("true")) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-
+        } else if (UserPreferences.getString("should_sync", "").equals("true")) {
+            shouldSync = true;
         }
     }
 

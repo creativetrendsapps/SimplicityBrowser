@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+    <PreferenceCategory
+        android:title="@string/about_app">
+
+        <Preference
+            android:icon="@drawable/ic_public"
+            android:summary="@string/mus"
+            android:title="@string/app_name"
+            android:selectable="false"/>
+
+
+        <Preference
+            android:key="version_simple"
+            android:icon="@drawable/ic_info_version"
+            android:title="@string/version_spectrum" />
+
+
+
+    </PreferenceCategory>
+
+
+
+    <PreferenceCategory
+        android:title="@string/help_feedback">
+
+        <Preference
+            android:key="face"
+            android:icon="@drawable/ic_facebook_about"
+            android:title="Facebook Help Page"
+            android:summary="Reach out for help via our Facebook page.">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://facebook.com/creativetrendsapps" />
+        </Preference>
+
+        <Preference
+            android:key="bugs"
+            android:icon="@drawable/ic_bug_report"
+            android:title="Report A Bug"
+            android:summary="Tap to send major bug reports or issues. Please do not choose this option if you are sending feedback or a feature request.">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://facebook.com/creativetrendsapps" />
+        </Preference>
+
+
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:title="@string/support_dev">
+
+
+
+        <Preference
+            android:key="trans"
+            android:icon="@drawable/ic_translate"
+            android:title="@string/help_trans"
+            android:summary="Tap here to help translate Simplicity in your language.">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://creativetrendsapps.oneskyapp.com/collaboration/project/96132" />
+        </Preference>
+
+        <Preference
+            android:key="rate"
+            android:icon="@drawable/ic_thumbs_up"
+            android:summary="@string/rate_summary"
+            android:title="@string/ratesimple" >
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://play.google.com/store/apps/details?id=com.creativetrends.simplicity.app" />
+        </Preference>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

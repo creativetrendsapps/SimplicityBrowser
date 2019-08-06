@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:id="@+id/tab_header"
+    android:background="?colorPrimaryDark">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="UselessParent">
+    <ImageView
+        android:orientation="vertical"
+        android:id="@+id/pin_header_left"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="10dp"
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription" />
+    <TextView
+        android:id="@+id/tabs_header"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+        android:textSize="26sp"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="@string/tabs"
+        android:textAllCaps="true"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_centerInParent="true"
+        android:layout_alignTop="@+id/pin_header_left"
+        android:layout_alignBottom="@+id/pin_header_left"
+        android:layout_alignStart="@+id/pin_header_left"
+        android:layout_alignEnd="@+id/pin_header_left" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+</RelativeLayout>
+</LinearLayout>

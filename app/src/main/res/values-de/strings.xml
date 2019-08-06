@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<resources>
+    <string name="settings">Einstellungen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="ok">OK</string>
+    <string name="privacy_settings">Privatsphäreeinstellungen</string>
+    <string name="general_settings">Allgemeine Einstellungen</string>
+    <string name="bookmarks">Lesezeichen</string>
+    <string name="search_engine_choice">Suchmaschinenauswahl</string>
+    <string-array name="search_engine" translatable="false">
+        <item>AOL</item>
+        <item>Ask</item>
+        <item>Bing</item>
+        <item>DuckDuckGo</item>
+        <item>Ecosia</item>
+        <item>Google</item>
+        <item>InfoSpace</item>
+        <item>MyWebSearch</item>
+        <item>Qwant</item>
+        <item>Searx</item>
+        <item>StartPage</item>
+        <item>WebCrawler</item>
+        <item>Wow</item>
+        <item>Yandex</item>
+        <item>Yahoo</item>
+    </string-array>
+
+    <string-array name="search_engine_values" translatable="false">
+        <item>https://search.aol.com/aol/search?s_chn=prt_ticker-test-g&amp;q=</item>
+        <item>http://www.ask.com/web?q=</item>
+        <item>https://www.bing.com/search?q=</item>
+        <item>https://duckduckgo.com/?q=</item>
+        <item>https://www.ecosia.org/search?q=</item>
+        <item>https://www.google.com/search?q=</item>
+        <item>http://search.infospace.com/search/web?q=</item>
+        <item>http://int.search.mywebsearch.com/mywebsearch/GGmain.jhtml?searchfor=</item>
+        <item>https://www.qwant.com/?q=</item>
+        <item>https://searx.me/?q=</item>
+        <item>https://www.startpage.com/do/search?q=</item>
+        <item>https://www.webcrawler.com/serp?q=</item>
+        <item>http://www.wow.com/search?s_it=search-thp&amp;v_t=na&amp;q=</item>
+        <item>https://www.yandex.com/search/?text=</item>
+        <item>https://search.yahoo.com/mobile/s?p=</item>
+
+    </string-array>
+    <string name="private_mode">Privater Modus</string>
+    <string name="history">Verlauf</string>
+    <string name="share">Teilen...</string>
+    <string name="find_in">Suche auf dieser Seite</string>
+    <string name="add_to_home">Zum Startbildschirm hinzufügen</string>
+    <string name="request_desk">Desktopversion</string>
+    <string name="clear_history">Verlauf löschen</string>
+    <string name="help_trans">Hilf bei der Übersetzung von Simplicity</string>
+    <string name="about_app">Über</string>
+    <string name="new_tab">Neuer Tab</string>
+    <string name="action_search">Suche</string>
+    <string name="ratesimple">Bewerte Simplicity</string>
+    <string name="rate_summary">Hilf anderen Simplicity zu genießen, indem du die App bei Google Play bewertest.</string>
+    <string name="mus">Web-Browser</string>
+    <string name="version_spectrum">Version</string>
+    <string name="support_dev">Entwicklung unterstützen</string>
+    <string name="simplicity_close">Drücke erneut um Simplicity zu schließen.</string>
+    <string name="error">Fehler mit diesem Link</string>
+    <string name="search_bookmarks">Durchsuche Lesezeichen</string>
+    <string name="search_history">Durchsuche Verlauf</string>
+    <string name="delete_bookmark">Lesezeichen löschen</string>
+    <string name="rename_bookmark">Lesezeichen umbenennen</string>
+    <string name="share_bookmark">Lesezeichen teilen</string>
+    <string name="rename_titile">Lesezeichen umbenennen</string>
+    <string name="rename_message">Willst du dieses Lesezeichen umbenennen?</string>
+    <string name="remove_bookmark">Lesezeichen entfernen?</string>
+    <string name="are_you_sure">Möchtest du</string>
+    <string name="from_bookmark">von deinen Lesezeichen entfernen?</string>
+    <string name="settings_more">Mehr</string>
+    <string name="terms">Nutzungsbedingungen</string>
+    <string name="privacy_policy">Datenschutzerklärung</string>
+    <string name="clear_all">Lösche alles</string>
+    <string name="clear_bookmarks">Lösche Lesezeichen</string>
+    <string name="are_you_sure_bookmarks">Möchtest du deine gesamten Lesezeichen entfernen? Diese Aktion kann nicht rückgängig gemacht werden.</string>
+    <string name="are_you_sure_history">Möchtest du deinen gesamten Verlauf löschen? Diese Aktion kann nicht rückgängig gemacht werden.</string>
+    <string name="added_to_bookmarks">zu deinen Lesezeichen hinzugefügt.</string>
+    <string name="add_home">Zum HomeScreen hinzufügen</string>
+    <string name="print_page">Drucken...</string>
+    <string name="reader_mode">ReaderModus</string>
+    <string name="incognito_mode">Privater Modus</string>
+    <string name="default_font_zoom">Standard Font Zoom</string>
+    <string name="ad_block">AdBlock</string>
+    <string name="ad_block_sum">Werbung auf Webseiten blockieren.</string>
+    <string name="do_not_track">Nicht verfolgen</string>
+    <string name="do_not_track_sum">Aktivieren um Seiten zu bitten deine Browsingdaten nicht zu verfolgen.</string>
+    <string name="clear_data">Daten automatisch löschen</string>
+    <string name="clear_data_sum">Simplicity\'s Cookies, Verlauf &amp; Daten beim Verlassen der App löschen.</string>
+    <string name="location">Standort aktivieren</string>
+    <string name="location_sum">Webseiten erlauben deinen Standort zu ermitteln.</string>
+    <string name="confirm">Schließen bestätigen</string>
+    <string name="confirm_sum">Drücke 2x zurück um Simplicity zu schließen.</string>
+    <string name="home_page">Startseite</string>
+    <string name="remember">Letzte Seite merken</string>
+    <string name="remember_sum">Aktivieren um beim Öffnen von Simplicity mit der zuletzt genutzten Webseite fortzufahren.</string>
+    <string name="bookmarks_hint">Lesezeichen lange drücken um sie zu sortieren</string>
+    <string name="voice_search_button">Sprachsuche</string>
+    <string name="voice_search_button_sum">Aktivieren um per Spracheingabe zu suchen.</string>
+    <string name="close_app">Verlassen</string>
+    <string name="already_to_bookmarks">wurde schon zu deinen Lesezeichen hinzugefügt.</string>
+    <string name="download_warning">Dieser Dateityp kann dein Gerät beschädigen. Möchtest du %s trotzdem behalten?</string>
+    <string name="downloading">Herunterladen</string>
+    <!-- Suggestions provider: no suggestions provider -->
+    <string name="backup_restore_title">Lokale Sicherung und Wiederherstellung</string>
+    <string name="backup_restore_sum">Lesezeichen und Verlauf lokal sichern oder wiederherstellen.</string>
+    <string name="backup_restore_message">Lesezeichen und Verlauf sichern oder wiederherstellen. Sicherung ersetzt alte Sicherungsdateien.</string>
+    <string name="backup">Sichern</string>
+    <string name="restore">Wiedeherstellen</string>
+    <string name="backup_restore">Sichern &amp; Wiederhestellen</string>
+</resources>

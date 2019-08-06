@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<resources>
+    <string name="settings">設定</string>
+    <string name="cancel">取消</string>
+    <string name="ok">確定</string>
+    <string name="privacy_settings">隱私設定</string>
+    <string name="general_settings">基本設定</string>
+    <string name="bookmarks">書籤</string>
+    <string name="search_engine_choice">選擇搜尋引擎</string>
+    <string-array name="search_engine" translatable="false">
+        <item>AOL</item>
+        <item>Ask</item>
+        <item>Bing</item>
+        <item>DuckDuckGo</item>
+        <item>Ecosia</item>
+        <item>Google</item>
+        <item>InfoSpace</item>
+        <item>MyWebSearch</item>
+        <item>Qwant</item>
+        <item>Searx</item>
+        <item>StartPage</item>
+        <item>WebCrawler</item>
+        <item>Wow</item>
+        <item>Yandex</item>
+        <item>Yahoo</item>
+    </string-array>
+
+    <string-array name="search_engine_values" translatable="false">
+        <item>https://search.aol.com/aol/search?s_chn=prt_ticker-test-g&amp;q=</item>
+        <item>http://www.ask.com/web?q=</item>
+        <item>https://www.bing.com/search?q=</item>
+        <item>https://duckduckgo.com/?q=</item>
+        <item>https://www.ecosia.org/search?q=</item>
+        <item>https://www.google.com/search?q=</item>
+        <item>http://search.infospace.com/search/web?q=</item>
+        <item>http://int.search.mywebsearch.com/mywebsearch/GGmain.jhtml?searchfor=</item>
+        <item>https://www.qwant.com/?q=</item>
+        <item>https://searx.me/?q=</item>
+        <item>https://www.startpage.com/do/search?q=</item>
+        <item>https://www.webcrawler.com/serp?q=</item>
+        <item>http://www.wow.com/search?s_it=search-thp&amp;v_t=na&amp;q=</item>
+        <item>https://www.yandex.com/search/?text=</item>
+        <item>https://search.yahoo.com/mobile/s?p=</item>
+
+    </string-array>
+    <string name="private_mode">無痕瀏覽模式</string>
+    <string name="history">歷史紀錄</string>
+    <string name="share">分享至 …</string>
+    <string name="find_in">在頁面中查找</string>
+    <string name="add_to_home">新增至主畫面</string>
+    <string name="request_desk">桌面版網站</string>
+    <string name="clear_history">清除歷史紀錄</string>
+    <string name="help_trans">協助進行翻譯</string>
+    <string name="about_app">關於</string>
+    <string name="new_tab">新增分頁</string>
+    <string name="action_search">搜尋</string>
+    <string name="ratesimple">對 Simplicity 進行評價</string>
+    <string name="rate_summary">透過好評以協助他人至 Google Play 下載使用本程式。</string>
+    <string name="mus">網頁瀏覽器</string>
+    <string name="version_spectrum">版本</string>
+    <string name="support_dev">贊助開發者</string>
+    <string name="simplicity_close">再次點擊返回鍵以退出本程式。</string>
+    <string name="error">有關這個連結的問題</string>
+    <string name="search_bookmarks">搜尋書籤</string>
+    <string name="search_history">搜尋紀錄</string>
+    <string name="delete_bookmark">刪除書籤</string>
+    <string name="rename_bookmark">重新命名書籤</string>
+    <string name="share_bookmark">分享書籤</string>
+    <string name="rename_titile">重新命名書籤</string>
+    <string name="rename_message">您是否要對此書籤重新命名？</string>
+    <string name="remove_bookmark">是否刪除此書籤？</string>
+    <string name="are_you_sure">您是否確認要刪除</string>
+    <string name="from_bookmark">從書籤中？</string>
+    <string name="settings_more">更多內容</string>
+    <string name="terms">使用條款</string>
+    <string name="privacy_policy">隱私政策</string>
+    <string name="clear_all">清除全部</string>
+    <string name="clear_bookmarks">清除書籤</string>
+    <string name="are_you_sure_bookmarks">您是否確定要將您所有的書籤刪除嗎？本次操作將無法被復原。</string>
+    <string name="are_you_sure_history">您是否確定要將您所有的紀錄刪除嗎？本次操作將無法被復原。</string>
+    <string name="added_to_bookmarks">已新增至您的書籤中。</string>
+    <string name="add_home">新增至主畫面</string>
+    <string name="print_page">列印 …</string>
+    <string name="reader_mode">閱讀模式</string>
+    <string name="incognito_mode">無痕瀏覽模式</string>
+    <string name="default_font_zoom">默認字體縮放大小</string>
+    <string name="ad_block">廣告阻擋</string>
+    <string name="ad_block_sum">阻擋網頁上的廣告。</string>
+    <string name="do_not_track">停止追蹤</string>
+    <string name="do_not_track_sum">當被啟用時，將會要求網站停止追蹤您的瀏覽資料。</string>
+    <string name="clear_data">自行清除資料</string>
+    <string name="clear_data_sum">當退出本程式時，所有的 Cookies、瀏覽紀錄，以及資料將同時被清除。</string>
+    <string name="location">定位功能</string>
+    <string name="location_sum">允許網站取得您的位置。</string>
+    <string name="confirm">關閉確認</string>
+    <string name="confirm_sum">確認您以雙擊返回來關閉程式。</string>
+    <string name="home_page">首頁</string>
+    <string name="remember">記住上次的頁面</string>
+    <string name="remember_sum">啟用時，您上次所訪問的網頁將在程式重新開啟時自動載入。</string>
+    <string name="bookmarks_hint">長按書籤以進行排序。</string>
+    <string name="voice_search_button">語音搜尋</string>
+    <string name="voice_search_button_sum">啟用以語音搜尋</string>
+    <string name="close_app">離開</string>
+    <string name="already_to_bookmarks">已經加入至您的書籤中了。</string>
+    <string name="download_warning">這類檔案有可能會損害您的設備，您確定要保留  %s 嗎？</string>
+    <string name="downloading">下載中</string>
+    <!-- Suggestions provider: no suggestions provider -->
+    <string name="backup_restore_title">本地備份與還原</string>
+    <string name="backup_restore_sum">在本地路徑中存放書籤與瀏覽紀錄以進行備份還原</string>
+    <string name="backup_restore_message">備份與還原您的書籤與瀏覽紀錄。請注意這將會替換您舊有的備份資料。</string>
+    <string name="backup">備份</string>
+    <string name="restore">還原</string>
+    <string name="backup_restore">備份與還原</string>
+</resources>

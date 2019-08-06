@@ -1,17 +1,8 @@
 -dontusemixedcaseclassnames
 -dontskipnonpubliclibraryclasses
--dontpreverify
--verbose
-
--keep public class * extends android.app.Activity
--keep public class * extends android.app.Application
--keep public class * extends android.app.Service
--keep public class * extends android.content.BroadcastReceiver
--keep public class * extends android.content.ContentProvider
--keep public class * extends android.app.backup.BackupAgentHelper
--keep public class * extends android.preference.Preference
--keep public class com.android.vending.licensing.ILicensingService
-
+-allowaccessmodification
+-optimizationpasses 5
+-repackageclasses ''
 
 -keepclasseswithmembernames class * {
     native <methods>;
@@ -29,15 +20,16 @@
    public void *(android.view.View);
 }
 
--keepclassmembers enum * {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
-}
+-keeppackagenames org.jsoup.nodes
 
--keep class * implements android.os.Parcelable {
-  public static final android.os.Parcelable$Creator *;
-}
+-keep class androidx.** { *; }
 
--dontwarn android.support.**
--keep class android.support.v7.app.** { *; }
--keep class android.support.v7.widget.** { *; }
+-keep class * extends android.support.v4.app.Fragment{}
+
+
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}

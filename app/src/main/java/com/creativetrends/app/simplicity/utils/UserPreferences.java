@@ -6,7 +6,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.creativetrends.app.simplicity.SimplicityApplication;
-import com.creativetrends.app.simplicity.adapters.Bookmark;
+import com.creativetrends.app.simplicity.adapters.BookmarkItems;
+import com.creativetrends.app.simplicity.adapters.HistoryItems;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,13 +25,15 @@ public final class UserPreferences {
     private static final String TOOLBAR_STYLE = "address_bar";
     private static final String SIMPLICITY_BOOKMARKS = "simplicity_bookmarks";
     private static final String SIMPLICITY_HISTORY = "simplicity_history";
-    private static final String KEY_COOKIE = "key_cookie";
+    private static final String CUSTOM_FONT_PREF = "custom_font";
     private static SharedPreferences mPreferences;
     @SuppressLint("StaticFieldLeak")
     private static UserPreferences sInstance;
     @SuppressLint("StaticFieldLeak")
     private static Context mContext;
 
+
+    public static ArrayList<String> list = new ArrayList<>();
     UserPreferences(final Context context) {
         mContext = context;
         mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -45,14 +48,51 @@ public final class UserPreferences {
     }
 
 
-    private static String getString(String key) {
+
+    public static boolean getBoolean(String key, boolean defValue) {
+        return PreferenceManager.getDefaultSharedPreferences(SimplicityApplication.getContextOfApplication()).getBoolean(key, defValue);
+    }
+
+    @SuppressLint("ApplySharedPref")
+    public static boolean putBoolean(String key, boolean value) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(SimplicityApplication.getContextOfApplication()).edit();
+        editor.putBoolean(key, value);
+        editor.commit();
+        return value;
+    }
+
+    public static String getString(String key) {
         return PreferenceManager.getDefaultSharedPreferences(SimplicityApplication.getContextOfApplication()).getString(key, "[]");
     }
 
-    private static void putString(String key, String value) {
+    @SuppressWarnings (value="unused")
+    public static int getInt(String key, int defValue) {
+        return PreferenceManager.getDefaultSharedPreferences(SimplicityApplication.getContextOfApplication()).getInt(key, defValue);
+    }
+
+
+    public static String getString(String key, String value) {
+        return PreferenceManager.getDefaultSharedPreferences(SimplicityApplication.getContextOfApplication()).getString(key, value);
+    }
+
+    public static void putString(String key, String value) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(SimplicityApplication.getContextOfApplication()).edit();
         editor.putString(key, value);
         editor.apply();
+    }
+
+    public static void clearPrefrence(String key) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(SimplicityApplication.getContextOfApplication()).edit();
+        editor.remove(key);
+        editor.apply();
+    }
+
+    @SuppressWarnings (value="unused")
+    public static int putInt(String key, int defValue) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(SimplicityApplication.getContextOfApplication()).edit();
+        editor.putInt(key, defValue);
+        editor.apply();
+        return defValue;
     }
 
 
@@ -60,23 +100,53 @@ public final class UserPreferences {
         return mPreferences.getString(TOOLBAR_STYLE, "top");
     }
 
+    @SuppressWarnings (value="unused")
+    public String getCustomFontPref() {
+        return mPreferences.getString(CUSTOM_FONT_PREF, "");
+    }
+
     public String getFont() {
         return mPreferences.getString(FONT_SIZE, "default_font");
     }
 
 
+    public static ArrayList<String> getSimpleDownloads() {
+        String bookmarks = PreferenceManager.getDefaultSharedPreferences(mContext).getString("simple_downloads", "[]");
+        ArrayList<String> listFilters = new ArrayList<>();
+        try {
+            JSONArray array = new JSONArray(bookmarks);
+            for (int i = 0; i < array.length(); i++) {
+                String filter = (String) array.get(i);
+                listFilters.add(filter);
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return listFilters;
+    }
+
+
+    public static void saveSimpleDownloads(ArrayList<String> listFilters) {
+        JSONArray array = new JSONArray();
+        for (String string : listFilters) {
+            array.put(string);
+        }
+        PreferenceManager.getDefaultSharedPreferences(mContext).edit().putString("simple_downloads", array.toString()).apply();
+    }
+
 
     //bookmarks
-    public static ArrayList<Bookmark> getBookmarks() {
+    public static ArrayList<BookmarkItems> getBookmarks() {
         String bookmarks = getString("simplicity_bookmarks");
-        ArrayList<Bookmark> listBookmarks = new ArrayList<>();
+        ArrayList<BookmarkItems> listBookmarks = new ArrayList<>();
         try {
             JSONArray array = new JSONArray(bookmarks);
             for (int i = 0; i < array.length(); i++) {
                 JSONObject ob = array.getJSONObject(i);
-                Bookmark bookmark = new Bookmark();
+                BookmarkItems bookmark = new BookmarkItems();
                 bookmark.setTitle(ob.getString("title"));
-                bookmark.setUrl(ob.getString("url"));
+                bookmark.setUrl(ob.optString("url"));
                 bookmark.setLetter(ob.getString("letter"));
                 bookmark.setImage(ob.getInt("color"));
                 listBookmarks.add(bookmark);
@@ -87,12 +157,12 @@ public final class UserPreferences {
         return listBookmarks;
     }
 
-    public static void saveBookmarks(ArrayList<Bookmark> listBookmarks) {
+    public static void saveBookmarks(ArrayList<BookmarkItems> listBookmarks) {
         JSONArray array = new JSONArray();
         Iterator it = listBookmarks.iterator();
         if (it.hasNext()) {
             do {
-                Bookmark bookmark = (Bookmark) it.next();
+                BookmarkItems bookmark = (BookmarkItems) it.next();
                 JSONObject ob = new JSONObject();
                 try {
                     ob.put("title", bookmark.getTitle());
@@ -110,16 +180,17 @@ public final class UserPreferences {
 
 
     //history
-    public static ArrayList<History> getHistory() {
+    public static ArrayList<HistoryItems> getHistory() {
         String historyItem = getString("simplicity_history");
-        ArrayList<History> listBookmarks = new ArrayList<>();
+        ArrayList<HistoryItems> listBookmarks = new ArrayList<>();
         try {
             JSONArray array = new JSONArray(historyItem);
             for (int i = 0; i < array.length(); i++) {
                 JSONObject ob = array.getJSONObject(i);
-                History history = new History();
+                HistoryItems history = new HistoryItems();
                 history.setTitle(ob.getString("title"));
                 history.setUrl(ob.getString("url"));
+                history.setDate(ob.optString("date"));
                 listBookmarks.add(history);
             }
         } catch (JSONException e) {
@@ -128,16 +199,17 @@ public final class UserPreferences {
         return listBookmarks;
     }
 
-    public static void saveHistory(ArrayList<History> listBookmarks) {
+    public static void saveHistory(ArrayList<HistoryItems> listBookmarks) {
         JSONArray array = new JSONArray();
         Iterator it = listBookmarks.iterator();
         if (it.hasNext()) {
             do {
-                History bookmark = (History) it.next();
+                HistoryItems bookmark = (HistoryItems) it.next();
                 JSONObject ob = new JSONObject();
                 try {
                     ob.put("title", bookmark.getTitle());
                     ob.put("url", bookmark.getUrl());
+                    ob.put("date", bookmark.getDate());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -164,17 +236,13 @@ public final class UserPreferences {
         PreferenceManager.getDefaultSharedPreferences(mContext).edit().putString(SIMPLICITY_HISTORY , his).apply();
     }
 
-    public static boolean getCookie(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean(KEY_COOKIE, true);
-    }
 
     public static boolean isStarred(String bookmark) {
         if (bookmark == null || bookmark.isEmpty()) {
             return false;
         }
         String removeStart = removeStart(bookmark);
-        for (Bookmark url : getBookmarks()) {
+        for (BookmarkItems url : getBookmarks()) {
             if (removeStart(url.getUrl()).equals(removeStart)) {
                 return true;
             }
@@ -193,7 +261,7 @@ public final class UserPreferences {
             return false;
         }
         String removeStart = getHome(history);
-        for (History url : getHistory()) {
+        for (HistoryItems url : getHistory()) {
             if (getHome(url.getUrl()).equals(removeStart)) {
                 return true;
             }
@@ -206,7 +274,7 @@ public final class UserPreferences {
     }
 
 
-    public static boolean isDownloadableFile(String url) {
+    public static boolean isDangerousFileExtension(String url) {
         int index = url.indexOf("?");
         if (index > -1) {
             url = url.substring(0, index);
@@ -222,7 +290,12 @@ public final class UserPreferences {
 
     private static final String[] DOWNLOAD_FILE_TYPES = {
             ".apk", ".exe", ".jar", ".bat", ".xls",
-            ".js", ".sh", ".bin"
+            ".js", ".sh", ".bin", "app", "com", "scr",
+            "vbs", "cmd", "xlsx", "docx", "pdf", "msi", "dmg",
+            "wsh", "wsf", "ws", "vbscript", "workflow", "vbe", "vs",
+            "run", "rgs", "reg", "ps1", "paf", "pif", "osx", "out",
+            "lnk", "jse", "job", "ksh", "ipa", "csh", "command", "action",
+            "chm",
     };
 
 }

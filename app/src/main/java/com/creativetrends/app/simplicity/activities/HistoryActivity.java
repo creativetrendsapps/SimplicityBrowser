@@ -1,44 +1,48 @@
 package com.creativetrends.app.simplicity.activities;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-
-import com.creativetrends.app.simplicity.adapters.AdapterHistory;
-import com.creativetrends.app.simplicity.utils.History;
-import com.creativetrends.app.simplicity.utils.UserPreferences;
-import com.creativetrends.simplicity.app.R;
-import com.google.android.material.snackbar.Snackbar;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.creativetrends.app.simplicity.adapters.AdapterHistory;
+import com.creativetrends.app.simplicity.adapters.HistoryItems;
+import com.creativetrends.app.simplicity.ui.Cardbar;
+import com.creativetrends.app.simplicity.utils.ExportUtils;
+import com.creativetrends.app.simplicity.utils.TabManager;
+import com.creativetrends.app.simplicity.utils.UserPreferences;
+import com.creativetrends.app.simplicity.webview.NestedWebview;
+import com.creativetrends.simplicity.app.R;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Creative Trends Apps.
  */
 
-public class HistoryActivity extends AppCompatActivity implements AdapterHistory.onBookmarkSelected, SearchView.OnQueryTextListener {
-    AdapterHistory adapterBookmarks;
-    ArrayList<History> listHistory = new ArrayList<>();
+public class HistoryActivity extends BaseActivity implements AdapterHistory.onBookmarkSelected, SearchView.OnQueryTextListener {
+    @SuppressLint("StaticFieldLeak")
+    public static AdapterHistory adapterBookmarks;
+    ArrayList<HistoryItems> listHistory = new ArrayList<>();
     RecyclerView recyclerBookmarks;
     private SearchView searchView;
     SharedPreferences preferences;
@@ -47,6 +51,9 @@ public class HistoryActivity extends AppCompatActivity implements AdapterHistory
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(UserPreferences.getBoolean("dark_mode", false)){
+            setTheme(R.style.BookMarksThemeDark);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -56,10 +63,6 @@ public class HistoryActivity extends AppCompatActivity implements AdapterHistory
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            Drawable drawable = mToolbar.getNavigationIcon();
-            if (drawable != null) {
-                drawable.setColorFilter(ContextCompat.getColor(this, R.color.grey_color), PorterDuff.Mode.SRC_ATOP);
-            }
         }
         listHistory = UserPreferences.getHistory();
         recyclerBookmarks = findViewById(R.id.recycler_history);
@@ -71,14 +74,11 @@ public class HistoryActivity extends AppCompatActivity implements AdapterHistory
         recyclerBookmarks.setAdapter(adapterBookmarks);
         //show long click hint
         if (preferences.getBoolean("first_history", true) && !listHistory.isEmpty()) {
-            Snackbar.make(recyclerBookmarks, "Long click to copy link", Snackbar.LENGTH_SHORT).show();
+            Cardbar.snackBar(getApplicationContext(), "Long click to copy link", true).show();
+
             preferences.edit().putBoolean("first_history", false).apply();
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-
-        }
 
     }
 
@@ -89,10 +89,21 @@ public class HistoryActivity extends AppCompatActivity implements AdapterHistory
     }
 
     public void loadBookmark(final String title, final String url) {
-        Intent peekIntent = new Intent(HistoryActivity.this, MainActivity.class);
-        peekIntent.setData(Uri.parse(url));
-        peekIntent.putExtra("isNewTab" , false);
-        startActivity(peekIntent);
+        int size = 0;
+        if (TabManager.getList() != null) {
+            size = TabManager.getList().size();
+        }
+        NestedWebview behe = new NestedWebview(getApplicationContext(), (MainActivity) MainActivity.getMainActivity(), ((MainActivity) MainActivity.getMainActivity()).mProgress, ((MainActivity) MainActivity.getMainActivity()).mSearchView);
+        behe.loadUrl(url);
+        TabManager.addTab(behe);
+        TabManager.setCurrentTab(behe);
+        TabManager.updateTabView();
+        ((MainActivity) MainActivity.getMainActivity()).refreshTab();
+        try {
+            MainActivity.mBadgeText.setText(String.valueOf(size + 1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         finish();
     }
 
@@ -107,6 +118,14 @@ public class HistoryActivity extends AppCompatActivity implements AdapterHistory
         super.onPause();
         if (isFinishing()) {
             UserPreferences.saveHistory(adapterBookmarks.getListBookmarks());
+        }
+        try{
+            if(currentUser != null) {
+                uploadToFireBase();
+            }
+        }catch (Exception i){
+            i.printStackTrace();
+
         }
     }
 
@@ -148,11 +167,11 @@ public class HistoryActivity extends AppCompatActivity implements AdapterHistory
         }
 
     }
-    private List filter(List<History> bookmarks, String query) {
+    private List filter(List<HistoryItems> bookmarks, String query) {
         query = query.toLowerCase();
-        List<History> filteredBookmarks = new ArrayList<>();
+        List<HistoryItems> filteredBookmarks = new ArrayList<>();
         if (bookmarks != null && bookmarks.size() > 0) {
-            for (History bookmark : bookmarks) {
+            for (HistoryItems bookmark : bookmarks) {
                 String searchCheck = bookmark.getTitle() + " " + bookmark.getUrl();
                 if (!(searchCheck.isEmpty() || !searchCheck.toLowerCase().contains(query.toLowerCase()))) {
                     filteredBookmarks.add(bookmark);
@@ -184,5 +203,41 @@ public class HistoryActivity extends AppCompatActivity implements AdapterHistory
         removeFavorite.setPositiveButton(getResources().getString(R.string.clear_history), (dialog, which) -> adapterBookmarks.clear());
         removeFavorite.setNegativeButton(R.string.cancel, null);
         removeFavorite.show();
+    }
+
+
+    private void uploadToFireBase(){
+        try{
+            File bh = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + getResources().getString(R.string.app_name) + File.separator + "Simplicity Backups" + File.separator);
+            if (!bh.exists()) {
+                //noinspection ResultOfMethodCallIgnored
+                bh.mkdirs();
+            }
+            String extStorageDirectory = bh.toString();
+            File file = new File(extStorageDirectory, currentUser.getUid() + ".sbh");
+            ExportUtils.writeToFile(file, this);
+            StorageReference proimage = FirebaseStorage.getInstance().getReference(currentUser.getUid() +"/simplicity_backup/"+currentUser.getUid() + ".sbh");
+            if(Uri.fromFile(file) != null){
+                proimage.putFile(Uri.fromFile(file)).continueWithTask(task -> {
+                    if (!task.isSuccessful()) {
+                        throw Objects.requireNonNull(task.getException());
+                    }
+                    return proimage.getDownloadUrl();
+                }).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("Backed up", "sent history to Firebase");
+                    } else {
+                        Log.d("Failed backed up", Objects.requireNonNull(task.getException()).toString());
+                    }
+                });
+
+
+            }
+
+        }catch (NullPointerException i){
+            i.printStackTrace();
+        }catch (Exception ignored){
+
+        }
     }
 }

@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="false"
+    android:focusable="false">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/sim_menu"
+        android:layout_width="255dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="16dp"
+        android:soundEffectsEnabled="false"
+        android:visibility="invisible"
+        app:cardBackgroundColor="?android:attr/windowBackground"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="4dp">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fadingEdge="vertical"
+            android:requiresFadingEdge="vertical"
+            android:fadingEdgeLength="90dp"
+            android:scrollbars="vertical">
+
+
+            <LinearLayout
+                android:id="@+id/sub_overflow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/sim_new_update_rel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:visibility="gone">
+                <TextView
+                    android:id="@+id/sim_new_update"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="2dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="16dp"
+                    android:text="@string/new_update"
+                    android:textColor="#d32f2f"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry"
+                    android:drawableEnd="@drawable/ic_update"
+                    android:drawablePadding="20dp"/>
+
+                    <TextView
+                        android:layout_below="@id/sim_new_update"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="6dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="@string/new_version"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:alpha="0.7"
+                        android:textSize="13sp"
+                        tools:ignore="RtlHardcoded,RtlSymmetry"/>
+
+                </RelativeLayout>
+
+
+                <TextView
+                    android:id="@+id/sim_new_window"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="16dp"
+                    android:text="@string/new_tab"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry"
+                    android:background="?android:attr/selectableItemBackground"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/sim_private_mode"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="16dp"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="10dp"
+                        android:text="@string/new_private_mode"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:textSize="16sp"
+                        tools:ignore="RtlHardcoded,RtlSymmetry"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:background="?android:attr/selectableItemBackground"/>
+
+                    <androidx.appcompat.widget.AppCompatCheckBox
+                        android:id="@+id/sim_private_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_alignBaseline="@+id/sim_private_mode"
+                        android:layout_alignBottom="@+id/sim_private_mode"
+                        android:layout_alignParentEnd="true"
+                        android:visibility="gone"/>
+
+                </RelativeLayout>
+
+
+                <TextView
+                    android:id="@+id/sim_reader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/reader_mode"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/sim_books"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/bookmarks"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry"
+                    android:background="?android:attr/selectableItemBackground"/>
+
+
+                <TextView
+                    android:id="@+id/sim_history"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/history"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry"
+                    android:background="?android:attr/selectableItemBackground"/>
+
+                <TextView
+                    android:id="@+id/sim_download"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/downloads"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry"
+                    android:background="?android:attr/selectableItemBackground"/>
+
+
+                <TextView
+                    android:id="@+id/sim_share"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/share"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry"
+                    android:background="?android:attr/selectableItemBackground"/>
+
+                <TextView
+                    android:id="@+id/sim_print"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/print_page"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry"
+                    android:background="?android:attr/selectableItemBackground"/>
+
+                <TextView
+                    android:id="@+id/sim_find"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/find_in"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry"
+                    android:background="?android:attr/selectableItemBackground"/>
+
+
+                <TextView
+                    android:id="@+id/sim_home_screen"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/add_to_home"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry"
+                    android:background="?android:attr/selectableItemBackground"/>
+
+
+                <RelativeLayout
+                    android:id="@+id/desk_rel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/sim_desktop"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="16dp"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="10dp"
+                        android:text="@string/request_desk"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:textSize="16sp"
+                        tools:ignore="RtlHardcoded,RtlSymmetry"
+                        android:background="?android:attr/selectableItemBackground"/>
+
+                    <androidx.appcompat.widget.AppCompatCheckBox
+                        android:id="@+id/sim_desktop_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_alignBaseline="@+id/sim_desktop"
+                        android:layout_alignBottom="@+id/sim_desktop"
+                        android:layout_alignParentEnd="true" />
+
+                </RelativeLayout>
+
+
+
+
+
+                <TextView
+                    android:id="@+id/sim_settings"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/settings"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry"
+                    android:background="?android:attr/selectableItemBackground"/>
+
+
+                <TextView
+                    android:id="@+id/sim_close"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/close_app"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:visibility="gone"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:paddingBottom="16dp"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/root_overflow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="4"
+            android:background="?android:attr/windowBackground"
+            android:layout_gravity="bottom">
+
+
+
+            <ImageView
+                android:id="@+id/sim_go_forward"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:padding="8dp"
+                android:layout_gravity="center_horizontal"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_arrow_forward"
+                tools:ignore="ContentDescription" />
+
+
+            <ImageView
+                android:id="@+id/sim_bookmark"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:padding="8dp"
+                android:layout_gravity="center_horizontal"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_star_border"
+                android:tint="?android:attr/textColorPrimary"
+                tools:ignore="ContentDescription" />
+
+
+            <ImageView
+                android:id="@+id/sim_downloads"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:padding="8dp"
+                android:layout_gravity="center_horizontal"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_downloads"
+                tools:ignore="ContentDescription" />
+
+
+
+
+            <ImageView
+                android:id="@+id/sim_stop"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:padding="8dp"
+                android:layout_gravity="center_horizontal"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_info"
+                tools:ignore="ContentDescription" />
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

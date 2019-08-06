@@ -6,9 +6,10 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Rect;
 import android.graphics.Shader;
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
 /**
  * Created by Creative Trends Apps (Jorell Rutledge) 4/2/2018.
@@ -29,9 +30,6 @@ public class SimpleAutoComplete extends AppCompatAutoCompleteTextView {
         super(context, attrs, defStyle);
     }
 
-    // Override View's focus change listener handling so that we're able to
-    // call it before the actual focus change handling, in particular before
-    // the IME is fired up.
     @Override
     public void setOnFocusChangeListener(OnFocusChangeListener l) {
         mFocusChangeListener = l;
@@ -44,46 +42,63 @@ public class SimpleAutoComplete extends AppCompatAutoCompleteTextView {
 
     @Override
     protected void onFocusChanged(boolean gainFocus, int direction, Rect previouslyFocusedRect) {
-        if (mFocusChangeListener != null) {
-            mFocusChangeListener.onFocusChange(this, gainFocus);
+        try {
+            if (mFocusChangeListener != null) {
+                mFocusChangeListener.onFocusChange(this, gainFocus);
+            }
+            super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
+        }catch (NullPointerException i){
+            i.printStackTrace();
+        }catch (Exception p){
+            p.printStackTrace();
         }
-        super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
     }
 
-    private static LinearGradient getGradient(float widthEnd, float fadeStart,
-                                              float stopStart, float stopEnd, int color) {
+    private static LinearGradient getGradient(float widthEnd, float fadeStart, float stopStart, float stopEnd, int color) {
         return new LinearGradient(0, 0, widthEnd, 0,
-                new int[] { color, Color.TRANSPARENT, color, color, Color.TRANSPARENT },
-                new float[] { 0, fadeStart, stopStart, stopEnd, 1f }, Shader.TileMode.CLAMP);
+                new int[]{color, Color.TRANSPARENT, color, color, Color.TRANSPARENT},
+                new float[]{0, fadeStart, stopStart, stopEnd, 1f}, Shader.TileMode.CLAMP);
     }
 
     @Override
     protected void onScrollChanged(int x, int y, int oldX, int oldY) {
-        super.onScrollChanged(x, y, oldX, oldY);
-        mPositionX = x;
-        requestLayout();
+        try {
+            super.onScrollChanged(x, y, oldX, oldY);
+            mPositionX = x;
+            requestLayout();
+        }catch (NullPointerException i){
+            i.printStackTrace();
+        }catch (Exception p){
+            p.printStackTrace();
+        }
     }
 
     @Override
     public void onDraw(Canvas canvas) {
-        float lineWidth = getLayout().getLineWidth(0);
-        float width = getMeasuredWidth();
+        try {
+            float lineWidth = getLayout().getLineWidth(0);
+            float width = getMeasuredWidth();
 
-        if (getText() == null || getText().length() == 0 || lineWidth <= width) {
-            getPaint().setShader(null);
+            if (getText() == null || getText().length() == 0 || lineWidth <= width) {
+                getPaint().setShader(null);
+                super.onDraw(canvas);
+                return;
+            }
+
+            int textColor = getCurrentTextColor();
+            float widthEnd = width + mPositionX;
+            float percent = (int) (width * 0.2);
+
+            float fadeStart = mPositionX / widthEnd;
+
+            float stopStart = mPositionX > 0 ? ((mPositionX + percent) / widthEnd) : 0;
+            float stopEnd = (widthEnd - (lineWidth > widthEnd ? percent : 0)) / widthEnd;
+            getPaint().setShader(getGradient(widthEnd, fadeStart, stopStart, stopEnd, textColor));
             super.onDraw(canvas);
-            return;
+        }catch (NullPointerException i){
+            i.printStackTrace();
+        }catch (Exception p){
+            p.printStackTrace();
         }
-
-        int textColor = getCurrentTextColor();
-        float widthEnd = width + mPositionX;
-        float percent = (int) (width * 0.2);
-
-        float fadeStart = mPositionX / widthEnd;
-
-        float stopStart = mPositionX > 0 ? ((mPositionX + percent) / widthEnd) : 0;
-        float stopEnd = (widthEnd - (lineWidth > widthEnd ? percent : 0)) / widthEnd;
-        getPaint().setShader(getGradient(widthEnd, fadeStart, stopStart, stopEnd, textColor));
-        super.onDraw(canvas);
     }
 }

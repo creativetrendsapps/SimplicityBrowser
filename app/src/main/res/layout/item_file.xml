@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?android:attr/selectableItemBackground"
+    android:elevation="0dp"
+    android:id="@+id/file_holder">
+    <RelativeLayout
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp">
+        <ImageView
+            android:id="@+id/item_file_image"
+            android:padding="8dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_folder"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            tools:ignore="ContentDescription" />
+
+        <LinearLayout
+            android:id="@+id/item_lin"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="64dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/item_file_title"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="com.creativetrends.simplicity.app"
+                android:textColor="?android:attr/textColorPrimary"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="64dp"
+            android:layout_below="@+id/item_lin">
+
+            <TextView
+                android:id="@+id/item_file_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="6.94MB"
+                android:textColor="?android:attr/textColorPrimary"
+                android:alpha="0.7"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:ignore="SmallSp"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="6sp"
+                android:textStyle="bold"
+                android:text="@string/dash"
+                android:textColor="?android:attr/textColorPrimary"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:alpha="0.7"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:ignore="SmallSp" />
+
+
+            <TextView
+                android:id="@+id/item_file_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="APK"
+                android:textColor="?android:attr/textColorPrimary"
+                android:alpha="0.7"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:ignore="SmallSp"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/file_delete"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_trash"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            tools:ignore="ContentDescription" />
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

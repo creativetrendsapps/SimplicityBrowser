@@ -1,25 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <dimen name="app_defaultsize_w">632.0dip</dimen>
     <dimen name="app_defaultsize_h">598.0dip</dimen>
     <dimen name="app_minimumsize_w">632.0dip</dimen>
     <dimen name="app_minimumsize_h">598.0dip</dimen>
-    <dimen name="pref_title_space">16dp</dimen>
 
-    <dimen name="dots_height">30dp</dimen>
-    <dimen name="dots_margin_bottom">80dp</dimen>
-    <dimen name="img_width_height">100dp</dimen>
-    <dimen name="slide_title">30dp</dimen>
-    <dimen name="slide_desc">16dp</dimen>
-    <dimen name="desc_padding">40dp</dimen>
-
-    <dimen name="dialog_frame_margin">24dp</dimen>
-    <dimen name="dialog_content_padding_top">8dp</dimen>
-    <dimen name="dialog_content_padding_bottom">8dp</dimen>
-    <dimen name="dialog_content_textsize">14sp</dimen>
-    <dimen name="bottom_sheet_corner_radius">16dp</dimen>
-    <dimen name="bottom_sheet_top_padding">8dp</dimen>
+    <dimen name="design_navigation_padding_bottom" tools:override="true">56dp</dimen>
+    <dimen name="photo_snack">100dp</dimen>
+    <bool name="isTablet">false</bool>
 
 
 </resources>

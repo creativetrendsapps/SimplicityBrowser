@@ -13,7 +13,6 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.webkit.URLUtil;
 
@@ -122,13 +121,19 @@ public class SimplicityDownloader extends AsyncTask<String, Integer, String> {
     }
 
 
-    protected void onProgressUpdate(Integer... progress) {
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+        super.onProgressUpdate(values);
         final int dl_progress = (int) ((double)total / (double)fileLength * 100f);
-        build.setProgress(100, progress[0], false);
+        build.setProgress(100, values[0], false);
         build.setContentText(getFileSize(total)+ "/" +getFileSize(fileLength) +" " +dl_progress + "%");
         mNotifyManager.notify(id,  build.build());
-        super.onProgressUpdate(progress);
+        if(!StaticUtils.isNetworkConnected(context)){
+            cancel(true);
+        }
     }
+
+
 
     @Override
     protected void onPostExecute(String file_url) {
@@ -144,7 +149,7 @@ public class SimplicityDownloader extends AsyncTask<String, Integer, String> {
                     .setSmallIcon(R.drawable.ic_error);
             Notification notification = build.build();
             mNotifyManager.notify(id, notification);
-            Cardbar.snackBar(context, context.getString(R.string.error) + file_url, true).show();
+            Cardbar.snackBar(context, context.getString(R.string.download_failed, filename), true).show();
         }else {
             try {
                 mNotifyManager.cancel(id);
@@ -159,15 +164,16 @@ public class SimplicityDownloader extends AsyncTask<String, Integer, String> {
                         .setShowWhen(true)
                         .setWhen(System.currentTimeMillis())
                         .setContentTitle(filename)
-                        .setContentText("Download complete -"+ " "+ getFileSize(fileLength))
+                        .setContentText("Download complete "+ context.getString(R.string.bullet) +" "+ getFileSize(fileLength))
                         .setAutoCancel(true)
                         .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_download_done))
                         .setProgress(0, 0, false)
                         .setSmallIcon(R.drawable.ic_check_download);
                 Notification notification = build.build();
                 mNotifyManager.notify(id, notification);
-                MediaScannerConnection.scanFile(context,new String[]{imageStorageDir + File.separator + filename}, null,
-                        (newpath, newuri) -> Log.i("Saved and scanned to",  newpath));
+                Cardbar.snackBar(context, context.getString(R.string.download_successful, filename), true).show();
+                MediaScannerConnection.scanFile(context, new String[]{imageStorageDir + File.separator + filename}, null, (path1, uri1) -> {
+                });
             } catch (ActivityNotFoundException e) {
                 Cardbar.snackBar(context, "Cannot open file.", true).show();
             } catch (Exception p){
@@ -176,6 +182,14 @@ public class SimplicityDownloader extends AsyncTask<String, Integer, String> {
             }
 
         }
+    }
+
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        Cardbar.snackBar(context, context.getString(R.string.download_cancelled), true).show();
+
     }
 
 

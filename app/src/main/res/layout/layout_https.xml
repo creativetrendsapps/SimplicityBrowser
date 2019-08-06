@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content">
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="@string/issued_to"
+            android:textColor="?attr/iconPrefColor"/>
+
+        <TextView
+            android:id="@+id/issued_to_cname"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:textColor="?attr/iconPrefColor"/>
+
+        <TextView
+            android:id="@+id/issued_to_oname"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:textColor="?attr/iconPrefColor"/>
+
+        <TextView
+            android:id="@+id/issued_to_uname"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:textColor="?attr/iconPrefColor"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:textStyle="bold"
+            android:text="@string/issued_by"
+            android:textColor="?attr/iconPrefColor"/>
+
+        <TextView
+            android:id="@+id/issued_by_cname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/iconPrefColor"/>
+
+        <TextView
+            android:id="@+id/issued_by_oname"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="?attr/iconPrefColor"/>
+
+        <TextView
+            android:id="@+id/issued_by_uname"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="?attr/iconPrefColor"/>
+
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="15dp"
+            android:textStyle="bold"
+            android:text="@string/issued_dates"
+            android:textColor="?attr/iconPrefColor"/>
+
+        <TextView
+            android:id="@+id/start_date"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="?attr/iconPrefColor"/>
+
+        <TextView
+            android:id="@+id/end_date"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="?attr/iconPrefColor"/>
+    </LinearLayout>
+</ScrollView>

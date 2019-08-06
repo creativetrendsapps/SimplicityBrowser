@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9F9F8">
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/welcome_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="1dp"
+        app:cardCornerRadius="0dp">
+    
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="180dp"
+        android:text="Sign in to Simplicity"
+        android:textSize="22sp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        tools:ignore="HardcodedText" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Sign in with your Simplicity Account to sync your bookmarks and history on all of your devices."
+        android:textSize="12sp"
+        android:layout_below="@id/welcome_card"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        tools:ignore="HardcodedText" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/welcome_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="No Thanks"
+        android:textColor="@color/md_blue_600"
+        android:backgroundTint="@color/other"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="8dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="16dp"
+        android:outlineProvider="none"
+        app:cornerRadius="4dp"
+        tools:ignore="HardcodedText"/>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/welcome_sign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="Sign in"
+        android:textColor="@android:color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="8dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/md_blue_600"
+        app:cornerRadius="4dp"
+        app:backgroundTint="@color/md_blue_600"
+        tools:ignore="HardcodedText"/>
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height=".9dp"
+        android:background="#CCCCCC"
+        android:alpha=".4"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

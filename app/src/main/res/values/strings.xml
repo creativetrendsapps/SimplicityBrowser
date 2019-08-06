@@ -1,4 +1,6 @@
-<resources>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
     <string name="app_name" translatable="false">Simplicity</string>
     <string name="settings">Settings</string>
     <string name="about" translatable="false">About</string>
@@ -10,7 +12,6 @@
     <string name="auth">com.creativetrends.simplicity.app.provider</string>
     <string name="search_engine_choice">Search Engine Choice</string>
     <string name="donate_description">Hello there! Hundreds of hours have been put into developing and perfecting this app, so if you use it quite often, why not consider donating?\n\n\nDonating is 100% optional but, donating any amount ensures that I can keep up development, keeping this app alive &#128522;.  \n\n*Donations are US Dollars and may include tax. Exchange rates are calculated by Google Play.</string>
-    <string name="copy_right">\u00A9 %d Creative Trends Apps LLC.</string>
     <string-array name="search_engine" translatable="false">
         <item>AOL</item>
         <item>Ask</item>
@@ -20,6 +21,7 @@
         <item>Google</item>
         <item>InfoSpace</item>
         <item>MyWebSearch</item>
+        <item>Qwant</item>
         <item>Searx</item>
         <item>StartPage</item>
         <item>WebCrawler</item>
@@ -37,6 +39,7 @@
         <item>https://www.google.com/search?q=</item>
         <item>http://search.infospace.com/search/web?q=</item>
         <item>http://int.search.mywebsearch.com/mywebsearch/GGmain.jhtml?searchfor=</item>
+        <item>https://www.qwant.com/?q=</item>
         <item>https://searx.me/?q=</item>
         <item>https://www.startpage.com/do/search?q=</item>
         <item>https://www.webcrawler.com/serp?q=</item>
@@ -52,7 +55,7 @@
     <string name="share">Share…</string>
     <string name="find_in">Find in page</string>
     <string name="add_to_home">Add to Home screen</string>
-    <string name="request_desk">Desktop mode</string>
+    <string name="request_desk">Desktop site</string>
     <string name="clear_history">Clear History</string>
     <string name="help_trans">Help Translate Simplicity</string>
     <string name="about_app">About</string>
@@ -84,6 +87,13 @@
     <string name="clear_bookmarks">Clear Bookmarks</string>
     <string name="are_you_sure_bookmarks">Are you sure you would like to clear all of your bookmarks? This action cannot be undone.</string>
     <string name="are_you_sure_history">Are you sure you would like to clear all of your history? This action cannot be undone.</string>
+    <string name="delete_cache">Tap To Delete App Cache</string>
+    <string name="current_cache_size">Estimated cache size</string>
+    <string name="cache_dialog">Delete App Cache?</string>
+    <string name="cache_dialog_summary">Deleting cache can result with %s, starting slower and may cause more use of data. Are you sure you would like to continue? <b>Please note:</b> This action cannot be un-done.</string>
+    <string name="trimming">Deleting cache…</string>
+
+
 
     <string name="policy_about" translatable="false">
 Creative Trends Apps LLC built the Simplicity app as a Free app. This SERVICE is provided by Creative Trends Apps LLC at no cost and is intended for use as is.
@@ -199,7 +209,9 @@ If you have any questions or suggestions about our Terms and Conditions, do not 
     <string name="download_warning">This type of file can harm your device. Do you want to keep %s anyway?</string>
     <string name="downloading">Downloading</string>
     <!-- Suggestions provider: no suggestions provider -->
-
+    <string name="notification_widget_channel" translatable="false">com.creativetrends.simplicity.app.downloader</string>
+    <string name="notifications_widget">Simplicity Downloader</string>
+    <string name="notifications_widget_description">Notifications for when Simplicity is downloading a file.</string>
 
     <string name="backup_restore_title">Local Backup And Restore</string>
     <string name="backup_restore_sum">Backup and restore your bookmarks and history locally.</string>
@@ -246,11 +258,7 @@ If you have any questions or suggestions about our Terms and Conditions, do not 
     <string name="account_sync">Account Sync</string>
     <string name="new_private_mode">New private window</string>
     <string name="close_private">Close private window</string>
-    <string name="hello">Hello, %s!</string>
-    <string name="beta_user">Simplicity User</string>
     <string name="simplicity_account">Simplicity Account</string>
-    <string name="signin_signup">Signup for a Simplicity account. Don\'t have an account? Create one.</string>
-    <string name="syncing_to">Syncing to %s</string>
     <string name="create_account">Tap the image above to set your Simplicity account avatar.</string>
     <string name="create_account_picture">Tap the image above to update your Simplicity account avatar.</string>
     <string name="signin">Sign in to your Simplicity Account.</string>
@@ -259,5 +267,51 @@ If you have any questions or suggestions about our Terms and Conditions, do not 
     <string name="update_profile">Update Profile</string>
     <string name="dark_mode_title">Dark Mode</string>
     <string name="dark_mode_sum">When enabled Simplicity will use a dark theme throughout the app.</string>
+    <string name="lite_mode_title">Lite Mode</string>
+    <string name="lite_mode_sum">Enable to disable images, which may help save on data usage.</string>
+    <string name="new_update">Update Simplicity</string>
+    <string name="new_version">Newer version available</string>
+    <string name="success">Cache cleared</string>
 
+    <string name="type_archive">Archive</string>
+    <string name="type_certificate">Certificate</string>
+    <string name="type_directory">Directory</string>
+    <string name="type_document">File</string>
+    <string name="type_deb">Debian</string>
+    <string name="type_drawing">Picture</string>
+    <string name="type_excel">Spreadsheet</string>
+    <string name="type_image">Image</string>
+    <string name="type_music">Music</string>
+    <string name="type_video">Video</string>
+    <string name="type_pdf">PDF document</string>
+    <string name="type_power_point">Presentation</string>
+    <string name="type_web">HTML</string>
+    <string name="type_word">Document</string>
+    <string name="type_apk">APK</string>
+    <string name="downloads">Downloads</string>
+    <string name="dash">&#160;&#160;&#9679;&#160;&#160;</string>
+    <string name="welcome">Welcome to Simplicity</string>
+    <string name="dark_mode_web_title">Dark for Web</string>
+    <string name="dark_mode_web_sum">Enable dark mode on webpages. This feature is in beta and may not work 100%.</string>
+    <string name="download_successful">Successfully downloaded %s.</string>
+    <string name="download_failed">Simplicity could not download %s.</string>
+    <string name="download_cancelled">Download cancelled.</string>
+    <string name="removed_from_downloads">Successfully removed %s from your device.</string>
+    <string name="bullet">\u2022</string>
+    <string name="private_active_title"></string>
+    <string name="private_active_title_about">Now you can browse privately, and other people who use this device won\'t see your activity. However, downloads and bookmarks will be saved.</string>
+    <string name="wont_save">Simplicity  the following information:
+            \n\u2022 Your browsing history
+            \n\u2022 Cookies from your last visited page
+            \n\u2022 Information entered in forms</string>
+    <string name="your_activity">Your activity  to:
+            \n\u2022 Websites you visit
+            \n\u2022 Your employer or school
+            \n\u2022 Your internet service provider
+            \n\u2022 The person standing behind you</string>
+    <string name="delete">Delete?</string>
+    <string name="delete_message">Are you sure you would like to delete %s from your device? This cannot be undone.</string>
+    <string name="issued_by">Issued By</string>
+    <string name="issued_to">Issued To</string>
+    <string name="issued_dates">Issued Dates</string>
 </resources>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <string msgid="7903180715631665059" name="abc_action_bar_home_description">"Перейти на главный экран"</string>
+    <string msgid="6794660482873516081" name="abc_action_bar_up_description">"Перейти вверх"</string>
+    <string msgid="1155814932213556626" name="abc_action_menu_overflow_description">"Ещё"</string>
+    <string msgid="2571498368472823490" name="abc_action_mode_done">"Готово"</string>
+    <string msgid="3732416590524162402" name="abc_activity_chooser_view_see_all">"Показать все"</string>
+    <string msgid="1798588241954930982" name="abc_activitychooserview_choose_application">"Выберите приложение"</string>
+    <string msgid="3403923230105792483" name="abc_capital_off">"ВЫКЛ"</string>
+    <string msgid="7831734969929204599" name="abc_capital_on">"ВКЛ"</string>
+    <string msgid="5725160506500770567" name="abc_menu_alt_shortcut_label">"Alt +"</string>
+    <string msgid="944415252197684443" name="abc_menu_ctrl_shortcut_label">"Ctrl +"</string>
+    <string msgid="129742188101734366" name="abc_menu_delete_shortcut_label">"Delete"</string>
+    <string msgid="6840127756824236027" name="abc_menu_enter_shortcut_label">"Ввод"</string>
+    <string msgid="4974283687810130415" name="abc_menu_function_shortcut_label">"Fn +"</string>
+    <string msgid="8046416353848716905" name="abc_menu_meta_shortcut_label">"Meta +"</string>
+    <string msgid="3271697756921353410" name="abc_menu_shift_shortcut_label">"Shift +"</string>
+    <string msgid="2304645930658438191" name="abc_menu_space_shortcut_label">"Пробел"</string>
+    <string msgid="8327365089695024394" name="abc_menu_sym_shortcut_label">"Sym +"</string>
+    <string msgid="3570106412128999382" name="abc_prepend_shortcut_label">"Меню +"</string>
+    <string msgid="940844115270746197" name="abc_search_hint">"Введите запрос"</string>
+    <string msgid="1769270744562318534" name="abc_searchview_description_clear">"Удалить запрос"</string>
+    <string msgid="908784302972860853" name="abc_searchview_description_query">"Поисковый запрос"</string>
+    <string msgid="5466662225065974044" name="abc_searchview_description_search">"Поиск"</string>
+    <string msgid="8203855622131699655" name="abc_searchview_description_submit">"Отправить запрос"</string>
+    <string msgid="3478748990613108725" name="abc_searchview_description_voice">"Голосовой поиск"</string>
+    <string msgid="2650565705514630347" name="abc_shareactionprovider_share_with">"Поделиться с помощью"</string>
+    <string msgid="9009661856846212431" name="abc_shareactionprovider_share_with_application">"Поделиться с помощью <ns1:g id="APPLICATION_NAME">%s</ns1:g>"</string>
+    <string msgid="6389460216547290468" name="abc_toolbar_collapse_description">"Свернуть"</string>
+    <string name="about_app">О приложении</string>
+    <string name="action_search">Поиск</string>
+    <string name="ad_block">Блокировка рекламы</string>
+    <string name="ad_block_sum">Блокировать рекламу на веб-сайтах</string>
+    <string name="add_home">Добавить на домашний экран</string>
+    <string name="add_to_home">Добавить на домашний экран</string>
+    <string name="added_to_bookmarks">добавлен в закладки.</string>
+    <string name="already_to_bookmarks">уже добавлен в Ваши закладки.</string>
+    <string name="are_you_sure">Вы действительно хотите удалить</string>
+    <string name="are_you_sure_bookmarks">Вы действительно хотите удалить все Ваши закладки? Это действие нельзя отменить.</string>
+    <string name="are_you_sure_history">Вы действительно хотите удалить всю Ваши историю посещений? Это действие нельзя отменить.</string>
+    <string name="backup">Резервное копирование</string>
+    <string name="backup_restore">Резервное копирование &amp; Восстановление</string>
+    <string name="backup_restore_message">Сделайте резервное копирование Ваших закладок и истории посещений. Создание резервной копии настроек заменит любое другое предыдущее резервное копирование.</string>
+    <string name="backup_restore_sum">Сделать резервное копирование и восстановить Ваши закладки, а также локальную историю.</string>
+    <string name="backup_restore_title">Локальное резервное копирование и восстановление</string>
+    <string name="bookmarks">Закладки</string>
+    <string name="bookmarks_hint">Долгое нажатие на закладки позволяет их сортировать</string>
+    <string name="cancel">Отмена</string>
+    <string name="clear_all">Очистить все</string>
+    <string name="clear_bookmarks">Очистить закладки</string>
+    <string name="clear_data">Удалять данные автоматически</string>
+    <string name="clear_data_sum">Удалять куки, историю посещений и другие данные при закрытии Simplicity.</string>
+    <string name="clear_history">Очистить историю</string>
+    <string name="close_app">Выйти</string>
+    <string msgid="8585111718777012708" name="common_google_play_services_enable_button">"Включить"</string>
+    <string msgid="7045129128108380659" name="common_google_play_services_enable_text">"Для работы приложения \"<ns1:g id="APP_NAME">%1$s</ns1:g>\" требуется включить сервисы Google Play."</string>
+    <string msgid="3147157405986503375" name="common_google_play_services_enable_title">"Включите сервисы Google Play"</string>
+    <string msgid="9115728400623041681" name="common_google_play_services_install_button">"Установить"</string>
+    <string msgid="8179894293032530091" name="common_google_play_services_install_text">"Для работы приложения \"<ns1:g id="APP_NAME">%1$s</ns1:g>\" требуется установить сервисы Google Play."</string>
+    <string msgid="7442193194585196676" name="common_google_play_services_install_title">"Установите сервисы Google Play"</string>
+    <string msgid="4293541511340436975" name="common_google_play_services_notification_channel_name">"Доступность сервисов Google Play"</string>
+    <string msgid="180394615667698242" name="common_google_play_services_notification_ticker">"Ошибка сервисов Google Play"</string>
+    <string msgid="2518680582564677258" name="common_google_play_services_unknown_issue">"Приложению \"<ns1:g id="APP_NAME">%1$s</ns1:g>\" не удается подключиться к сервисам Google Play. Повторите попытку."</string>
+    <string msgid="5501187292256987189" name="common_google_play_services_unsupported_text">"Для работы с приложением \"<ns1:g id="APP_NAME">%1$s</ns1:g>\" требуются сервисы Google Play. Они не поддерживаются на вашем устройстве."</string>
+    <string msgid="8172070149091615356" name="common_google_play_services_update_button">"Обновить"</string>
+    <string msgid="7773943415006962566" name="common_google_play_services_update_text">"Чтобы запустить приложение \"<ns1:g id="APP_NAME">%1$s</ns1:g>\", обновите сервисы Google Play."</string>
+    <string msgid="8706675115216073244" name="common_google_play_services_update_title">"Обновите сервисы Google Play"</string>
+    <string msgid="7894275749778928941" name="common_google_play_services_updating_text">"Сервисы Google Play, необходимые для работы приложения \"<ns1:g id="APP_NAME">%1$s</ns1:g>\", в настоящий момент обновляются."</string>
+    <string msgid="2804989272736383918" name="common_google_play_services_wear_update_text">"Версия сервисов Google Play устарела. Они автоматически обновятся в ближайшее время."</string>
+    <string msgid="5201977337835724196" name="common_open_on_phone">"Открыть на телефоне"</string>
+    <string msgid="3441753203274453993" name="common_signin_button_text">"Войти"</string>
+    <string msgid="669893613918351210" name="common_signin_button_text_long">"Войти через аккаунт Google"</string>
+    <string name="confirm">Подтверждать закрытие</string>
+    <string name="confirm_sum">Подтверждать закрытие приложения двойным нажатием на кнопку \"Назад\".</string>
+    <string name="default_font_zoom">Стандартное увеличение размера шрифта</string>
+    <string name="delete_bookmark">Удалить закладку</string>
+    <string name="do_not_track">Не отслеживать</string>
+    <string name="do_not_track_sum">Включите, чтобы запретить веб-сайтам отслеживать Ваши данные просмотра веб-страниц</string>
+    <string name="download_warning">Этот тип файов может нанести вред Вашему устройству. Вы действительно хотите сохранить %s в любом случае?</string>
+    <string name="downloading">Загрузка</string>
+    <string name="error">Ошибка</string>
+    <string name="find_in">Найти на странице</string>
+    <string name="from_bookmark">с Ваших закладок?</string>
+    <string name="general_settings">Основные настройки</string>
+    <string name="help_trans">Помочь с переводом Simplicity</string>
+    <string name="history">История</string>
+    <string name="home_page">Домашняя страница</string>
+    <string name="incognito_mode">Приватный режим</string>
+    <string name="location">Включить определение местоположения</string>
+    <string name="location_sum">Разрешить веб-сайтам определять Ваше местоположение</string>
+    <string name="mus">Веб-браузер</string>
+    <string name="new_tab">Новая вкладка</string>
+    <string name="ok">Применить</string>
+    <string name="print_page">Печатаю…</string>
+    <string name="privacy_policy">Политика конфиденциальности</string>
+    <string name="privacy_settings">Настройки приватности</string>
+    <string name="private_mode">Режим инкгнито</string>
+    <string name="rate_summary">Помогите другим наслаждаться Simplicity оценив приложение в Google Play.</string>
+    <string name="ratesimple">Оценить Simplicity</string>
+    <string name="reader_mode">Режим чтения</string>
+    <string name="remember">Запомнить последнюю открытую страницу</string>
+    <string name="remember_sum">Включите, чтобы сохранять и открывать последнюю открытую страницу при запуске Simplicity.</string>
+    <string name="remove_bookmark">Удалить закладку?</string>
+    <string name="rename_bookmark">Переименовать закладку</string>
+    <string name="rename_message">Вы хотите переименовать эту закладку?</string>
+    <string name="rename_titile">Переименовать закладку</string>
+    <string name="request_desk">Версия для компьютеров</string>
+    <string name="restore">Восстановить</string>
+    <string name="search_bookmarks">Искать в закладках</string>
+    <string name="search_engine_choice">Выбор поискового сервиса</string>
+    <string name="search_history">История поиска</string>
+    <string msgid="730395136688082741" name="search_menu_title">"Поиск"</string>
+    <string name="settings">Настройки</string>
+    <string name="settings_more">Больше</string>
+    <string name="share">Поделиться…</string>
+    <string name="share_bookmark">Поделиться закладкой</string>
+    <string name="simplicity_close">Нажмите \"Назад\" еще раз для закрытия Simplicity</string>
+    <string msgid="8106346172024741305" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="support_dev">Поддержать разработку</string>
+    <string name="terms">Правила</string>
+    <string name="version_spectrum">Версия</string>
+    <string name="voice_search_button">Голосовой поиск</string>
+    <string name="voice_search_button_sum">Включите для поиска голосом</string>
+</resources>

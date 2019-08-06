@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <string-array name="search_engine" translatable="false">
+        <item>AOL</item>
+        <item>Ask</item>
+        <item>Bing</item>
+        <item>DuckDuckGo</item>
+        <item>Ecosia</item>
+        <item>Google</item>
+        <item>InfoSpace</item>
+        <item>MyWebSearch</item>
+        <item>Qwant</item>
+        <item>Searx</item>
+        <item>StartPage</item>
+        <item>WebCrawler</item>
+        <item>Wow</item>
+        <item>Yandex</item>
+        <item>Yahoo</item>
+    </string-array>
+    <string-array name="search_engine_values" translatable="false">
+        <item>https://search.aol.com/aol/search?s_chn=prt_ticker-test-g&amp;q=</item>
+        <item>http://www.ask.com/web?q=</item>
+        <item>https://www.bing.com/search?q=</item>
+        <item>https://duckduckgo.com/?q=</item>
+        <item>https://www.ecosia.org/search?q=</item>
+        <item>https://www.google.com/search?q=</item>
+        <item>http://search.infospace.com/search/web?q=</item>
+        <item>http://int.search.mywebsearch.com/mywebsearch/GGmain.jhtml?searchfor=</item>
+        <item>https://www.qwant.com/?q=</item>
+        <item>https://searx.me/?q=</item>
+        <item>https://www.startpage.com/do/search?q=</item>
+        <item>https://www.webcrawler.com/serp?q=</item>
+        <item>http://www.wow.com/search?s_it=search-thp&amp;v_t=na&amp;q=</item>
+        <item>https://www.yandex.com/search/?text=</item>
+        <item>https://search.yahoo.com/mobile/s?p=</item>
+
+    </string-array>
+    <string msgid="7903180715631665059" name="abc_action_bar_home_description">"Ir a inicio"</string>
+    <string msgid="6794660482873516081" name="abc_action_bar_up_description">"Desplazarse hacia arriba"</string>
+    <string msgid="1155814932213556626" name="abc_action_menu_overflow_description">"Más opciones"</string>
+    <string msgid="2571498368472823490" name="abc_action_mode_done">"Listo"</string>
+    <string msgid="3732416590524162402" name="abc_activity_chooser_view_see_all">"Ver todo"</string>
+    <string msgid="1798588241954930982" name="abc_activitychooserview_choose_application">"Seleccionar una aplicación"</string>
+    <string msgid="3403923230105792483" name="abc_capital_off">"NO"</string>
+    <string msgid="7831734969929204599" name="abc_capital_on">"SÍ"</string>
+    <string msgid="5725160506500770567" name="abc_menu_alt_shortcut_label">"Alt +"</string>
+    <string msgid="944415252197684443" name="abc_menu_ctrl_shortcut_label">"Ctrl +"</string>
+    <string msgid="129742188101734366" name="abc_menu_delete_shortcut_label">"Suprimir"</string>
+    <string msgid="6840127756824236027" name="abc_menu_enter_shortcut_label">"Intro"</string>
+    <string msgid="4974283687810130415" name="abc_menu_function_shortcut_label">"Función +"</string>
+    <string msgid="8046416353848716905" name="abc_menu_meta_shortcut_label">"Meta +"</string>
+    <string msgid="3271697756921353410" name="abc_menu_shift_shortcut_label">"Mayús +"</string>
+    <string msgid="2304645930658438191" name="abc_menu_space_shortcut_label">"Espacio"</string>
+    <string msgid="8327365089695024394" name="abc_menu_sym_shortcut_label">"Sym +"</string>
+    <string msgid="3570106412128999382" name="abc_prepend_shortcut_label">"Menú +"</string>
+    <string msgid="940844115270746197" name="abc_search_hint">"Buscar…"</string>
+    <string msgid="1769270744562318534" name="abc_searchview_description_clear">"Borrar consulta"</string>
+    <string msgid="908784302972860853" name="abc_searchview_description_query">"Consulta de búsqueda"</string>
+    <string msgid="5466662225065974044" name="abc_searchview_description_search">"Buscar"</string>
+    <string msgid="8203855622131699655" name="abc_searchview_description_submit">"Enviar consulta"</string>
+    <string msgid="3478748990613108725" name="abc_searchview_description_voice">"Búsqueda por voz"</string>
+    <string msgid="2650565705514630347" name="abc_shareactionprovider_share_with">"Compartir con"</string>
+    <string msgid="9009661856846212431" name="abc_shareactionprovider_share_with_application">"Compartir con <ns1:g id="APPLICATION_NAME">%s</ns1:g>"</string>
+    <string msgid="6389460216547290468" name="abc_toolbar_collapse_description">"Ocultar"</string>
+    <string name="about_app">Acerca de</string>
+    <string name="action_search">Buscar</string>
+    <string name="ad_block">Bloqueo de anuncios</string>
+    <string name="ad_block_sum">Bloquear anuncios en sitios web.</string>
+    <string name="add_home">Añadir a la pantalla de inicio</string>
+    <string name="add_to_home">Añadir a la pantalla de inicio</string>
+    <string name="added_to_bookmarks">añadido a sus marcadores.</string>
+    <string name="already_to_bookmarks">ya está añadido a sus marcadores.</string>
+    <string name="are_you_sure">¿Está seguro de que desea eliminar</string>
+    <string name="are_you_sure_bookmarks">¿Está seguro de que desea borrar todos sus marcadores? Esta acción no se puede deshacer.</string>
+    <string name="are_you_sure_history">¿Está seguro de que desea borrar todo su historial? Esta acción no se puede deshacer.</string>
+    <string name="backup">Copia de seguridad</string>
+    <string name="backup_restore">Copia de seguridad y restauración</string>
+    <string name="backup_restore_message">Haga una copia de seguridad o restaure sus marcadores e historial. La configuración de la copia de seguridad reemplazará cualquier archivo de copia de seguridad anterior que haya creado previamente.</string>
+    <string name="backup_restore_sum">Realice copias de seguridad y restaure sus marcadores e historial localmente.</string>
+    <string name="backup_restore_title">Copia de seguridad y restauración local</string>
+    <string name="bookmarks">Marcadores</string>
+    <string name="bookmarks_hint">Mantenga pulsados ​​los marcadores para ordenarlos.</string>
+    <string name="cancel">Cancelar</string>
+    <string name="clear_all">Borrar todo</string>
+    <string name="clear_bookmarks">Borrar marcadores</string>
+    <string name="clear_data">Borrar datos automáticamente</string>
+    <string name="clear_data_sum">Borrar las cookies, el historial y los datos de Simplicity al cerrar la aplicación.</string>
+    <string name="clear_history">Borrar historial</string>
+    <string name="close_app">Salir</string>
+    <string msgid="8585111718777012708" name="common_google_play_services_enable_button">"Habilitar"</string>
+    <string msgid="7045129128108380659" name="common_google_play_services_enable_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> no funcionará hasta que no habilites Servicios de Google Play."</string>
+    <string msgid="3147157405986503375" name="common_google_play_services_enable_title">"Habilita Servicios de Google Play"</string>
+    <string msgid="9115728400623041681" name="common_google_play_services_install_button">"Instalar"</string>
+    <string msgid="8179894293032530091" name="common_google_play_services_install_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> no se ejecutará si los Servicios de Google Play no están instalados en tu dispositivo."</string>
+    <string msgid="7442193194585196676" name="common_google_play_services_install_title">"Descargar Servicios de Google Play"</string>
+    <string msgid="4293541511340436975" name="common_google_play_services_notification_channel_name">"Disponibilidad Servicios de Google Play"</string>
+    <string msgid="180394615667698242" name="common_google_play_services_notification_ticker">"Error de Servicios de Google Play"</string>
+    <string msgid="2518680582564677258" name="common_google_play_services_unknown_issue">"La aplicación <ns1:g id="APP_NAME">%1$s</ns1:g> tiene problemas con los Servicios de Google Play. Vuelve a intentarlo."</string>
+    <string msgid="5501187292256987189" name="common_google_play_services_unsupported_text">"No es posible ejecutar la aplicación <ns1:g id="APP_NAME">%1$s</ns1:g> sin los Servicios de Google Play, que no son compatibles con tu dispositivo."</string>
+    <string msgid="8172070149091615356" name="common_google_play_services_update_button">"Actualizar"</string>
+    <string msgid="7773943415006962566" name="common_google_play_services_update_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> no funcionará hasta que no actualices Servicios de Google Play."</string>
+    <string msgid="8706675115216073244" name="common_google_play_services_update_title">"Actualiza Servicios de Google Play"</string>
+    <string msgid="7894275749778928941" name="common_google_play_services_updating_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> no se ejecutará hasta que finalice la actualización en curso de Servicios de Google Play."</string>
+    <string msgid="2804989272736383918" name="common_google_play_services_wear_update_text">"Se necesita una nueva versión de Servicios de Google Play. Se actualizará en breve."</string>
+    <string msgid="5201977337835724196" name="common_open_on_phone">"Abrir en teléfono"</string>
+    <string msgid="3441753203274453993" name="common_signin_button_text">"Iniciar sesión"</string>
+    <string msgid="669893613918351210" name="common_signin_button_text_long">"Iniciar sesión con Google"</string>
+    <string name="confirm">Confirmar cierre</string>
+    <string name="confirm_sum">Confirma que desea cerrar Simplicity con una doble pulsación.</string>
+    <string name="default_font_zoom">Fuente de zoom por defecto</string>
+    <string name="delete_bookmark">Eliminar marcador</string>
+    <string name="do_not_track">No seguir</string>
+    <string name="do_not_track_sum">Active para solicitar que los sitios no rastreen sus datos de navegación.</string>
+    <string name="download_warning">Este tipo de archivo puede dañar su dispositivo. ¿Desea mantener %s de todas formas?</string>
+    <string name="downloading">Descargando</string>
+    <string name="error">Problema con este enlace</string>
+    <string name="find_in">Encontrar en la página</string>
+    <string name="from_bookmark">de sus marcadores?</string>
+    <string name="general_settings">Ajustes Generales</string>
+    <string name="help_trans">Ayudar a traducir Simplicity</string>
+    <string name="history">Historial</string>
+    <string name="home_page">Página de inicio</string>
+    <string name="incognito_mode">Modo privado</string>
+    <string name="location">Activar ubicación</string>
+    <string name="location_sum">Permitir a los sitios web obtener su ubicación.</string>
+    <string name="mus">Navegador web</string>
+    <string name="new_tab">Nueva pestaña</string>
+    <string name="ok">Ok</string>
+    <string name="print_page">Imprimir…</string>
+    <string name="privacy_policy">Política de privacidad</string>
+    <string name="privacy_settings">Jose</string>
+    <string name="private_mode">Modo privado</string>
+    <string name="rate_summary">Ayude a otros a disfrutar de Simplicity calificando la aplicación en Google Play.</string>
+    <string name="ratesimple">Calificar Simplicity</string>
+    <string name="reader_mode">Modo lectura</string>
+    <string name="remember">Recordar última página</string>
+    <string name="remember_sum">Active para guardar y abrir su última página visitada cuando abre Simplicity.</string>
+    <string name="remove_bookmark">¿Eliminar marcador?</string>
+    <string name="rename_bookmark">Renombrar marcador</string>
+    <string name="rename_message">¿Desea renombrar este marcador?</string>
+    <string name="rename_titile">Renombrar marcador</string>
+    <string name="request_desk">Sitio de escritorio</string>
+    <string name="restore">Restaurar</string>
+    <string name="search_bookmarks">Buscar marcadores</string>
+    <string name="search_engine_choice">Escoger motor de búsqueda</string>
+    <string name="search_history">Buscar historial</string>
+    <string msgid="730395136688082741" name="search_menu_title">"Buscar"</string>
+    <string name="settings">😁</string>
+    <string name="settings_more">Más</string>
+    <string name="share">Compartir…</string>
+    <string name="share_bookmark">Compartir marcador</string>
+    <string name="simplicity_close">Vuelva a presionar para cerrar Simplicity</string>
+    <string msgid="8106346172024741305" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="support_dev">Apoyar el desarrollo</string>
+    <string name="terms">Términos</string>
+    <string name="version_spectrum">Versión</string>
+    <string name="voice_search_button">Búsqueda por voz</string>
+    <string name="voice_search_button_sum">Habilite para buscar con su voz.</string>
+</resources>

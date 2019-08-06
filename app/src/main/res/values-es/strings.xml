@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<resources>
+    <string name="settings">😁</string>
+    <string name="cancel">Cancelar</string>
+    <string name="ok">Ok</string>
+    <string name="privacy_settings">Jose</string>
+    <string name="general_settings">Ajustes Generales</string>
+    <string name="bookmarks">Marcadores</string>
+    <string name="search_engine_choice">Escoger motor de búsqueda</string>
+    <string-array name="search_engine" translatable="false">
+        <item>AOL</item>
+        <item>Ask</item>
+        <item>Bing</item>
+        <item>DuckDuckGo</item>
+        <item>Ecosia</item>
+        <item>Google</item>
+        <item>InfoSpace</item>
+        <item>MyWebSearch</item>
+        <item>Qwant</item>
+        <item>Searx</item>
+        <item>StartPage</item>
+        <item>WebCrawler</item>
+        <item>Wow</item>
+        <item>Yandex</item>
+        <item>Yahoo</item>
+    </string-array>
+
+    <string-array name="search_engine_values" translatable="false">
+        <item>https://search.aol.com/aol/search?s_chn=prt_ticker-test-g&amp;q=</item>
+        <item>http://www.ask.com/web?q=</item>
+        <item>https://www.bing.com/search?q=</item>
+        <item>https://duckduckgo.com/?q=</item>
+        <item>https://www.ecosia.org/search?q=</item>
+        <item>https://www.google.com/search?q=</item>
+        <item>http://search.infospace.com/search/web?q=</item>
+        <item>http://int.search.mywebsearch.com/mywebsearch/GGmain.jhtml?searchfor=</item>
+        <item>https://www.qwant.com/?q=</item>
+        <item>https://searx.me/?q=</item>
+        <item>https://www.startpage.com/do/search?q=</item>
+        <item>https://www.webcrawler.com/serp?q=</item>
+        <item>http://www.wow.com/search?s_it=search-thp&amp;v_t=na&amp;q=</item>
+        <item>https://www.yandex.com/search/?text=</item>
+        <item>https://search.yahoo.com/mobile/s?p=</item>
+
+    </string-array>
+    <string name="private_mode">Modo privado</string>
+    <string name="history">Historial</string>
+    <string name="share">Compartir...</string>
+    <string name="find_in">Encontrar en la página</string>
+    <string name="add_to_home">Añadir a la pantalla de inicio</string>
+    <string name="request_desk">Sitio de escritorio</string>
+    <string name="clear_history">Borrar historial</string>
+    <string name="help_trans">Ayudar a traducir Simplicity</string>
+    <string name="about_app">Acerca de</string>
+    <string name="new_tab">Nueva pestaña</string>
+    <string name="action_search">Buscar</string>
+    <string name="ratesimple">Calificar Simplicity</string>
+    <string name="rate_summary">Ayude a otros a disfrutar de Simplicity calificando la aplicación en Google Play.</string>
+    <string name="mus">Navegador web</string>
+    <string name="version_spectrum">Versión</string>
+    <string name="support_dev">Apoyar el desarrollo</string>
+    <string name="simplicity_close">Vuelva a presionar para cerrar Simplicity</string>
+    <string name="error">Problema con este enlace</string>
+    <string name="search_bookmarks">Buscar marcadores</string>
+    <string name="search_history">Buscar historial</string>
+    <string name="delete_bookmark">Eliminar marcador</string>
+    <string name="rename_bookmark">Renombrar marcador</string>
+    <string name="share_bookmark">Compartir marcador</string>
+    <string name="rename_titile">Renombrar marcador</string>
+    <string name="rename_message">¿Desea renombrar este marcador?</string>
+    <string name="remove_bookmark">¿Eliminar marcador?</string>
+    <string name="are_you_sure">¿Está seguro de que desea eliminar</string>
+    <string name="from_bookmark">de sus marcadores?</string>
+    <string name="settings_more">Más</string>
+    <string name="terms">Términos</string>
+    <string name="privacy_policy">Política de privacidad</string>
+    <string name="clear_all">Borrar todo</string>
+    <string name="clear_bookmarks">Borrar marcadores</string>
+    <string name="are_you_sure_bookmarks">¿Está seguro de que desea borrar todos sus marcadores? Esta acción no se puede deshacer.</string>
+    <string name="are_you_sure_history">¿Está seguro de que desea borrar todo su historial? Esta acción no se puede deshacer.</string>
+    <string name="added_to_bookmarks">añadido a sus marcadores.</string>
+    <string name="add_home">Añadir a la pantalla de inicio</string>
+    <string name="print_page">Imprimir...</string>
+    <string name="reader_mode">Modo lectura</string>
+    <string name="incognito_mode">Modo privado</string>
+    <string name="default_font_zoom">Fuente de zoom por defecto</string>
+    <string name="ad_block">Bloqueo de anuncios</string>
+    <string name="ad_block_sum">Bloquear anuncios en sitios web.</string>
+    <string name="do_not_track">No seguir</string>
+    <string name="do_not_track_sum">Active para solicitar que los sitios no rastreen sus datos de navegación.</string>
+    <string name="clear_data">Borrar datos automáticamente</string>
+    <string name="clear_data_sum">Borrar las cookies, el historial y los datos de Simplicity al cerrar la aplicación.</string>
+    <string name="location">Activar ubicación</string>
+    <string name="location_sum">Permitir a los sitios web obtener su ubicación.</string>
+    <string name="confirm">Confirmar cierre</string>
+    <string name="confirm_sum">Confirma que desea cerrar Simplicity con una doble pulsación.</string>
+    <string name="home_page">Página de inicio</string>
+    <string name="remember">Recordar última página</string>
+    <string name="remember_sum">Active para guardar y abrir su última página visitada cuando abre Simplicity.</string>
+    <string name="bookmarks_hint">Mantenga pulsados ​​los marcadores para ordenarlos.</string>
+    <string name="voice_search_button">Búsqueda por voz</string>
+    <string name="voice_search_button_sum">Habilite para buscar con su voz.</string>
+    <string name="close_app">Salir</string>
+    <string name="already_to_bookmarks">ya está añadido a sus marcadores.</string>
+    <string name="download_warning">Este tipo de archivo puede dañar su dispositivo. ¿Desea mantener %s de todas formas?</string>
+    <string name="downloading">Descargando</string>
+    <!-- Suggestions provider: no suggestions provider -->
+    <string name="backup_restore_title">Copia de seguridad y restauración local</string>
+    <string name="backup_restore_sum">Realice copias de seguridad y restaure sus marcadores e historial localmente.</string>
+    <string name="backup_restore_message">Haga una copia de seguridad o restaure sus marcadores e historial. La configuración de la copia de seguridad reemplazará cualquier archivo de copia de seguridad anterior que haya creado previamente.</string>
+    <string name="backup">Copia de seguridad</string>
+    <string name="restore">Restaurar</string>
+    <string name="backup_restore">Copia de seguridad y restauración</string>
+</resources>

@@ -46,7 +46,7 @@ public class ListPopupWindowAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = mLayoutInflater.inflate(R.layout.menu_popup_layout, null);
+            convertView = mLayoutInflater.inflate(R.layout.layout_popup_menu, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
