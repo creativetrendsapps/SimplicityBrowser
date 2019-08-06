@@ -93,7 +93,6 @@ public class PhotoActivity extends BaseActivity {
         mProgressbar = findViewById(R.id.progress_photo);
         genericImage = getIntent().getStringExtra("url");
         pic_back = findViewById(R.id.rel_pic);
-        registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
         shareRandom = StaticUtils.getRandomString(10) + ".png";
         mWebView = findViewById(R.id.web_photo);
         mWebView.setBackgroundColor(ContextCompat.getColor(this, R.color.black));
@@ -165,17 +164,7 @@ public class PhotoActivity extends BaseActivity {
 
         });
         shareButton.setOnClickListener(v -> {
-            try {
-
-                if (!Helpers.hasStoragePermission(PhotoActivity.this)) {
-                    Helpers.requestStoragePermission(PhotoActivity.this);
-                } else {
-                    shareImage();
-                }
-            } catch (Exception i) {
-                i.printStackTrace();
-            }
-
+            shareImage();
         });
     }
 
@@ -282,7 +271,6 @@ public class PhotoActivity extends BaseActivity {
 
     @Override
     public void onDestroy() {
-        unregisterReceiver(onComplete);
         super.onDestroy();
     }
 
@@ -319,15 +307,6 @@ public class PhotoActivity extends BaseActivity {
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
     }
-
-
-    BroadcastReceiver onComplete = new BroadcastReceiver() {
-        public void onReceive(Context ctxt, Intent intent) {
-            Cardbar.snackBar(getApplicationContext(), "Image downloaded", true).show();
-
-
-        }
-    };
 
 
 
