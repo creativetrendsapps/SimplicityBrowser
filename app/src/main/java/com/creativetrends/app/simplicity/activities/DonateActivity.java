@@ -45,7 +45,7 @@ public class DonateActivity extends BaseActivity implements View.OnClickListener
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donate);
-        bp = BillingProcessor.newBillingProcessor(this, "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjSFHzrCW9carUOooKilg7YpmDd8hvNk8Z2VFYVDVzhZtPsDXeeqckeW9AicEtTHu4s1uBPK6w2Z7LE8pb1kTrHR8YuIFltWmi3w9WKmt5RPgbSXDObzhXj2q6dz/QRyqMOl9JWL4C2gkNJLhvtqF3iJ+gp4PvYNCO5dN+EpGfWW6q4cJENYBwsobZQ/6rUGMNiKwJfPbDoaepkc3OEowIl4S49sIjMqvNKNvzTqyGJUMTerbljqdu9Jpk4Z8opAf0w7CasJ2vNKS3/ZERlT3fWZbR8TZvyo813rO7brRmMv0XtdrLeMS/TggWr9YAKbhyqOvZORaBdziu98jO0W5FwIDAQAB", this);
+        bp = BillingProcessor.newBillingProcessor(this, "", this);
         bp.initialize();
         mToolbar = findViewById(R.id.toolbar);
         amount = findViewById(R.id.amount);
@@ -120,36 +120,27 @@ public class DonateActivity extends BaseActivity implements View.OnClickListener
         seekBar.setProgress(progress);
         switch (progress) {
             case 0:
-                amount.setText(DXDecryptorxWPYWsyI.decode("XGULTp8=")/*"$1.50"*/);
-                description.setText(DXDecryptorxWPYWsyI.decode("OiFcCI/vU2YRpSIWYlNcQQgWmQEnxO8=")/*"Buys me a small coffee."*/);
+                
                 break;
 
             case 1:
-                amount.setText(DXDecryptorxWPYWsyI.decode("XGYLTp8=")/*"$2.50"*/);
-                description.setText(DXDecryptorxWPYWsyI.decode("OiFcCI/vU2YRpT0acVhVQQgWmQEnxO8=")/*"Buys me a large coffee."*/);
                 break;
 
             case 2:
-                amount.setText(DXDecryptorxWPYWsyI.decode("XGALTp8=")/*"$4.50"*/);
-                description.setText(DXDecryptorxWPYWsyI.decode("OiFcCI/vU2YR63Eee0tCAEsVnhUlxOEU3WOM50Mk")/*"Buys me an extra large coffee."*/);
+                
                 break;
 
             case 3:
-                amount.setText(DXDecryptorxWPYWsyI.decode("XGILTp8=")/*"$6.50"*/);
-                description.setText(DXDecryptorxWPYWsyI.decode("OiFcCI/vU2YRpSIWYlNcQQcMkQQqjw==")/*"Buys me a small lunch."*/);
+               
                 break;
             case 4:
-                amount.setText(DXDecryptorxWPYWsyI.decode("XGUQVZ+y")/*"$15.00"*/);
-                description.setText(DXDecryptorxWPYWsyI.decode("LztSWo/DRCNQ/D4OI0xFEw5G")/*"Wow! Are you sure?"*/);
                 break;
             case 5:
-                amount.setText(DXDecryptorxWPYWsyI.decode("XGYVVZ+y")/*"$20.00"*/);
-                description.setText(DXDecryptorxWPYWsyI.decode("LDxED4jxFidQ6T4PIh4QIBkc3x4t1OEEx3ePvQ==")/*"That's a lot!! Are you sure?"*/);
+                
                 break;
 
             default:
-                amount.setText(DXDecryptorxWPYWsyI.decode("XGULTp8=")/*"$1.50"*/);
-                description.setText(DXDecryptorxWPYWsyI.decode("OiFcCI/vU2YRpSIWYlNcQQgWmQEnxO8=")/*"Buys me a small coffee."*/);
+                
                 break;
 
         }
@@ -170,64 +161,29 @@ public class DonateActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (seekBar.getProgress()) {
             case 0:
-                if (!bp.isPurchased(DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwgWmQEnxA==")/*"simplicity.lite.coffee"*/)) {
-                    bp.purchase(this, DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwgWmQEnxA==")/*"simplicity.lite.coffee"*/);
-                } else {
-                    bp.consumePurchase(DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwgWmQEnxA==")/*"simplicity.lite.coffee"*/);
-                    bp.purchase(this, DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwgWmQEnxA==")/*"simplicity.lite.coffee"*/);
-                }
+                
                 break;
 
             case 1:
-                if (!bp.isPurchased(DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwcYjQAnj6IY1GOP5w==")/*"simplicity.lite.large.coffee"*/)) {
-                    bp.purchase(this, DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwcYjQAnj6IY1GOP5w==")/*"simplicity.lite.large.coffee"*/);
-                } else {
-                    bp.consumePurchase(DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwcYjQAnj6IY1GOP5w==")/*"simplicity.lite.large.coffee"*/);
-                    bp.purchase(this, DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwcYjQAnj6IY1GOP5w==")/*"simplicity.lite.large.coffee"*/);
-                }
+                
                 break;
 
             case 2:
-                if (!bp.isPurchased(DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTxMVnhUlxO8U3WOM50M=")/*"simplicity.lite.xlarge.coffee"*/)) {
-                    bp.purchase(this, DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTxMVnhUlxO8U3WOM50M=")/*"simplicity.lite.xlarge.coffee"*/);
-                } else {
-                    bp.consumePurchase(DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTxMVnhUlxO8U3WOM50M=")/*"simplicity.lite.xlarge.coffee"*/);
-                    bp.purchase(this, DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTxMVnhUlxO8U3WOM50M=")/*"simplicity.lite.xlarge.coffee"*/);
-                }
+                
                 break;
 
             case 3:
-                if (!bp.isPurchased(DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwcMkQQq")/*"simplicity.lite.lunch"*/)) {
-                    bp.purchase(this, DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwcMkQQq")/*"simplicity.lite.lunch"*/);
-                } else {
-                    bp.consumePurchase(DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwcMkQQq")/*"simplicity.lite.lunch"*/);
-                    bp.purchase(this, DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwcMkQQq")/*"simplicity.lite.lunch"*/);
-                }
+                
                 break;
             case 4:
-                if (!bp.isPurchased(DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwkQmAMtz6AD22qE")/*"simplicity.lite.bigdonation"*/)) {
-                    bp.purchase(this, DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwkQmAMtz6AD22qE")/*"simplicity.lite.bigdonation"*/);
-                } else {
-                    bp.consumePurchase(DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwkQmAMtz6AD22qE")/*"simplicity.lite.bigdonation"*/);
-                    bp.purchase(this, DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwkQmAMtz6AD22qE")/*"simplicity.lite.bigdonation"*/);
-                }
+                
                 break;
             case 5:
-                if (!bp.isPurchased(DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwcYjQAnxa4Z03GD7Ug=")/*"simplicity.lite.largedonation"*/)) {
-                    bp.purchase(this, DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwcYjQAnxa4Z03GD7Ug=")/*"simplicity.lite.largedonation"*/);
-                } else {
-                    bp.consumePurchase(DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwcYjQAnxa4Z03GD7Ug=")/*"simplicity.lite.largedonation"*/);
-                    bp.purchase(this, DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwcYjQAnxa4Z03GD7Ug=")/*"simplicity.lite.largedonation"*/);
-                }
+                
                 break;
 
             default:
-                if (!bp.isPurchased(DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwgWmQEnxA==")/*"simplicity.lite.coffee"*/)) {
-                    bp.purchase(this, DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwgWmQEnxA==")/*"simplicity.lite.coffee"*/);
-                } else {
-                    bp.consumePurchase(DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwgWmQEnxA==")/*"simplicity.lite.coffee"*/);
-                    bp.purchase(this, DXDecryptorxWPYWsyI.decode("Cz1IC8PrVS8E/H8XaktVTwgWmQEnxA==")/*"simplicity.lite.coffee"*/);
-                }
+                
                 break;
 
         }
