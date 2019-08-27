@@ -1,7 +1,5 @@
 package com.creativetrends.app.simplicity.adapters;
 
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -13,10 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,8 +25,13 @@ import com.creativetrends.app.simplicity.utils.FileTypeUtils;
 import com.creativetrends.app.simplicity.utils.FileUtils;
 import com.creativetrends.simplicity.app.R;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class AdapterDownloads extends RecyclerView.Adapter<AdapterDownloads.ViewHolder> {
@@ -40,10 +45,9 @@ public class AdapterDownloads extends RecyclerView.Adapter<AdapterDownloads.View
 
     @NonNull
     @Override
-    public AdapterDownloads.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        @SuppressLint("InflateParams")
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_file,null, false);
-        return new ViewHolder(view);
+    public AdapterDownloads.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_downloads, parent, false);
+        return new AdapterDownloads.ViewHolder(view);
     }
 
 
@@ -53,11 +57,10 @@ public class AdapterDownloads extends RecyclerView.Adapter<AdapterDownloads.View
         final Uri uri = Uri.parse(files.getUri().toString());
         final File file = new File(uri.getPath());
         FileTypeUtils.FileType fileType = FileTypeUtils.getFileType(file);
-
         holder.mFileImage.setImageResource(fileType.getIcon());
         holder.mFileTitle.setText(file.getName());
-        holder.mSize.setText(FileUtils.getReadableFileSize(file.length()));
-        holder.mFileSubtitle.setText(fileType.getDescription());
+        holder.mSize.setText(context.getString(R.string.item_download_details, FileUtils.getReadableFileSize(file.length()), FilenameUtils.getExtension(file.getName())));
+        holder.mFileSubtitle.setText(new SimpleDateFormat("E - MMM d, yyyy h:mm a", Locale.getDefault()).format(new Date(file.lastModified())));
 
         holder.mFile_Holder.setOnClickListener(v -> handleFileClicked(file));
         holder.mDelete.setOnClickListener(v -> {
@@ -87,25 +90,22 @@ public class AdapterDownloads extends RecyclerView.Adapter<AdapterDownloads.View
                 }
             });
             delete.show();
-
         });
     }
 
     private void handleFileClicked(final File clickedFile) {
-        Uri files = FileProvider.getUriForFile(context, context.getString(R.string.auth), clickedFile);
-        Intent newIntent = new Intent(Intent.ACTION_VIEW);
-        newIntent.setDataAndType(files, getMimeType(files));
-        newIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         try {
+            Uri files = FileProvider.getUriForFile(context, context.getString(R.string.auth), clickedFile);
+            Intent newIntent = new Intent(Intent.ACTION_VIEW);
+            newIntent.setDataAndType(files, getMimeType(files));
+            newIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             context.startActivity(newIntent);
         } catch (ActivityNotFoundException e) {
-            Cardbar.snackBar(context, "No handler for this type of file.", true).show();
+            Toast.makeText(context, "Can't open file", Toast.LENGTH_LONG).show();
         } catch (Exception p) {
             p.printStackTrace();
-            Cardbar.snackBar(context, "No handler for this type of file.", true).show();
+            Toast.makeText(context, "Can't open file", Toast.LENGTH_LONG).show();
         }
-
-
     }
 
     private String getMimeType(Uri uri) {
@@ -127,12 +127,12 @@ public class AdapterDownloads extends RecyclerView.Adapter<AdapterDownloads.View
         return filesList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView mFileImage, mDelete;
         private TextView mFileTitle;
         private TextView mFileSubtitle;
         private TextView mSize;
-        private LinearLayout mFile_Holder;
+        private RelativeLayout mFile_Holder;
         ViewHolder(View itemView) {
             super(itemView);
             mFileImage = itemView.findViewById(R.id.item_file_image);
