@@ -5,13 +5,13 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListPopupWindow;
 import android.widget.RelativeLayout;
@@ -19,11 +19,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.MotionEventCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.creativetrends.app.simplicity.popup.Item;
 import com.creativetrends.app.simplicity.popup.ListPopupWindowAdapter;
+import com.creativetrends.app.simplicity.ui.Cardbar;
 import com.creativetrends.app.simplicity.utils.OnStartDragListener;
 import com.creativetrends.app.simplicity.utils.TouchHelperAdapter;
 import com.creativetrends.app.simplicity.utils.UserPreferences;
@@ -56,7 +58,7 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
         private RelativeLayout bookmarkHolder;
         private ImageView delete;
         private TextView title, url, letter;
-        private LinearLayout card;
+        CardView card;
 
         ViewHolderBookmark(View itemView) {
             super(itemView);
@@ -81,21 +83,24 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
             letter.setBackgroundTintList(ColorStateList.valueOf(bookmark.getImage()));
             bookmarkHolder.setOnClickListener(this);
             delete.setOnClickListener(this);
-            et = new EditText(context);
         }
 
         private void deleteAlert() {
-            AlertDialog.Builder removeFavorite = new AlertDialog.Builder(context);
-            removeFavorite.setTitle(R.string.remove_bookmark);
-            removeFavorite.setMessage(context.getResources().getString(R.string.are_you_sure) + " " + bookmark.getTitle() + " " + context.getResources().getString(R.string.from_bookmark));
-            removeFavorite.setPositiveButton(context.getResources().getString(R.string.ok), (dialog, which) -> {
-                listBookmarks.remove(bookmark);
-                filteredBookmarks.remove(bookmark);
-                adapter.notifyDataSetChanged();
+            try {
+                AlertDialog.Builder removeFavorite = new AlertDialog.Builder(context);
+                removeFavorite.setTitle(R.string.remove_bookmark);
+                removeFavorite.setMessage(context.getResources().getString(R.string.are_you_sure) + " " + bookmark.getTitle() + " " + context.getResources().getString(R.string.from_bookmark));
+                removeFavorite.setPositiveButton(context.getResources().getString(R.string.ok), (dialog, which) -> {
+                    listBookmarks.remove(bookmark);
+                    filteredBookmarks.remove(bookmark);
+                    adapter.notifyDataSetChanged();
 
-            });
-            removeFavorite.setNegativeButton(R.string.cancel, null);
-            removeFavorite.show();
+                });
+                removeFavorite.setNegativeButton(R.string.cancel, null);
+                removeFavorite.show();
+            }catch (Exception dumb_crash){
+                dumb_crash.printStackTrace();
+            }
         }
 
 
@@ -103,6 +108,7 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
         private void editAlert() {
             try {
                 et = new EditText(context);
+
                 AlertDialog.Builder createFile = new AlertDialog.Builder(context);
                 createFile.setCancelable(false);
                 createFile.setTitle(context.getResources().getString(R.string.rename_titile));
@@ -110,12 +116,22 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
                 //noinspection deprecation
                 createFile.setView(et, 30, 5, 30, 5);
                 et.setHint(bookmark.getTitle());
+                et.setEllipsize(TextUtils.TruncateAt.END);
                 createFile.setPositiveButton(R.string.ok, (arg0, arg1) -> {
-                    bookmark.setTitle(et.getText().toString());
-                    String getText = et.getText().toString();
-                    String getLetter = getText.substring(0,1);
-                    bookmark.setLetter(getLetter);
-                    adapter.notifyItemRemoved(getAdapterPosition());
+                    if(et.getText().toString().isEmpty()) {
+                        Cardbar.snackBar(context, "No changes made to"+" "+bookmark.getTitle(), true).show();
+                    }else {
+                        bookmark.setTitle(et.getText().toString());
+                        String getText = et.getText().toString();
+                        String getLetter;
+                        if (!getText.isEmpty() & getText.length() > 0) {
+                            getLetter = getText.substring(0, 1);
+                        } else {
+                            getLetter = bookmark.getTitle();
+                        }
+                        bookmark.setLetter(getLetter);
+                        adapter.notifyItemRemoved(getAdapterPosition());
+                    }
                 });
                 createFile.setNegativeButton(R.string.cancel, null);
                 createFile.show();
@@ -211,7 +227,7 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
 
     @NonNull
     public ViewHolderBookmark onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolderBookmark(layoutInflater.inflate(R.layout.layout_bookmark_items, parent, false));
+        return new ViewHolderBookmark(layoutInflater.inflate(R.layout.item_bookmarks, parent, false));
     }
 
 
@@ -253,10 +269,10 @@ public class AdapterBookmarks extends RecyclerView.Adapter<AdapterBookmarks.View
         notifyItemMoved(fromPosition, toPosition);
     }
 
-    private BookmarkItems removeItem(int position) {
+    @SuppressWarnings (value="unused")
+    private void removeItem(int position) {
         BookmarkItems bookmark = filteredBookmarks.remove(position);
         notifyItemRemoved(position);
-        return bookmark;
     }
 
     public int getItemCount() {
