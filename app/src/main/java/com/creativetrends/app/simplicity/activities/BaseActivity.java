@@ -43,7 +43,6 @@ public class BaseActivity extends AppCompatActivity {
     public void getUserInfo(AppCompatImageView imageView){
         if (currentUser != null) {
             if (currentUser.getPhotoUrl() != null) {
-                Log.e("Profile", UserPreferences.getString("pro_picture", ""));
                 Glide.with(this)
                         .load(currentUser.getPhotoUrl().toString())
                         .apply(RequestOptions.circleCropTransform()
