@@ -34,6 +34,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.codekidlabs.storagechooser.StorageChooser;
 import com.creativetrends.app.simplicity.SimplicityApplication;
 import com.creativetrends.app.simplicity.activities.AboutActivity;
+import com.creativetrends.app.simplicity.activities.SettingsActivity;
 import com.creativetrends.app.simplicity.activities.DonateActivity;
 import com.creativetrends.app.simplicity.activities.SimplicityAccount;
 import com.creativetrends.app.simplicity.activities.SimplicityProfile;
@@ -114,8 +115,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                     break;
 
                 case "dark_mode":
-
-                    setRelaunch();
+                    SettingsActivity.showSheet();
                     break;
 
 
