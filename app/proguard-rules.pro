@@ -1,9 +1,3 @@
--dontusemixedcaseclassnames
--dontskipnonpubliclibraryclasses
--allowaccessmodification
--optimizationpasses 5
--repackageclasses ''
-
 -keepclasseswithmembernames class * {
     native <methods>;
 }
