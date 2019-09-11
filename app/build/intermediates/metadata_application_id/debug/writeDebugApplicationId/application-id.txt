@@ -1,1 +1,0 @@
-com.creativetrends.simplicity.app

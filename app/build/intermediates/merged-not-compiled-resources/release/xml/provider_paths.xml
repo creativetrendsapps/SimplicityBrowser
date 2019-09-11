@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<paths>
-    <external-path name="attachment_file" path="."/>
-    <external-path name="external_files" path="." />
-    <external-path name="media" path="."/>
-</paths>
