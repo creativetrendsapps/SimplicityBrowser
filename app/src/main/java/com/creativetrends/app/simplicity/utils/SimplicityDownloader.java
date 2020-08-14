@@ -13,6 +13,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.webkit.URLUtil;
 
@@ -35,6 +36,7 @@ import java.util.Objects;
 import static com.creativetrends.app.simplicity.utils.StaticUtils.getFileSize;
 
 public class SimplicityDownloader extends AsyncTask<String, Integer, String> {
+    private final int id = 101;
     @SuppressLint("StaticFieldLeak")
     private Context context;
     private NotificationManager mNotifyManager;
@@ -43,19 +45,31 @@ public class SimplicityDownloader extends AsyncTask<String, Integer, String> {
     private long total = 0;
     private String filename;
     private File imageStorageDir;
-    private final int id = 101;
-    public SimplicityDownloader(Context context){
+
+    public SimplicityDownloader(Context context) {
         this.context = context;
         mNotifyManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         build = new NotificationCompat.Builder(context, context.getString(R.string.notification_widget_channel));
+    }
+
+    private static String getFileNameTwitter(String url) {
+        int index = url.indexOf("?format=");
+        if (index > -1) {
+            url = url.substring(0, index);
+        }
+
+        index = url.lastIndexOf("/");
+        if (index > -1) {
+            return url.substring(index + 1);
+        } else {
+            return Long.toString(System.currentTimeMillis());
+        }
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
         build.setProgress(0, 0, true);
-        final int dl_progress = (int) ((double)total / (double)fileLength * 100f);
-        build.setContentText(" " +dl_progress + "%");
         build.setAutoCancel(true);
         build.setContentTitle(context.getString(R.string.downloading));
         build.setSmallIcon(android.R.drawable.stat_sys_download);
@@ -63,7 +77,6 @@ public class SimplicityDownloader extends AsyncTask<String, Integer, String> {
         build.setWhen(System.currentTimeMillis());
         mNotifyManager.notify(id, build.build());
     }
-
 
     @Override
     protected String doInBackground(String... string) {
@@ -80,28 +93,38 @@ public class SimplicityDownloader extends AsyncTask<String, Integer, String> {
             URL url = new URL(string[0]);
             connection = (HttpURLConnection) url.openConnection();
             connection.connect();
-            if(connection.getResponseCode() != HttpURLConnection.HTTP_OK){
-                return "Server returned HTTP " + connection.getResponseCode() + " "+ connection.getResponseMessage();
+            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                return "Server returned HTTP " + connection.getResponseCode() + " " + connection.getResponseMessage();
             }
+
+            String twitterExtension = ".jpg";
+            if (string[0].contains(".gif"))
+                twitterExtension = ".gif";
+            else if (string[0].contains(".png"))
+                twitterExtension = ".png";
+            else if (string[0].contains(".3gp"))
+                twitterExtension = ".3gp";
 
             fileLength = connection.getContentLength();
-            filename = URLUtil.guessFileName(string[0], null, Helpers.getMimeType(Uri.parse(string[0]).toString()));
+            if (string[0].contains("pbs.twimg.com")) {
+                filename = getFileNameTwitter(string[0]) + twitterExtension;
+            } else {
+                filename = URLUtil.guessFileName(string[0], null, Helpers.getMimeType(Uri.parse(string[0]).toString()));
+            }
             input = connection.getInputStream();
-            output = new FileOutputStream(imageStorageDir+ File.separator +filename);
-            byte[] data = new byte[4096];
+            output = new FileOutputStream(imageStorageDir + File.separator + filename);
+            byte[] data = new byte[1024 * 4];
             int count;
-            while ((count = input.read(data)) != -1) {
-                if (isCancelled()) {
-                    input.close();
-                    return null;
-                }
+            /*Calendar lastUpdate = Calendar.getInstance();*/
+            while ((count = input.read(data)) > 0) {
                 total += count;
-
-                if (fileLength > 0)
-                    publishProgress((int) (total * 100 / fileLength));
+                /*Calendar now = Calendar.getInstance();
+                if (now.getTimeInMillis() - lastUpdate.getTimeInMillis() >= 1500) {
+                    lastUpdate = now;
+                    publishProgress((int) ((total * 100 / fileLength)));
+                }*/
                 output.write(data, 0, count);
             }
-
         } catch (Exception e) {
             return e.toString();
         } finally {
@@ -120,37 +143,31 @@ public class SimplicityDownloader extends AsyncTask<String, Integer, String> {
         return null;
     }
 
-
     @Override
     protected void onProgressUpdate(Integer... values) {
         super.onProgressUpdate(values);
-        final int dl_progress = (int) ((double)total / (double)fileLength * 100f);
-        build.setProgress(100, values[0], false);
-        build.setContentText(getFileSize(total)+ "/" +getFileSize(fileLength) +" " +dl_progress + "%");
-        mNotifyManager.notify(id,  build.build());
-        if(!StaticUtils.isNetworkConnected(context)){
+        build.setProgress(0, 0, true);
+        if (!StaticUtils.isNetworkConnected(context)) {
             cancel(true);
         }
     }
 
-
-
     @Override
     protected void onPostExecute(String file_url) {
-        if (file_url != null){
+        if (file_url != null) {
             mNotifyManager.cancel(id);
             build.setContentText(context.getResources().getString(android.R.string.httpErrorBadUrl))
                     .setContentTitle(filename)
                     .setShowWhen(true)
                     .setWhen(System.currentTimeMillis())
                     .setAutoCancel(true)
-                    .setTimeoutAfter((long) 10000)
+                    .setTimeoutAfter(10000)
                     .setProgress(0, 0, false)
                     .setSmallIcon(R.drawable.ic_error);
             Notification notification = build.build();
             mNotifyManager.notify(id, notification);
-            Cardbar.snackBar(context, context.getString(R.string.download_failed, filename), true).show();
-        }else {
+            Cardbar.snackBar(context, context.getString(R.string.download_failed), true).show();
+        } else {
             try {
                 mNotifyManager.cancel(id);
                 File newFile = new File(imageStorageDir + File.separator, filename);
@@ -164,26 +181,22 @@ public class SimplicityDownloader extends AsyncTask<String, Integer, String> {
                         .setShowWhen(true)
                         .setWhen(System.currentTimeMillis())
                         .setContentTitle(filename)
-                        .setContentText("Download complete "+ context.getString(R.string.bullet) +" "+ getFileSize(fileLength))
+                        .setContentText("Download complete " + context.getString(R.string.bullet) + " " + getFileSize(fileLength))
                         .setAutoCancel(true)
                         .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_download_done))
                         .setProgress(0, 0, false)
                         .setSmallIcon(R.drawable.ic_check_download);
                 Notification notification = build.build();
                 mNotifyManager.notify(id, notification);
-                Cardbar.snackBar(context, context.getString(R.string.download_successful, filename), true).show();
-                MediaScannerConnection.scanFile(context, new String[]{imageStorageDir + File.separator + filename}, null, (path1, uri1) -> {
-                });
+                Cardbar.snackBar(context, context.getString(R.string.download_successful), true).show();
+                MediaScannerConnection.scanFile(context, new String[]{imageStorageDir + File.separator + filename}, null, (path, uri) -> Log.i("Saved and scanned to", path));
             } catch (ActivityNotFoundException e) {
                 Cardbar.snackBar(context, "Cannot open file.", true).show();
-            } catch (Exception p){
-                p.printStackTrace();
-                Cardbar.snackBar(context, "Cannot open file.", true).show();
+
             }
 
         }
     }
-
 
     @Override
     protected void onCancelled() {
@@ -191,7 +204,6 @@ public class SimplicityDownloader extends AsyncTask<String, Integer, String> {
         Cardbar.snackBar(context, context.getString(R.string.download_cancelled), true).show();
 
     }
-
 
     private String getMimeType(Uri uri) {
         String mimeType;
