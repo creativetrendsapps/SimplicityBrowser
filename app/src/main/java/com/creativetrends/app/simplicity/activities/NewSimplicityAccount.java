@@ -1,16 +1,21 @@
 package com.creativetrends.app.simplicity.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -22,6 +27,7 @@ import com.creativetrends.app.simplicity.ui.Cardbar;
 import com.creativetrends.app.simplicity.utils.ExportUtils;
 import com.creativetrends.app.simplicity.utils.UserPreferences;
 import com.creativetrends.simplicity.app.R;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -29,24 +35,25 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
-import java.util.Calendar;
 import java.util.Objects;
 
 public class NewSimplicityAccount extends BaseActivity {
+    private static final int CHOOSE_IMAGE = 22;
     AppCompatEditText editText0, editText1, editText2;
-    AppCompatButton next, verify;
+    MaterialButton next, verify;
     Toolbar toolbar;
     AppCompatTextView forgot;
     AppCompatImageView appCompatImageView;
     int attempts = 2;
-    private static final int CHOOSE_IMAGE = 22;
     Uri user_pic;
     String pic_url;
+    AlertDialog PostDialog;
+    ProgressBar progressBar;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if(UserPreferences.getBoolean("dark_mode", false)){
+        if (UserPreferences.getBoolean("dark_mode", false)) {
             setTheme(R.style.SimplicityAccountThemeDark);
         }
         super.onCreate(savedInstanceState);
@@ -67,8 +74,6 @@ public class NewSimplicityAccount extends BaseActivity {
             getSupportActionBar().setTitle(null);
         }
 
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
         AppCompatTextView copyright = findViewById(R.id.copy);
         copyright.setText("");
         try {
@@ -82,15 +87,13 @@ public class NewSimplicityAccount extends BaseActivity {
                 }
                 return false;
             });
-        }catch (NullPointerException i){
+        } catch (NullPointerException i) {
             i.printStackTrace();
-        }catch (Exception ignored){
+        } catch (Exception ignored) {
 
         }
 
     }
-
-
 
 
     private void createAccount(String name, String email, String password) {
@@ -102,7 +105,7 @@ public class NewSimplicityAccount extends BaseActivity {
                     if (task.isSuccessful()) {
                         sendEmailVerification();
                     } else {
-                        Cardbar.snackBar(this,"Error creating account.", true).show();
+                        Cardbar.snackBar(this, "Error creating account.", true).show();
 
                     }
 
@@ -111,27 +114,26 @@ public class NewSimplicityAccount extends BaseActivity {
     }
 
 
-
     private void sendEmailVerification() {
         final FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             user.sendEmailVerification().addOnCompleteListener(this, task -> {
-                        if (task.isSuccessful()) {
-                            Cardbar.snackBar(this,"Verification email sent to " + user.getEmail(), true).show();
+                if (task.isSuccessful()) {
+                    Cardbar.snackBar(this, "Verification email sent to " + user.getEmail(), true).show();
 
-                        } else {
-                            Cardbar.snackBar(this,"Failed to send verification email.", true).show();
+                } else {
+                    Cardbar.snackBar(this, "Failed to send verification email.", true).show();
 
-                        }
+                }
 
-                    });
+            });
         }
     }
 
 
-    private boolean validateForm () {
+    private boolean validateForm() {
         boolean valid = true;
-        try{
+        try {
             String name = Objects.requireNonNull(editText0.getText()).toString();
             if (TextUtils.isEmpty(name)) {
                 editText0.setError("Required.");
@@ -155,17 +157,22 @@ public class NewSimplicityAccount extends BaseActivity {
             } else {
                 editText2.setError(null);
             }
-        }catch (NullPointerException i){
+
+            if(user_pic == null){
+                Cardbar.snackBar(this,"Avatar required", false).show();
+                valid = false;
+            }
+        } catch (NullPointerException i) {
             i.printStackTrace();
-        }catch (Exception ignored){
+        } catch (Exception ignored) {
 
         }
 
         return valid;
     }
 
-    private void resetPass(String email){
-        try{
+    private void resetPass(String email) {
+        try {
             mAuth.sendPasswordResetEmail(email)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -174,9 +181,9 @@ public class NewSimplicityAccount extends BaseActivity {
                     });
             attempts = 2;
 
-        }catch (NullPointerException i){
+        } catch (NullPointerException i) {
             i.printStackTrace();
-        }catch (Exception ignored){
+        } catch (Exception ignored) {
 
         }
     }
@@ -186,34 +193,27 @@ public class NewSimplicityAccount extends BaseActivity {
         super.onResume();
         try {
 
-            if(currentUser!= null) {
-                Cardbar.snackBar(this,"Please wait while your account is setup and synced.", true).show();
+            if (currentUser != null) {
+                deleteCache();
                 File bh = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + getResources().getString(R.string.app_name) + File.separator + "Simplicity Backups" + File.separator);
                 if (!bh.exists()) {
                     //noinspection ResultOfMethodCallIgnored
                     bh.mkdirs();
                 }
                 String extStorageDirectory = bh.toString();
-                File file = new File(extStorageDirectory, currentUser.getUid()+".sbh");
+                File file = new File(extStorageDirectory, currentUser.getUid() + ".sbh");
                 ExportUtils.writeToFile(file, this);
-                new Handler().postDelayed(() -> {
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
                     try {
                         uploadToFireBase();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    new Handler().postDelayed(() -> {
-                        try {
-                            saveUserInfo();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }, 3000);
-                }, 3050);
+                }, 5000);
             }
-        }catch (NullPointerException i){
+        } catch (NullPointerException i) {
             i.printStackTrace();
-        }catch (Exception ignored){
+        } catch (Exception ignored) {
 
         }
     }
@@ -228,7 +228,7 @@ public class NewSimplicityAccount extends BaseActivity {
         super.onDestroy();
     }
 
-    private void loadMain(){
+    private void loadMain() {
         finish();
     }
 
@@ -237,94 +237,90 @@ public class NewSimplicityAccount extends BaseActivity {
         loadMain();
     }
 
-    private void showImageChooser(){
-        try{
+    private void showImageChooser() {
+        try {
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Select Profile Image"), CHOOSE_IMAGE);
-        }catch (NullPointerException i){
+        } catch (NullPointerException i) {
             i.printStackTrace();
-        }catch (Exception ignored){
+        } catch (Exception ignored) {
 
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    private void uploadToFireBase(){
-        try{
-            StorageReference proimage = FirebaseStorage.getInstance().getReference(currentUser.getUid() +"/profilepicture/"+currentUser.getUid()+ ".jpg");
-            if(user_pic != null){
+    private void uploadToFireBase() {
+        try {
+            StorageReference proimage = FirebaseStorage.getInstance().getReference(currentUser.getUid() + "/profilepicture/" + currentUser.getUid() + ".jpg");
+            if (user_pic != null) {
                 proimage.putFile(user_pic).continueWithTask(task -> {
-                            if (!task.isSuccessful()) {
-                                throw Objects.requireNonNull(task.getException());
-                            }
-                            return proimage.getDownloadUrl();
-                        }).addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                Uri downloadUri = task.getResult();
-                                if (downloadUri != null) {
-                                    pic_url = downloadUri.toString();
-                                }
-                                Cardbar.snackBar(getApplicationContext(),"Uploaded profile image.", true).show();
-                                createUserFile();
-                            } else {
-                                Cardbar.snackBar(getApplicationContext(), Objects.requireNonNull(task.getException()).toString(), true).show();
+                    if (!task.isSuccessful()) {
+                        throw Objects.requireNonNull(task.getException());
+                    }
+                    return proimage.getDownloadUrl();
+                }).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        if (downloadUri != null) {
+                            pic_url = downloadUri.toString();
+                        }
+                        createUserFile();
+                        saveUserInfo();
+                    } else {
+                        Cardbar.snackBar(getApplicationContext(), Objects.requireNonNull(task.getException()).toString(), true).show();
 
-                            }
-                        });
-
-
+                    }
+                });
             }
 
-        }catch (NullPointerException i){
+        } catch (NullPointerException i) {
             i.printStackTrace();
-        }catch (Exception ignored){
+        } catch (Exception ignored) {
 
         }
     }
 
 
-    private void saveUserInfo(){
-        try{
+    private void saveUserInfo() {
+        try {
             String displayName = Objects.requireNonNull(editText0.getText()).toString();
-            if(editText0.getText().toString().isEmpty()){
+            if (editText0.getText().toString().isEmpty()) {
                 editText0.setError("Name required");
                 editText0.requestFocus();
                 return;
             }
 
-            if(currentUser != null && pic_url!= null){
+            if (currentUser != null && pic_url != null) {
                 UserProfileChangeRequest userProfileChangeRequest = new UserProfileChangeRequest.Builder()
                         .setDisplayName(displayName)
                         .setPhotoUri(Uri.parse(pic_url))
                         .build();
                 currentUser.updateProfile(userProfileChangeRequest)
-
                         .addOnCompleteListener(task -> {
-                            if(task.isSuccessful()){
-                                Cardbar.snackBar(getApplicationContext(), "Simplicity account created!", true).show();
+                            if (task.isSuccessful()) {
+                                Cardbar.snackBar(getApplicationContext(), getString(R.string.account_created), true).show();
                                 finish();
                             }
                         });
             }
-        }catch (NullPointerException i){
+        } catch (NullPointerException i) {
             i.printStackTrace();
-        }catch (Exception ignored){
+        } catch (Exception ignored) {
 
         }
     }
 
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    private void createUserFile(){
-        try{
+    private void createUserFile() {
+        try {
+            UserPreferences.putString("user", currentUser.getUid());
             final File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            String pathToMyAttachedFile = File.separator + getResources().getString(R.string.app_name) + File.separator + "Simplicity Backups" + File.separator+ currentUser.getUid() + ".sbh";
+            String pathToMyAttachedFile = File.separator + getResources().getString(R.string.app_name) + File.separator + "Simplicity Backups" + File.separator + currentUser.getUid() + ".sbh";
             File file = new File(root, pathToMyAttachedFile);
             final Uri uri = Uri.fromFile(file);
-            StorageReference proimage = FirebaseStorage.getInstance().getReference(currentUser.getUid() +"/simplicity_backup/"+currentUser.getUid() + ".sbh");
-            if(uri != null){
+            StorageReference proimage = FirebaseStorage.getInstance().getReference(currentUser.getUid() + "/simplicity_backup/" + currentUser.getUid() + ".sbh");
+            if (uri != null) {
                 proimage.putFile(uri).continueWithTask(task -> {
                     if (!task.isSuccessful()) {
                         throw Objects.requireNonNull(task.getException());
@@ -341,9 +337,9 @@ public class NewSimplicityAccount extends BaseActivity {
 
             }
 
-        }catch (NullPointerException i){
+        } catch (NullPointerException i) {
             i.printStackTrace();
-        }catch (Exception ignored){
+        } catch (Exception ignored) {
 
         }
     }
@@ -361,6 +357,25 @@ public class NewSimplicityAccount extends BaseActivity {
                 //Glide.with(this).asBitmap().load(user_pic.toString()).into(add_pic);
                 // currentUser.
             }
+        }
+    }
+
+    private void deleteCache() {
+        try {
+            LayoutInflater inflater = getLayoutInflater();
+            @SuppressLint("InflateParams")
+            View alertLayout = inflater.inflate(R.layout.account_dialog, null);
+            progressBar = alertLayout.findViewById(R.id.prog);
+            progressBar.setIndeterminate(true);
+            AlertDialog.Builder progress = new AlertDialog.Builder(NewSimplicityAccount.this);
+            progress.setTitle("Creating account");
+            progress.setMessage(getString(R.string.please_wait_account));
+            progress.setCancelable(false);
+            progress.setView(alertLayout);
+            PostDialog = progress.create();
+            PostDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
