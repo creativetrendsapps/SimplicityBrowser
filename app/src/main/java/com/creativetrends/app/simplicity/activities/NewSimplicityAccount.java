@@ -1,5 +1,6 @@
 package com.creativetrends.app.simplicity.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,12 +10,8 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -45,8 +42,7 @@ public class NewSimplicityAccount extends BaseActivity {
     int attempts = 2;
     Uri user_pic;
     String pic_url;
-    AlertDialog PostDialog;
-    ProgressBar progressBar;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -88,6 +84,7 @@ public class NewSimplicityAccount extends BaseActivity {
     }
 
 
+    //part one of sending email verification for new account
     private void createAccount(String name, String email, String password) {
         if (!validateForm()) {
             return;
@@ -106,6 +103,7 @@ public class NewSimplicityAccount extends BaseActivity {
     }
 
 
+    //part two of sending email verification for new account
     private void sendEmailVerification() {
         final FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
@@ -172,13 +170,13 @@ public class NewSimplicityAccount extends BaseActivity {
         super.onResume();
         if (currentUser != null) {
             accountDialog();
-            File bh = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + getResources().getString(R.string.app_name) + File.separator + "Simplicity Backups" + File.separator);
+            File bh = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + getResources().getString(R.string.app_name) + File.separator + "Your backup location" + File.separator);
             if (!bh.exists()) {
                 //noinspection ResultOfMethodCallIgnored
                 bh.mkdirs();
             }
             String extStorageDirectory = bh.toString();
-            File file = new File(extStorageDirectory, currentUser.getUid() + ".sbh");
+            File file = new File(extStorageDirectory, Objects.requireNonNull(mAuth.getCurrentUser()).getUid() + ".your_extention");
             ExportUtils.writeToFile(file, this);
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 try {
@@ -206,11 +204,13 @@ public class NewSimplicityAccount extends BaseActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Profile Image"), CHOOSE_IMAGE);
+        Intent chooserIntent = Intent.createChooser(intent, "Select Profile Image");
+        startActivity(chooserIntent);
     }
 
+    //saving the user to firebase after creating their account
     private void uploadToFireBase() {
-        StorageReference proimage = FirebaseStorage.getInstance().getReference(currentUser.getUid() + "/profilepicture/" + currentUser.getUid() + ".jpg");
+        StorageReference proimage = FirebaseStorage.getInstance().getReference(Objects.requireNonNull(mAuth.getCurrentUser()).getUid() + "/your_profile_picture_location/" + Objects.requireNonNull(mAuth.getCurrentUser()).getUid() + ".jpg");
         if (user_pic != null) {
             proimage.putFile(user_pic).continueWithTask(task -> {
                 if (!task.isSuccessful()) {
@@ -228,12 +228,14 @@ public class NewSimplicityAccount extends BaseActivity {
                 } else {
                     Cardbar.snackBar(getApplicationContext(), Objects.requireNonNull(task.getException()).toString(), true).show();
 
+
                 }
             });
         }
     }
 
-
+    
+    //make sure the required info is applied
     private void saveUserInfo() {
         String displayName = Objects.requireNonNull(editText0.getText()).toString();
         if (editText0.getText().toString().isEmpty()) {
@@ -241,7 +243,7 @@ public class NewSimplicityAccount extends BaseActivity {
             editText0.requestFocus();
             return;
         }
-
+        //sending the users profile image to firebase
         if (currentUser != null && pic_url != null) {
             UserProfileChangeRequest userProfileChangeRequest = new UserProfileChangeRequest.Builder()
                     .setDisplayName(displayName)
@@ -252,18 +254,22 @@ public class NewSimplicityAccount extends BaseActivity {
                         if (task.isSuccessful()) {
                             Cardbar.snackBar(getApplicationContext(), getString(R.string.account_created), true).show();
                             finish();
+                            if (!isDestroyed() && progressDialog!= null && progressDialog.isShowing()) {
+                                progressDialog.dismiss();
+                            }
                         }
                     });
         }
     }
 
 
+    //send the first bookmark file to Firebase
     private void createUserFile() {
         final File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        String pathToMyAttachedFile = File.separator + getResources().getString(R.string.app_name) + File.separator + "Simplicity Backups" + File.separator + currentUser.getUid() + ".sbh";
+        String pathToMyAttachedFile = File.separator + getResources().getString(R.string.app_name) + File.separator + "Your backup location" + File.separator + Objects.requireNonNull(mAuth.getCurrentUser()).getUid() + ".your_extention";
         File file = new File(root, pathToMyAttachedFile);
         final Uri uri = Uri.fromFile(file);
-        StorageReference proimage = FirebaseStorage.getInstance().getReference(currentUser.getUid() + "/simplicity_backup/" + currentUser.getUid() + ".sbh");
+        StorageReference proimage = FirebaseStorage.getInstance().getReference(Objects.requireNonNull(mAuth.getCurrentUser()).getUid() + "/your_backup_location/" + Objects.requireNonNull(mAuth.getCurrentUser()).getUid() + ".your_extention");
         if (uri != null) {
             proimage.putFile(uri).continueWithTask(task -> {
                 if (!task.isSuccessful()) {
@@ -283,29 +289,25 @@ public class NewSimplicityAccount extends BaseActivity {
     }
 
 
+    //letting the user know their account is being created
+    private void accountDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Creating account");
+        progressDialog.setMessage("This will only take a minute.");
+        progressDialog.setVolumeControlStream(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+    }
+    
+    //gettting the picture that was sent
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CHOOSE_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if (resultCode == RESULT_OK && data != null && data.getData() != null) {
             user_pic = data.getData();
             if (user_pic != null) {
                 Glide.with(this).asBitmap().load(user_pic).apply(new RequestOptions().circleCrop()).into(appCompatImageView);
             }
         }
-    }
-
-    private void accountDialog() {
-        LayoutInflater inflater = getLayoutInflater();
-        View alertLayout = inflater.inflate(R.layout.account_dialog, null);
-        progressBar = alertLayout.findViewById(R.id.prog);
-        progressBar.setIndeterminate(true);
-        AlertDialog.Builder progress = new AlertDialog.Builder(NewSimplicityAccount.this);
-        progress.setTitle("Creating account");
-        progress.setMessage(getString(R.string.please_wait_account));
-        progress.setCancelable(false);
-        progress.setView(alertLayout);
-        PostDialog = progress.create();
-        PostDialog.show();
     }
 
 
