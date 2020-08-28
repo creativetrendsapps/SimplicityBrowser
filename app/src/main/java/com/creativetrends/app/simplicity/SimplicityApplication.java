@@ -36,10 +36,9 @@ public class SimplicityApplication extends Application {
 
     }
 
+    //notification channel for Simplicity's downloader
     private void createNotificationChannel() {
-        try {
-           
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 CharSequence widget_name = getString(R.string.notifications_widget);
                 String widget_description = getString(R.string.notifications_widget_description);
                 int wimp = NotificationManager.IMPORTANCE_LOW;
@@ -58,10 +57,6 @@ public class SimplicityApplication extends Application {
                 }
 
             }
-        }catch (NullPointerException ignored){
-        } catch (Exception i) {
-            i.printStackTrace();
-        }
     }
 
 }
