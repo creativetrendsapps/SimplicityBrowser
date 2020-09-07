@@ -2,29 +2,31 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 29
 
-    bundle{
-        language{
+    bundle {
+        language {
             enableSplit = false
         }
     }
 
 
-
     defaultConfig {
         applicationId "com.creativetrends.simplicity.app"
         minSdkVersion 21
-        targetSdkVersion 28
-        versionCode 602
-        versionName "6.0.2"
+        targetSdkVersion 29
     }
 
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            debuggable true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -40,31 +42,39 @@ dependencies {
     implementation project(":bottomsheet")
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //google
-    api 'com.google.guava:guava:27.1-android'
+    implementation 'com.google.guava:guava:28.0-android'
+    //noinspection GradleDependency
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation "androidx.appcompat:appcompat:1.3.0-alpha02"
+    implementation 'com.google.android.material:material:1.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.palette:palette:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-
+    implementation 'androidx.preference:preference:1.1.1'
+    implementation 'com.google.android.play:core:1.8.0'
+    implementation "androidx.webkit:webkit:1.3.0"
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     //other libraries
+    //noinspection GradleDependency
     implementation("com.github.bumptech.glide:glide:4.8.0") {
         annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
         exclude group: "com.android.support"
     }
     implementation 'com.anthonycr.progress:animated-progress:1.0'
-    implementation 'com.github.codekidX:storage-chooser:2.0.3'
+    implementation 'com.github.codekidX:storage-chooser:2.0.4.4'
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-    implementation 'com.anjlab.android.iab.v3:library:1.0.44'
-
-    //noinspection GradleDependency
-    implementation 'commons-io:commons-io:2.5'
+    implementation 'com.anjlab.android.iab.v3:library:1.0.45'
+    implementation 'commons-io:commons-io:2.6'
 
     //html parsers
+    //noinspection GradleDependency
     implementation 'org.jsoup:jsoup:1.11.3'
 
+    //sync
+    implementation 'androidx.work:work-runtime:2.4.0'
+
     //Firebase
-    implementation 'com.google.firebase:firebase-auth:18.1.0'
-    implementation 'com.google.firebase:firebase-storage:18.1.1'
+    implementation 'com.google.firebase:firebase-auth:19.3.2'
+    implementation 'com.google.firebase:firebase-storage:19.1.1'
+    
 }
