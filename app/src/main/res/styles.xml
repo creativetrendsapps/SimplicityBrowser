@@ -1,86 +1,249 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="BookMarksTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowActionModeOverlay">true</item>
-        <item name="colorPrimary">@color/white</item>
-        <item name="colorPrimaryDark">@color/md_grey_400</item>
-        <item name="colorAccent">@color/md_grey_400</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
-        <item name="searchViewStyle">@style/MySearchViewStyle</item>
-        <item name="android:popupMenuStyle">@style/PopupMenu</item>
-        <item name="android:listPopupWindowStyle">@style/Popup</item>
-        <item name="dialogCornerRadius">16dp</item>
-    </style>
-
-
-    <style name="MainTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="BHDTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/md_grey_400</item>
         <item name="colorAccent">@color/md_blue_600</item>
+        <item name="colorButtonNormal">@color/md_grey_400</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
-        <item name="android:colorEdgeEffect">@color/md_white_1000_25</item>
-        <item name="dialogCornerRadius">16dp</item>
+        <item name="searchViewStyle">@style/SearchViewMy</item>
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="iconPrefColor">@color/dark</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:fontFamily">@font/manrope</item>
 
     </style>
 
-    <style name="SettingsTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="BHDThemeDark" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/md_dark_primary</item>
+        <item name="colorPrimaryDark">@color/md_dark_primary</item>
+        <item name="colorAccent">@color/md_grey_500</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+        <item name="android:colorEdgeEffect">@color/md_grey_900</item>
+        <item name="searchViewStyle">@style/SearchViewMy</item>
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="iconPrefColor">@color/white</item>
+        <item name="android:windowBackground">@color/md_dark_primary_dark</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
+        <item name="android:fontFamily">@font/manrope</item>
+
+    </style>
+
+
+    <style name="MainTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/md_grey_400</item>
         <item name="colorAccent">@color/md_blue_600</item>
+        <item name="colorButtonNormal">@color/md_grey_400</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:windowBackground">@color/white</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
-        <item name="android:colorEdgeEffect">@color/md_white_1000_25</item>
-        <item name="dialogCornerRadius">16dp</item>
-
-    </style>
-
-
-    <style name="WelcomeTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowActionModeOverlay">true</item>
-        <item name="colorPrimary">@color/white</item>
-        <item name="colorPrimaryDark">@color/md_grey_400</item>
-        <item name="colorAccent">@color/md_blue_600</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
-        <item name="dialogCornerRadius">16dp</item>
+        <item name="android:colorEdgeEffect">@color/md_white_1000_25</item>
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="iconPrefColor">@color/dark</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
+        <item name="android:fontFamily">@font/manrope</item>
+        <item name="diaColor">@color/white</item>
+        <item name="progress_color_simple">@color/white</item>
+        <item name="cardPost">@color/white</item>
+    </style>
+
+
+    <style name="MainThemeDark" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/md_dark_primary</item>
+        <item name="colorPrimaryDark">@color/md_dark_primary</item>
+        <item name="colorAccent">@color/md_grey_500</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+        <item name="android:colorEdgeEffect">@color/md_grey_900</item>
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="android:windowBackground">@color/md_dark_primary_dark</item>
+        <item name="iconPrefColor">@color/white</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
+        <item name="android:fontFamily">@font/manrope</item>
+        <item name="android:navigationBarColor">@color/md_dark_primary_dark</item>
+        <item name="diaColor">@color/dark</item>
+        <item name="progress_color_simple">@color/md_blue_600_dark</item>
+        <item name="cardPost">@color/md_dark_primary_dark</item>
+    </style>
+
+    <style name="SettingsTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/md_grey_400</item>
+        <item name="colorAccent">@color/md_blue_600</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+        <item name="android:colorEdgeEffect">@color/md_white_1000_25</item>
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="iconPrefColor">@color/dark</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:statusBarColor">@color/light_nav</item>
+        <item name="android:navigationBarColor">@color/light_nav</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
+        <item name="diaColor">@color/white</item>
+    </style>
+
+    <style name="SettingsThemeDark" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/md_dark_primary_dark</item>
+        <item name="colorPrimaryDark">@color/md_dark_primary_dark</item>
+        <item name="colorAccent">@color/md_blue_600_dark</item>
+        <item name="android:windowBackground">@color/md_dark_primary_dark</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+        <item name="android:colorEdgeEffect">@color/md_grey_900</item>
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="iconPrefColor">@color/white</item>
+        <item name="android:statusBarColor">@color/md_dark_primary_dark</item>
+        <item name="android:navigationBarColor">@color/md_dark_primary_dark</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
+        <item name="diaColor">@color/dark</item>
+    </style>
+
+
+    <style name="ReaderTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/md_grey_400</item>
+        <item name="colorAccent">@color/md_blue_600</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+        <item name="searchViewStyle">@style/SearchViewMy</item>
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="iconPrefColor">@color/dark</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
+        <item name="android:fontFamily">@font/manrope</item>
 
     </style>
 
-    <style name="DialogAnimation">
-        <item name="android:windowEnterAnimation">@null</item>
-        <item name="android:windowExitAnimation">@null</item>
+
+    <style name="SimplicityAccountTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/md_blue_600</item>
+        <item name="colorPrimaryDark">@color/md_grey_400</item>
+        <item name="colorAccent">@color/md_blue_600</item>
+        <item name="colorButtonNormal">@color/md_blue_600</item>
+        <item name="colorControlActivated">@color/md_blue_600</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="android:colorEdgeEffect">@color/md_white_1000_25</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name="iconPrefColor">@color/md_blue_600</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
+        <item name="android:fontFamily">@font/manrope</item>
+
     </style>
 
-    <style name="MySearchViewStyle" parent="Widget.AppCompat.SearchView">
+    <style name="SimplicityAccountThemeDark" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/md_dark_primary</item>
+        <item name="colorPrimaryDark">@color/md_dark_primary</item>
+        <item name="colorAccent">@color/md_grey_500</item>
+        <item name="colorButtonNormal">@color/md_grey_900</item>
+        <item name="colorControlActivated">@color/md_grey_900</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="android:navigationBarColor">@color/md_dark_primary_dark</item>
+        <item name="android:colorEdgeEffect">@color/md_grey_900</item>
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox </item>
+        <item name="iconPrefColor">@color/white</item>
+        <item name="android:windowBackground">@color/md_dark_primary_dark</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
+        <item name="android:fontFamily">@font/manrope</item>
+
+    </style>
+
+    <style name="AppThemePhoto" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/md_grey_500</item>
+        <item name="colorButtonNormal">@color/dcP</item>
+        <item name="android:windowBackground">@color/black</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:colorEdgeEffect">@color/md_white_1000_25</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="dialogCornerRadius">10dp</item>
+        <item name="iconPrefColor">@color/white</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
+        <item name="android:fontFamily">@font/manrope</item>
+
+    </style>
+
+    <style name="SearchViewMy" parent="Widget.AppCompat.Light.SearchView">
         <item name="queryBackground">@android:color/transparent</item>
-        <item name="searchIcon">@null</item>
+        <item name="searchHintIcon">@null</item>
+        <item name="android:layout_marginStart">0dp</item>
     </style>
 
-    <style name="AppTheme.ToolbarTheme" parent="Widget.MaterialComponents.Toolbar">
+
+    <style name="AppTheme.ToolbarTheme" parent="Widget.AppCompat.Toolbar">
         <item name="contentInsetStart">0dp</item>
     </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents" />
 
-    <style name="Popup" parent="android:Widget.Material.Light.ListPopupWindow">
-        <item name="android:popupElevation">2dp</item>
-        <item name="android:popupBackground">@color/white</item>
+
+
+
+    <style name="SeekBarWithoutSteps" parent="Widget.AppCompat.SeekBar.Discrete">
+        <item name="tickMark">@null</item>
+        <item name="android:minHeight">8dip</item>
     </style>
 
-    <style name="PopupMenu" parent="Widget.MaterialComponents.PopupMenu">
-        <item name="android:popupElevation">2dp</item>
+
+    <style name="FilterBadge" parent="@style/EllipsizedSingleLineTextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/ic_filter_badge</item>
+    </style>
+
+
+    <style name="EllipsizedSingleLineTextView">
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:lines">1</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="BottomSheetDialog_Rounded" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+    </style>
+
+    <style name="BottomSheetDialog_Rounded_Light" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+    </style>
+
+
+
+    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/round_card_drawable</item>
     </style>
 
 
